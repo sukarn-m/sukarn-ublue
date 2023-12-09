@@ -1,7 +1,7 @@
 # image will be published to ghcr.io/<user>/<name>
 name: sukarn-ublue
 # description will be included in the image's metadata
-description: Personal OS image - AMD.
+description: Personal OS image.
 
 # the base image to build on top of (FROM) and the version tag to use
 base-image: ghcr.io/ublue-os/silverblue-main
