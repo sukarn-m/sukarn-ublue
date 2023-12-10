@@ -37,26 +37,52 @@ Documentation around making custom images exists / should be written in two sepa
 * [The Tinkerer's Guide on the website](https://universal-blue.org/tinker/make-your-own/) for general documentation around making custom images, best practices, tutorials, and so on.
 * Inside this repository for documentation specific to the ins and outs of the template (like module documentation), and just some essential guidance on how to make custom images.
 
-## Installation
+## Installation by rebasing from Silverblue
 
 > **Warning**
 > [This is an experimental feature](https://www.fedoraproject.org/wiki/Changes/OstreeNativeContainerStable) and should not be used in production, try it in a VM for a while!
 
-To rebase an existing Silverblue/Kinoite installation to the latest build:
+To rebase an existing Silverblue installation to the latest build:
+
+### Rebasing - Desktop
 
 - First rebase to the unsigned image, to get the proper signing keys and policies installed:
-  `rpm-ostree rebase ostree-unverified-registry:ghcr.io/sukarn-m/sukarn-ublue-laptop:latest` or `rpm-ostree rebase ostree-unverified-registry:ghcr.io/sukarn-m/sukarn-ublue-desktop:latest`
+  ```
+  rpm-ostree rebase ostree-unverified-registry:ghcr.io/sukarn-m/sukarn-ublue-desktop:latest
   ```
 - Reboot to complete the rebase:
   ```
   systemctl reboot
   ```
 - Then rebase to the signed image, like so:
-  `rpm-ostree rebase ostree-image-signed:docker://ghcr.io/sukarn-m/sukarn-ublue-laptop:latest` or `rpm-ostree rebase ostree-image-signed:docker://ghcr.io/sukarn-m/sukarn-ublue-desktop:latest`
+  ```
+  rpm-ostree rebase ostree-image-signed:docker://ghcr.io/sukarn-m/sukarn-ublue-desktop:latest
+  ```
 - Reboot again to complete the installation
   ```
   systemctl reboot
   ```
+
+### Rebasing - Laptop
+
+- First rebase to the unsigned image, to get the proper signing keys and policies installed:
+  ```
+  rpm-ostree rebase ostree-unverified-registry:ghcr.io/sukarn-m/sukarn-ublue-desktop:latest
+  ```
+- Reboot to complete the rebase:
+  ```
+  systemctl reboot
+  ```
+- Then rebase to the signed image, like so:
+  ```
+  rpm-ostree rebase ostree-image-signed:docker://ghcr.io/sukarn-m/sukarn-ublue-desktop:latest
+  ```
+- Reboot again to complete the installation
+  ```
+  systemctl reboot
+  ```
+
+### Installation - Additional information
 
 This repository builds date tags as well, so if you want to rebase to a particular day's build:
 
