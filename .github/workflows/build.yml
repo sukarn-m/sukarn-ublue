@@ -98,6 +98,8 @@ jobs:
           BUILD_TAGS+=("${TIMESTAMP}")
           BUILD_TAGS+=("latest")
 
+          VERSION="${MAJOR_VERSION}.${TIMESTAMP}.$(date +%H)"
+
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
               echo "Generated the following commit tags: "
               for TAG in "${COMMIT_TAGS[@]}"; do
@@ -156,6 +158,7 @@ jobs:
             BASE_IMAGE_URL=${{ env.BASE_IMAGE_URL }}
             RECIPE=${{ matrix.recipe }}
             IMAGE_REGISTRY=${{ steps.registry_case.outputs.lowercase }}
+            VERSION=${{ steps.generate-tags.outputs.version }}
           labels: ${{ steps.meta.outputs.labels }}
           oci: false
 

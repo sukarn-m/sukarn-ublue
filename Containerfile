@@ -9,16 +9,20 @@
 # does nothing if the image is built in the cloud.
 
 # !! Warning: changing these might not do anything for you. Read comment above.
-ARG IMAGE_MAJOR_VERSION=39
-ARG BASE_IMAGE_URL=ghcr.io/ublue-os/silverblue-main
+ARG $IMAGE_MAJOR_VERSION #=39
+ARG $BASE_IMAGE_URL #=ghcr.io/ublue-os/silverblue-main
 
 FROM ${BASE_IMAGE_URL}:${IMAGE_MAJOR_VERSION}
 
+ARG $VERSION
+
 # The default recipe is set to the recipe's default filename
 # so that `podman build` should just work for most people.
-ARG RECIPE=recipe.yml 
+ARG $RECIPE #=recipe.yml 
 # The default image registry to write to policy.json and cosign.yaml
 ARG IMAGE_REGISTRY=ghcr.io/ublue-os
+
+RUN sed -i "s,^PRETTY_NAME=.*,PRETTY_NAME=\"Fedora Linux ${VERSION} \(Sukarn\)\"," /usr/lib/os-release
 
 COPY cosign.pub /usr/share/ublue-os/cosign.pub
 
@@ -40,18 +44,6 @@ COPY modules /tmp/modules/
 # `yq` is used for parsing the yaml configuration
 # It is copied from the official container image since it's not available as an RPM.
 COPY --from=docker.io/mikefarah/yq /usr/bin/yq /usr/bin/yq
-
-## Adapted from bazzite Containerfile
-RUN if grep -q "kinoite" <<< "${BASE_IMAGE_URL}"; then \
-        sed -i '/^PRETTY_NAME/s/Kinoite/Sukarn Kinoite/' /usr/lib/os-release; \
-    elif grep -q "silverblue" <<< "${BASE_IMAGE_URL}"; then \
-        sed -i '/^PRETTY_NAME/s/Silverblue/Sukarn Silverblue/' /usr/lib/os-release; \
-    else \
-        sed -i '/^PRETTY_NAME/s/\(.+?\)/\(Sukarn\)/' /usr/lib/os-release; \
-    fi && \
-    if grep -q "bazzite" <<< "${BASE_IMAGE_URL}"; then \
-        sed -i '/^PRETTY_NAME/s/Bazzite//' /usr/lib/os-release; \
-    fi
 
 # Run the build script, then clean up temp files and finalize container build.
 RUN chmod +x /tmp/build.sh && /tmp/build.sh && \
