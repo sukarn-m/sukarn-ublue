@@ -45,17 +45,14 @@ Documentation around making custom images exists / should be written in two sepa
 To rebase an existing Silverblue/Kinoite installation to the latest build:
 
 - First rebase to the unsigned image, to get the proper signing keys and policies installed:
-  ```
-  rpm-ostree rebase ostree-unverified-registry:ghcr.io/sukarn-m/sukarn-ublue:latest
+  `rpm-ostree rebase ostree-unverified-registry:ghcr.io/sukarn-m/sukarn-ublue-laptop:latest` or `rpm-ostree rebase ostree-unverified-registry:ghcr.io/sukarn-m/sukarn-ublue-desktop:latest`
   ```
 - Reboot to complete the rebase:
   ```
   systemctl reboot
   ```
 - Then rebase to the signed image, like so:
-  ```
-  rpm-ostree rebase ostree-image-signed:docker://ghcr.io/sukarn-m/sukarn-ublue:latest
-  ```
+  `rpm-ostree rebase ostree-image-signed:docker://ghcr.io/sukarn-m/sukarn-ublue-laptop:latest` or `rpm-ostree rebase ostree-image-signed:docker://ghcr.io/sukarn-m/sukarn-ublue-desktop:latest`
 - Reboot again to complete the installation
   ```
   systemctl reboot
@@ -63,9 +60,7 @@ To rebase an existing Silverblue/Kinoite installation to the latest build:
 
 This repository builds date tags as well, so if you want to rebase to a particular day's build:
 
-```
-rpm-ostree rebase ostree-image-signed:docker://ghcr.io/sukarn-m/sukarn-ublue:20230403
-```
+`rpm-ostree rebase ostree-image-signed:docker://ghcr.io/sukarn-m/sukarn-ublue-laptop:20230403`
 
 This repository by default also supports signing.
 
