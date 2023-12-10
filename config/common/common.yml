@@ -1,0 +1,3 @@
+modules:
+  - from-file: common/common-scripts.yml
+  - from-file: common/common-packages.yml
