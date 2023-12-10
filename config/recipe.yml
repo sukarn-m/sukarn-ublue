@@ -26,16 +26,21 @@ modules:
     install:
       # - micro
       # - starship
-      - nextcloud-client
+      - nextcloud-client-devel # On Fedora, nextcloud-client does not contain the libraries for virtual files support. Flatpak does not work with virtual files. AppImage does not integrate with Nautilus.
       - nextcloud-client-nautilus
       - gnome-shell-extension-pop-shell
       - gnome-shell-extension-gsconnect
       - nautilus-gsconnect
+      - gnome-shell-extension-appindicator
+      - gnome-shell-extension-dash-to-panel
+      - gnome-shell-extension-workspace-indicator
       - syncthing
       - gparted
     remove:
       - firefox # default firefox removed in favor of flatpak
       - firefox-langpacks # langpacks needs to also be removed to prevent dependency problems
+      - gnome-shell-extension-background-logo
+      - gnome-shell-extension-window-list
 
   - type: bling # configure what to pull in from ublue-os/bling
     install:
