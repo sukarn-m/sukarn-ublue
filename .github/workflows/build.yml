@@ -7,7 +7,7 @@
 name: build-ublue
 on: # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows
   schedule:
-    - cron: "30 3 * * 0,5,6"
+    - cron: "30 2 * * 0,5,6"
   push:
     branches:
       - live
@@ -39,7 +39,7 @@ jobs:
         # Add recipes for all the images you want to build here.
         # Don't add module configuration files, you will get errors.
         recipe:
-          #- desktop.yml
+          - desktop.yml
           - laptop.yml
 # !!!
 
