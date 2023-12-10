@@ -42,6 +42,7 @@ COPY modules /tmp/modules/
 COPY --from=docker.io/mikefarah/yq /usr/bin/yq /usr/bin/yq
 
 ## Adapted from bazzite Containerfile
+COPY system_files/shared /
 RUN if grep -q "kinoite" <<< "${BASE_IMAGE_URL}"; then \
         sed -i '/^PRETTY_NAME/s/Kinoite/Sukarn Kinoite/' /usr/lib/os-release; \
     elif grep -q "silverblue" <<< "${BASE_IMAGE_URL}"; then \
