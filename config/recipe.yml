@@ -40,7 +40,6 @@ modules:
       - firefox # default firefox removed in favor of flatpak
       - firefox-langpacks # langpacks needs to also be removed to prevent dependency problems
       - gnome-shell-extension-background-logo
-      - gnome-shell-extension-window-list
 
   - type: bling # configure what to pull in from ublue-os/bling
     install:
