@@ -38,9 +38,8 @@ jobs:
 # !!!
         # Add recipes for all the images you want to build here.
         # Don't add module configuration files, you will get errors.
-        desktop:
+        recipe:
           - desktop.yml
-        laptop:
           - laptop.yml
 # !!!
 
