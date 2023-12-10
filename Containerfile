@@ -12,8 +12,6 @@
 ARG IMAGE_MAJOR_VERSION=39
 ARG BASE_IMAGE_URL=ghcr.io/ublue-os/silverblue-main
 
-ARG IMAGE_DATE=undated
-
 FROM ${BASE_IMAGE_URL}:${IMAGE_MAJOR_VERSION} AS sukarn-ublue
 
 # The default recipe is set to the recipe's default filename
@@ -21,10 +19,6 @@ FROM ${BASE_IMAGE_URL}:${IMAGE_MAJOR_VERSION} AS sukarn-ublue
 ARG RECIPE=recipe.yml 
 # The default image registry to write to policy.json and cosign.yaml
 ARG IMAGE_REGISTRY=ghcr.io/ublue-os
-
-RUN echo "IMAGE_DATE=${IMAGE_DATE}"
-
-RUN sed -i 's,^PRETTY_NAME=.*,PRETTY_NAME=\"Fedora Linux ${{IMAGE_DATE}} \(Sukarn\)\",' /usr/lib/os-release
 
 COPY cosign.pub /usr/share/ublue-os/cosign.pub
 
