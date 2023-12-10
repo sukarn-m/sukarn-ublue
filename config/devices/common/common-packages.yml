@@ -1,7 +1,7 @@
 modules:
   - type: rpm-ostree
     install:
-      # Nextcloud also requires the script nextcloud-vfs.sh, called from the file common.yml
+      # Nextcloud also requires the script nextcloud-vfs.sh, called from the file common-scripts.yml
       - nextcloud-client-devel
       - nextcloud-client-nautilus
       - gnome-shell-extension-pop-shell
@@ -11,6 +11,10 @@ modules:
       - gnome-shell-extension-dash-to-panel
       - gnome-shell-extension-workspace-indicator
       - syncthing
+      - mangohud.x86_64
+      - mangohud.i686
+      - gperftools-libs.i686
+      - goverlay
     remove:
       - gnome-shell-extension-background-logo
       - firefox # default firefox removed in favor of flatpak
