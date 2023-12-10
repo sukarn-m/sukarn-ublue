@@ -11,7 +11,7 @@ image-version: 39 # latest is also supported if you want new updates ASAP
 # you can include multiple instances of the same module
 modules:
   - from-file: common/common.yml
-  - from-file: laptop-customizations.yml
+  - from-file: laptop/laptop-customizations.yml
   - type: files
     files:
       - usr: /usr
