@@ -14,15 +14,11 @@ ARG $BASE_IMAGE_URL=ghcr.io/ublue-os/silverblue-main
 
 FROM ${BASE_IMAGE_URL}:${IMAGE_MAJOR_VERSION}
 
-ARG $IMAGE_DATE=undated
-
 # The default recipe is set to the recipe's default filename
 # so that `podman build` should just work for most people.
 ARG $RECIPE=recipe.yml 
 # The default image registry to write to policy.json and cosign.yaml
 ARG IMAGE_REGISTRY=ghcr.io/ublue-os
-
-RUN sed -i "s,^PRETTY_NAME=.*,PRETTY_NAME=\"Fedora Linux ${IMAGE_DATE} \(Sukarn\)\"," /usr/lib/os-release
 
 COPY cosign.pub /usr/share/ublue-os/cosign.pub
 
