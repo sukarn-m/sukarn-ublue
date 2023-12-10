@@ -155,6 +155,7 @@ jobs:
             BASE_IMAGE_URL=${{ env.BASE_IMAGE_URL }}
             RECIPE=${{ matrix.recipe }}
             IMAGE_REGISTRY=${{ steps.registry_case.outputs.lowercase }}
+            IMAGE_DATE=$(date %Y%m%d-%H)
           labels: ${{ steps.meta.outputs.labels }}
           oci: false
 
