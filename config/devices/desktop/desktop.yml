@@ -1,0 +1,3 @@
+# Placeholder
+modules:
+  - from-file: devices/desktop/desktop-files.yml

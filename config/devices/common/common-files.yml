@@ -1,7 +1,7 @@
 modules:
   - type: files
     files:
-      - usr: /usr
+      - common/usr: /usr
           # copy static configurations
           #
           # copies config/files/usr into your image's /usr

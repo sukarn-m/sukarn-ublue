@@ -1,0 +1,4 @@
+modules:
+  - from-file: devices/common/common-files.yml
+  - from-file: devices/common/common-packages.yml
+  - from-file: devices/common/common-scripts.yml

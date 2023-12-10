@@ -1,7 +1,8 @@
 modules:
   - type: rpm-ostree
     install:
-      - nextcloud-client-devel # On Fedora, nextcloud-client does not contain the libraries for virtual files support. Flatpak does not work with virtual files. AppImage does not integrate with Nautilus.
+      # Nextcloud also requires the script nextcloud-vfs.sh, called from the file common.yml
+      - nextcloud-client-devel
       - nextcloud-client-nautilus
       - gnome-shell-extension-pop-shell
       - gnome-shell-extension-gsconnect
