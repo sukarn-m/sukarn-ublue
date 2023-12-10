@@ -35,7 +35,6 @@ modules:
       - gnome-shell-extension-dash-to-panel
       - gnome-shell-extension-workspace-indicator
       - syncthing
-      - gparted
     remove:
       - firefox # default firefox removed in favor of flatpak
       - firefox-langpacks # langpacks needs to also be removed to prevent dependency problems
