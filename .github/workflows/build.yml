@@ -39,17 +39,18 @@ jobs:
         # Add recipes for all the images you want to build here.
         # Don't add module configuration files, you will get errors.
         recipe:
-          - desktop.yml
+#          - desktop.yml
           - laptop.yml
 # !!!
 
     steps:
-      - name: Maximize build space
-        uses: AdityaGarg8/remove-unwanted-software@v1
-        with:
-          remove-dotnet: 'true'
-          remove-android: 'true'
-          remove-haskell: 'true'
+## CUSTOM DISABLED FOR TESTING ONLY.
+#      - name: Maximize build space
+#        uses: AdityaGarg8/remove-unwanted-software@v1
+#        with:
+#          remove-dotnet: 'true'
+#          remove-android: 'true'
+#          remove-haskell: 'true'
 
       # Checkout push-to-registry action GitHub repository
       - name: Checkout Push to Registry action
@@ -111,6 +112,13 @@ jobs:
               echo "${TAG}"
           done
           echo "alias_tags=${alias_tags[*]}" >> $GITHUB_OUTPUT
+
+## TEST: Based on bazzite build.yml 
+      - name: Get Current Fedora Version
+        id: labels
+        run: |
+          ver=$(skopeo inspect docker://ghcr.io/sukarn-m/${{ matrix.base_image_name }}-${{ matrix.image_flavor }}:${{ matrix.major_version }} | jq -r '.Labels["org.opencontainers.image.version"]')
+          echo "VERSION=$ver" >> $GITHUB_OUTPUT
 
       # Build metadata
       - name: Image Metadata
