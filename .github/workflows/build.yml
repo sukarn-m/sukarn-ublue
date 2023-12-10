@@ -79,7 +79,7 @@ jobs:
         shell: bash
         run: |
           # Generate a timestamp for creating an image version history
-          TIMESTAMP="$(date +%Y%m%d)"
+          TIMESTAMP="$(date +'%Y%m%d')"
           MAJOR_VERSION="$(echo ${{ steps.labels.outputs.VERSION }} | cut -d . -f 1)"
           COMMIT_TAGS=()
           BUILD_TAGS=()
@@ -97,7 +97,7 @@ jobs:
           BUILD_TAGS+=("${TIMESTAMP}")
           BUILD_TAGS+=("latest")
 
-          echo "VERSION=${{MAJOR_VERSION}.${TIMESTAMP}}" >> $GITHUB_OUTPUT
+          VERSION="${MAJOR_VERSION}.${TIMESTAMP}"
 
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
               echo "Generated the following commit tags: "
