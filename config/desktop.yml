@@ -4,8 +4,8 @@ name: sukarn-ublue-desktop
 description: Customized for desktops with nvidia graphics card.
 
 # the base image to build on top of (FROM) and the version tag to use
-# base-image: ghcr.io/ublue-os/silverblue-nvidia
-base-image: ghcr.io/ublue-os/bazzite-gnome-nvidia
+base-image: ghcr.io/ublue-os/silverblue-nvidia
+# base-image: ghcr.io/ublue-os/bazzite-gnome-nvidia
 image-version: 39 # latest is also supported if you want new updates ASAP
 
 # module configuration, executed in order
