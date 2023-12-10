@@ -22,7 +22,7 @@ ARG RECIPE=recipe.yml
 # The default image registry to write to policy.json and cosign.yaml
 ARG IMAGE_REGISTRY=ghcr.io/ublue-os
 
-RUN echo "IMAGE_DATE=${{IMAGE_DATE}}"
+RUN echo "IMAGE_DATE=${IMAGE_DATE}"
 
 RUN sed -i 's,^PRETTY_NAME=.*,PRETTY_NAME=\"Fedora Linux ${{IMAGE_DATE}} \(Sukarn\)\",' /usr/lib/os-release
 
