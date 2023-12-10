@@ -11,10 +11,6 @@ modules:
       - gnome-shell-extension-dash-to-panel
       - gnome-shell-extension-workspace-indicator
       - syncthing
-      - mangohud.x86_64
-      - mangohud.i686
-      - gperftools-libs.i686
-      - goverlay
     remove:
       - gnome-shell-extension-background-logo
       - firefox # default firefox removed in favor of flatpak
