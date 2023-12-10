@@ -22,7 +22,7 @@ ARG $RECIPE=recipe.yml
 # The default image registry to write to policy.json and cosign.yaml
 ARG IMAGE_REGISTRY=ghcr.io/ublue-os
 
-RUN sed -i "s,^PRETTY_NAME=.*,PRETTY_NAME=\"Fedora Linux ${VERSION} \(Sukarn\)\"," /usr/lib/os-release
+#RUN sed -i "s,^PRETTY_NAME=.*,PRETTY_NAME=\"Fedora Linux ${VERSION} \(Sukarn\)\"," /usr/lib/os-release
 
 COPY cosign.pub /usr/share/ublue-os/cosign.pub
 
