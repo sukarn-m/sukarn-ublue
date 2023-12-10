@@ -112,6 +112,13 @@ jobs:
           done
           echo "alias_tags=${alias_tags[*]}" >> $GITHUB_OUTPUT
 
+      - name: Generate Image Date
+        id: image_date
+        shell: bash
+        run: |
+          image_date=$(date +%Y%m%d-%H)
+          echo "IMAGE_DATE=$image_date" >> $GITHUB_OUTPUT
+
       # Build metadata
       - name: Image Metadata
         uses: docker/metadata-action@v5
@@ -155,7 +162,7 @@ jobs:
             BASE_IMAGE_URL=${{ env.BASE_IMAGE_URL }}
             RECIPE=${{ matrix.recipe }}
             IMAGE_REGISTRY=${{ steps.registry_case.outputs.lowercase }}
-            IMAGE_DATE=$(date %Y%m%d-%H)
+            IMAGE_DATE=${{ steps.image_date.outputs.IMAGE_DATE }}
           labels: ${{ steps.meta.outputs.labels }}
           oci: false
 
