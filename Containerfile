@@ -41,19 +41,6 @@ COPY modules /tmp/modules/
 # It is copied from the official container image since it's not available as an RPM.
 COPY --from=docker.io/mikefarah/yq /usr/bin/yq /usr/bin/yq
 
-## Adapted from bazzite Containerfile
-COPY system_files/shared /
-RUN if grep -q "kinoite" <<< "${BASE_IMAGE_URL}"; then \
-        sed -i '/^PRETTY_NAME/s/Kinoite/Sukarn Kinoite/' /usr/lib/os-release; \
-    elif grep -q "silverblue" <<< "${BASE_IMAGE_URL}"; then \
-        sed -i '/^PRETTY_NAME/s/Silverblue/Sukarn Silverblue/' /usr/lib/os-release; \
-    else \
-        sed -i '/^PRETTY_NAME/s/\(.*\)/\(Sukarn\)/' /usr/lib/os-release; \
-    fi && \
-    if grep -q "bazzite" <<< "${BASE_IMAGE_URL}"; then \
-        sed -i '/^PRETTY_NAME/s/Bazzite//' /usr/lib/os-release; \
-    fi
-
 # Run the build script, then clean up temp files and finalize container build.
 RUN chmod +x /tmp/build.sh && /tmp/build.sh && \
     rm -rf /tmp/* /var/* && ostree container commit
