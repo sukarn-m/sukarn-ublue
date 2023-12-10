@@ -1,5 +1,5 @@
 # image will be published to ghcr.io/<user>/<name>
-name: sukarn-ublue
+name: sukarn-ublue-desktop
 # description will be included in the image's metadata
 description: Personal OS image.
 
@@ -10,6 +10,7 @@ image-version: 39 # latest is also supported if you want new updates ASAP
 # module configuration, executed in order
 # you can include multiple instances of the same module
 modules:
+  - from-file: common-packages.yml
   - type: files
     files:
       - usr: /usr
@@ -26,19 +27,9 @@ modules:
     install:
       # - micro
       # - starship
-      - nextcloud-client-devel # On Fedora, nextcloud-client does not contain the libraries for virtual files support. Flatpak does not work with virtual files. AppImage does not integrate with Nautilus.
-      - nextcloud-client-nautilus
-      - gnome-shell-extension-pop-shell
-      - gnome-shell-extension-gsconnect
-      - nautilus-gsconnect
-      - gnome-shell-extension-appindicator
-      - gnome-shell-extension-dash-to-panel
-      - gnome-shell-extension-workspace-indicator
-      - syncthing
     remove:
       - firefox # default firefox removed in favor of flatpak
       - firefox-langpacks # langpacks needs to also be removed to prevent dependency problems
-      - gnome-shell-extension-background-logo
 
   - type: bling # configure what to pull in from ublue-os/bling
     install:
@@ -53,7 +44,7 @@ modules:
       # - devpod # https://devpod.sh/ as an rpm
       # - gnome-vrr # enables gnome-vrr for your image
       # - container-tools # installs container-related tools onto /usr/bin: kind, kubectx, docker-compose and kubens
-      - laptop # installs TLP and configures your system for laptop usage
+      # - laptop # installs TLP and configures your system for laptop usage
       # - flatpaksync # allows synchronization of user-installed flatpaks, see separate documentation section
 
 
