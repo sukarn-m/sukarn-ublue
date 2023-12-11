@@ -21,7 +21,7 @@ jobs:
         uses: ublue-os/isogenerator@v2.2.0
         id: isogenerator
         with:
-          image-name: ${{ github.event.repository.name }}
+          image-name: sukarn-ublue
           installer-repo: releases
           installer-major-version: 39
           boot-menu-path: boot_menu.yml

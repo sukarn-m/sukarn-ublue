@@ -1,5 +1,11 @@
 ublue_variants:
-  - label: ublue-os/startingpoint
+  - label: sukarn-m/sukarn-ublue-laptop
     ks: /kickstart/ublue-os.ks
     flavors:
-      - label: startingpoint
+      - label: sukarn-ublue-laptop
+        info: For laptop, without nVidia drivers.
+  - label: sukarn-m/sukarn-ublue-desktop
+    ks: /kickstart/ublue-os.ks
+    flavors:
+      - label: sukarn-ublue-desktop
+        info: For Desktop, with nVidia drivers.
