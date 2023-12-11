@@ -4,7 +4,7 @@ modules:
       # Nextcloud also requires the script nextcloud-vfs.sh, called from the file common-scripts.yml
       - nextcloud-client-devel
       - nextcloud-client-nautilus
-      - gnome-shell-extension-pop-shell
+#      - gnome-shell-extension-pop-shell
       - gnome-shell-extension-gsconnect
       - nautilus-gsconnect
       - gnome-shell-extension-appindicator
@@ -13,9 +13,6 @@ modules:
       - syncthing
     remove:
       - gnome-shell-extension-background-logo
-# Firefox is not installed on bazzite.
-      - firefox # default firefox removed in favor of flatpak
-      - firefox-langpacks # langpacks needs to also be removed to prevent dependency problems
 
   - type: bling # configure what to pull in from ublue-os/bling
     install:
