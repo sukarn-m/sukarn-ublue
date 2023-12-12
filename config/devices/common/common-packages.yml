@@ -11,6 +11,7 @@ modules:
       - gnome-shell-extension-dash-to-panel
       - gnome-shell-extension-workspace-indicator
       - syncthing
+      - byobu
     remove:
       - gnome-shell-extension-background-logo
 
