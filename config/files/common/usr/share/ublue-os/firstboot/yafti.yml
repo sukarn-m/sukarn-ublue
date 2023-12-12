@@ -18,11 +18,11 @@ screens:
       description: |
         We have detected the limited, Fedora-provided Flatpak remote on your system, whose applications are usually missing important codecs and other features. This step will therefore remove all basic Fedora Flatpaks from your system! We will instead switch all core Flatpak applications over to the vastly superior, unfiltered Flathub. If you don't want to do this, simply exit this installer.
       actions:
-#        - run: flatpak remote-delete --system --force fedora
-#        - run: flatpak remote-delete --user --force fedora
-#        - run: flatpak remove --system --noninteractive --all
+        - run: flatpak remote-delete --system --force fedora
+        - run: flatpak remote-delete --user --force fedora
+        - run: flatpak remove --system --noninteractive --all
         - run: flatpak remote-add --if-not-exists --system flathub https://flathub.org/repo/flathub.flatpakrepo
-#        - run: flatpak remote-add --if-not-exists --user flathub https://flathub.org/repo/flathub.flatpakrepo
+        - run: flatpak remote-add --if-not-exists --user flathub https://flathub.org/repo/flathub.flatpakrepo
   check-system-flathub:
     source: yafti.screen.consent
     values:
@@ -86,6 +86,28 @@ screens:
             - Flatseal (Permission Manager): com.github.tchx84.Flatseal
             - Font Downloader: org.gustavoperedo.FontDownloader
             - Mozilla Firefox: org.mozilla.firefox
+#        Sukarn's Selection (Common):
+#          description: Custom selection by Sukarn.
+#          default: true
+#          packages:
+#            - GNOME Boxes: org.gnome.Boxes
+#            - GNOME Dconf Editor: ca.desrt.dconf-editor
+#            - Blanket: com.rafaelmardojai.Blanket
+#            - Emby Theater: media.emby.EmbyTheater
+#            - Gear Lever: it.mijorus.gearlever
+#            - GitHub Desktop: io.github.shiftey.Desktop
+#            - Joplin: net.cozic.joplin_desktop
+#            - LibreOffice: org.libreoffice.LibreOffice
+#            - Microsoft Edge: com.microsoft.Edge
+#            - Mission Center: io.missioncenter.MissionCenter
+#            - NewsFlash: io.gitlab.news_flash.NewsFlash
+#            - Trilium Notes: com.github.zadam.trilium
+#            - Ungoogled Chromium: com.github.Eloston.UngoogledChromium
+#        Sukarn's Selection (Laptop):
+#          description: Custom selection by Sukarn for Laptop only.
+#          default: false
+#          packages:
+#            - TLP-UI: com.github.d4nj1.tlpui
         Web Browsers:
           description: Additional browsers to complement or replace Firefox.
           default: false

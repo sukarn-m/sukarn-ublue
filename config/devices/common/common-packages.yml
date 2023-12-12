@@ -36,10 +36,24 @@ modules:
       # - laptop # installs TLP and configures your system for laptop usage
       # - flatpaksync # allows synchronization of user-installed flatpaks, see separate documentation section
 
-#  - type: yafti
+  - type: yafti
       # if included, yafti and it's dependencies (pip & libadwaita)
       #  will be installed and set up
-#    custom-flatpaks:
+    custom-flatpaks:
       # this section is optional
+      - (Laptop) TLP-UI: com.github.d4nj1.tlpui
+      - GNOME Boxes: org.gnome.Boxes
+      - GNOME Dconf Editor: ca.desrt.dconf-editor
+      - Blanket: com.rafaelmardojai.Blanket
+      - Emby Theater: media.emby.EmbyTheater
+      - Gear Lever: it.mijorus.gearlever
+      - GitHub Desktop: io.github.shiftey.Desktop
+      - Joplin: net.cozic.joplin_desktop
+      - LibreOffice: org.libreoffice.LibreOffice
+      - Microsoft Edge: com.microsoft.Edge
+      - Mission Center: io.missioncenter.MissionCenter
+      - NewsFlash: io.gitlab.news_flash.NewsFlash
+      - Trilium Notes: com.github.zadam.trilium
+      - Ungoogled Chromium: com.github.Eloston.UngoogledChromium
       # - Celluloid: io.github.celluloid_player.Celluloid
       # - Krita: org.kde.krita
