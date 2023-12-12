@@ -86,28 +86,28 @@ screens:
             - Flatseal (Permission Manager): com.github.tchx84.Flatseal
             - Font Downloader: org.gustavoperedo.FontDownloader
             - Mozilla Firefox: org.mozilla.firefox
-#        Sukarn's Selection (Common):
-#          description: Custom selection by Sukarn.
-#          default: true
-#          packages:
-#            - GNOME Boxes: org.gnome.Boxes
-#            - GNOME Dconf Editor: ca.desrt.dconf-editor
-#            - Blanket: com.rafaelmardojai.Blanket
-#            - Emby Theater: media.emby.EmbyTheater
-#            - Gear Lever: it.mijorus.gearlever
-#            - GitHub Desktop: io.github.shiftey.Desktop
-#            - Joplin: net.cozic.joplin_desktop
-#            - LibreOffice: org.libreoffice.LibreOffice
-#            - Microsoft Edge: com.microsoft.Edge
-#            - Mission Center: io.missioncenter.MissionCenter
-#            - NewsFlash: io.gitlab.news_flash.NewsFlash
-#            - Trilium Notes: com.github.zadam.trilium
-#            - Ungoogled Chromium: com.github.Eloston.UngoogledChromium
-#        Sukarn's Selection (Laptop):
-#          description: Custom selection by Sukarn for Laptop only.
-#          default: false
-#          packages:
-#            - TLP-UI: com.github.d4nj1.tlpui
+        Sukarn's Selection (Common):
+          description: Custom selection by Sukarn.
+          default: true
+          packages:
+            - GNOME Boxes: org.gnome.Boxes
+            - GNOME Dconf Editor: ca.desrt.dconf-editor
+            - Blanket: com.rafaelmardojai.Blanket
+            - Emby Theater: media.emby.EmbyTheater
+            - Gear Lever: it.mijorus.gearlever
+            - GitHub Desktop: io.github.shiftey.Desktop
+            - Joplin: net.cozic.joplin_desktop
+            - LibreOffice: org.libreoffice.LibreOffice
+            - Microsoft Edge: com.microsoft.Edge
+            - Mission Center: io.missioncenter.MissionCenter
+            - NewsFlash: io.gitlab.news_flash.NewsFlash
+            - Trilium Notes: com.github.zadam.trilium
+            - Ungoogled Chromium: com.github.Eloston.UngoogledChromium
+        Sukarn's Selection (Laptop):
+          description: Custom selection by Sukarn for Laptop only.
+          default: false
+          packages:
+            - TLP-UI: com.github.d4nj1.tlpui
         Web Browsers:
           description: Additional browsers to complement or replace Firefox.
           default: false
