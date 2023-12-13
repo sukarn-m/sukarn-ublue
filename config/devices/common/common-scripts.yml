@@ -3,4 +3,5 @@ modules:
     scripts:
       - nextcloud-vfs.sh
       - image_name.sh
+      - nas.sh
 #      - configure-screen.sh

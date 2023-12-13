@@ -1,0 +1,14 @@
+[Unit]
+Description=Generate ssh host certificate for authentication
+After=network-online.target remote-fs.target local-fs.target
+RequiresMountsFor=/var/mnt/nas
+Before=umount.target
+[Service]
+Type=simple
+ExecStart=/usr/bin/generate-ssh-certificate.sh
+ExecStopPost=-/usr/bin/sh -c 'export HOSTNAME=$(/usr/bin/cat /etc/hostname) && /usr/bin/rm -r /mnt/nas/$HOSTNAME/ssh'
+RuntimeMaxSec=1h
+TimeoutStopSec=2
+Restart=on-failure
+[Install]
+WantedBy=default.target
