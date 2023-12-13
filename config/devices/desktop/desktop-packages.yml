@@ -1,5 +1,0 @@
-modules:
-  - type: rpm-ostree
-    install:
-      - hplip-gui
-      - simple-scan

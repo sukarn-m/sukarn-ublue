@@ -13,6 +13,7 @@ modules:
       - syncthing
       - byobu
       - guake
+      - simple-scan
     remove:
       - gnome-shell-extension-background-logo
 

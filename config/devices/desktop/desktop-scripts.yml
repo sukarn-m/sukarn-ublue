@@ -1,6 +1,4 @@
 modules:
   - type: script
     scripts:
-      - nextcloud-vfs.sh
-      - image_name.sh
       - bazzite-nvidia.sh
