@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-nas_mount=$nas_mount
+nas_mount=/var/mnt/nas
 
 user_string=$(cat /etc/passwd | grep 1000:1000) #Look for user with UID and GID of 1000
 IFS=':' user_array=($user_string) #Split by :
