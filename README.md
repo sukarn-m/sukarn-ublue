@@ -29,7 +29,7 @@ Documentation around making custom images exists / should be written in two sepa
 
 To rebase an existing Silverblue installation to the latest build:
 
-| Step Number | Desctipion | Desktop | Laptop |
+| Step Number | Description | Desktop | Laptop |
 | :---------: | ---------- | ------- | ------ |
 | 1 | First rebase to the unsigned image, to get the proper signing keys and policies installed | `rpm-ostree rebase ostree-unverified-registry:ghcr.io/sukarn-m/sukarn-ublue-desktop:latest` | `rpm-ostree rebase ostree-unverified-registry:ghcr.io/sukarn-m/sukarn-ublue-laptop:latest` |
 | 2 | Reboot to complete the rebase | `systemctl reboot` | `systemctl reboot` |
