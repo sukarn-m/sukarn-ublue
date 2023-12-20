@@ -1,6 +1,7 @@
 modules:
   - from-file: devices/laptop/laptop-files.yml
   - from-file: devices/laptop/laptop-packages.yml
+  - from-file: devices/laptop/laptop-scripts.yml
   - type: bling # configure what to pull in from ublue-os/bling
     install:
       - laptop # installs TLP and configures your system for laptop usage

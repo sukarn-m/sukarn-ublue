@@ -4,4 +4,5 @@ modules:
       - nextcloud-vfs.sh
       - image_name.sh
       - nas.sh
+      - systemd-common.sh
 #      - configure-screen.sh
