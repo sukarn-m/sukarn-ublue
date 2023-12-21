@@ -3,18 +3,20 @@
 KARGS=$(rpm-ostree kargs)
 NEEDED_KARGS=()
 
+echo "Current kargs: $KARGS"
+
 # Fix storage crash.
-if [[ ! $KARGS=~ "nvme_core.default_ps_max_latency_us" ]]; then
-  NEEDED_KARGS+=("--append=nvme_core.default_ps_max_latency_us=0")
+if [[ ! $KARGS =~ "nvme_core.default_ps_max_latency_us" ]]; then
+  NEEDED_KARGS+=("--append-if-missing=nvme_core.default_ps_max_latency_us=0")
 fi
 
 # Attempt to fix AMD S3 sleep crash.
-if [[ ! $KARGS=~ "amd_iommu" ]]; then
-  NEEDED_KARGS+=("--append=amd_iommu=off")
+if [[ ! $KARGS =~ "amd_iommu" ]]; then
+  NEEDED_KARGS+=("--append-if-missing=amd_iommu=off")
 fi
 
 if [[ -n "$NEEDED_KARGS" ]]; then
-  echo "Found needed karg changes, applying the following: $NEEDED_KARGS"
+  echo "Found needed karg changes, applying the following: ${NEEDED_KARGS[*]}"
   plymouth display-message --text="Updating kargs - Please wait, this may take a while" || true
   rpm-ostree kargs ${NEEDED_KARGS[*]} --reboot || exit 1
 else
