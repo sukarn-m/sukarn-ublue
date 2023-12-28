@@ -12,7 +12,7 @@ modules:
       - gnome-shell-extension-workspace-indicator
       - syncthing
       - byobu
-      - guake
+#      - guake
       - simple-scan
     remove:
       - gnome-shell-extension-background-logo
