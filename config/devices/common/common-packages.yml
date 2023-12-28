@@ -10,6 +10,8 @@ modules:
       - gnome-shell-extension-appindicator
       - gnome-shell-extension-dash-to-panel
       - gnome-shell-extension-workspace-indicator
+      - gnome-shell-extension-caffeine
+      - gnome-shell-extension-system-monitor-applet
       - syncthing
       - byobu
 #      - guake
