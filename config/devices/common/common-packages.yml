@@ -23,12 +23,17 @@ modules:
       - syncthing
     remove:
       - gnome-shell-extension-background-logo
+      # Firefox is not installed on bazzite.
+      - firefox
+      - firefox-langpacks
 
   - type: bling # configure what to pull in from ublue-os/bling
     install:
       - justfiles # add "!include /usr/share/ublue-os/just/100-bling.just" in your custom.just (added by default) or local justfile
       - ublue-os-wallpapers
       - ublue-update # https://github.com/ublue-os/ublue-update
+
+  - type: yafti
 
 ## Upstream:
 

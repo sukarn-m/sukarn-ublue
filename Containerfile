@@ -12,7 +12,7 @@
 ARG IMAGE_MAJOR_VERSION=39
 ARG BASE_IMAGE_URL=ghcr.io/ublue-os/silverblue-main
 
-FROM ${BASE_IMAGE_URL}:${IMAGE_MAJOR_VERSION} AS sukarn-ublue
+FROM ${BASE_IMAGE_URL}:${IMAGE_MAJOR_VERSION} #AS sukarn-ublue
 
 # The default recipe is set to the recipe's default filename
 # so that `podman build` should just work for most people.

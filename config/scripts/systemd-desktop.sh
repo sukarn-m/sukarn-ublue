@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
 systemctl daemon-reload
-systemctl enable desktop-kargs.service
-chmod 0700 /usr/bin/desktop-kargs
+systemctl enable nvidia-kargs.service
+chmod 0700 /usr/bin/nvidia-kargs
