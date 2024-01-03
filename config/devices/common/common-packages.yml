@@ -1,21 +1,26 @@
 modules:
   - type: rpm-ostree
     install:
+      - byobu
+#      - guake
+      - gamemode.i686
+      - gamescope
+      - gnome-shell-extension-appindicator
+      - gnome-shell-extension-blur-my-shell
+      - gnome-shell-extension-caffeine
+      - gnome-shell-extension-dash-to-panel
+      - gnome-shell-extension-gamemode
+      - gnome-shell-extension-gsconnect
+      - nautilus-gsconnect
+#      - gnome-shell-extension-pop-shell
+      - gnome-shell-extension-system-monitor-applet
+      - gnome-shell-extension-workspace-indicator
+      - mangohud
       # Nextcloud also requires the script nextcloud-vfs.sh, called from the file common-scripts.yml
       - nextcloud-client-devel
       - nextcloud-client-nautilus
-#      - gnome-shell-extension-pop-shell
-      - gnome-shell-extension-gsconnect
-      - nautilus-gsconnect
-      - gnome-shell-extension-appindicator
-      - gnome-shell-extension-dash-to-panel
-      - gnome-shell-extension-workspace-indicator
-      - gnome-shell-extension-caffeine
-      - gnome-shell-extension-system-monitor-applet
-      - syncthing
-      - byobu
-#      - guake
       - simple-scan
+      - syncthing
     remove:
       - gnome-shell-extension-background-logo
 

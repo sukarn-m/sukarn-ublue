@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+KARGS=$(rpm-ostree kargs)
+NEEDED_KARGS=()
+
+echo "Current kargs: $KARGS"
+
+if [[ ! $KARGS =~ "rd.driver.blacklist=nouveau" ]]; then
+  NEEDED_KARGS+=("--append-if-missing=rd.driver.blacklist=nouveau")
+fi
+
+if [[ ! $KARGS =~ "modprobe.blacklist=nouveau" ]]; then
+  NEEDED_KARGS+=("--append-if-missing=modprobe.blacklist=nouveau")
+fi
+
+if [[ ! $KARGS =~ "nvidia-drm.modeset=1" ]]; then
+  NEEDED_KARGS+=("--append-if-missing=nvidia-drm.modeset=1")
+fi
+
+if [[ -n "$NEEDED_KARGS" ]]; then
+  echo "Found needed karg changes, applying the following: ${NEEDED_KARGS[*]}"
+  plymouth display-message --text="Updating kargs - Please wait, this may take a while" || true
+  rpm-ostree kargs ${NEEDED_KARGS[*]} --reboot || exit 1
+else
+  echo "No karg changes needed."
+fi

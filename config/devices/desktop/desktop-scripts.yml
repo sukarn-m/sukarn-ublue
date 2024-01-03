@@ -2,4 +2,5 @@ modules:
   - type: script
     scripts:
       - desktop-nvidia.sh
+      - systemd-desktop.sh
 #      - bazzite.sh
