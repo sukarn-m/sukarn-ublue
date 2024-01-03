@@ -1,4 +1,5 @@
 # Placeholder
 modules:
   - from-file: devices/desktop/desktop-files.yml
+  - from-file: devices/desktop/desktop-packages.yml
   - from-file: devices/desktop/desktop-scripts.yml

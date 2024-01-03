@@ -4,9 +4,8 @@ name: sukarn-ublue-desktop
 description: Customized for desktops with nvidia graphics card.
 
 # the base image to build on top of (FROM) and the version tag to use
-base-image: ghcr.io/ublue-os/bazzite-gnome-nvidia
-### Removal of firefox shifted from common-packages.yml to laptop-packages.yml since bazzite does not have firefox pre-installed.
-# base-image: ghcr.io/ublue-os/bazzite-gnome-nvidia
+#base-image: ghcr.io/ublue-os/bazzite-gnome-nvidia
+base-image: ghcr.io/ublue-os/silverblue-nvidia
 image-version: 39 # latest is also supported if you want new updates ASAP
 
 # module configuration, executed in order

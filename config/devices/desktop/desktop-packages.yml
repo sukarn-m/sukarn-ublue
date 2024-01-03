@@ -1,0 +1,6 @@
+modules:
+  - type: rpm-ostree
+    remove:
+    # Firefox is not installed on bazzite, so this part is not included in images built on top of bazzite.
+      - firefox # default firefox removed in favor of flatpak
+      - firefox-langpacks # langpacks needs to also be removed to prevent dependency problems
