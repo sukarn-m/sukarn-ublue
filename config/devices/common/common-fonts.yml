@@ -1,0 +1,13 @@
+modules:
+  - type: fonts
+    fonts:
+      nerd-fonts:
+        - SourceCodePro
+        - Tinos
+      google-fonts:
+        - Bebas Neue
+        - Bitter
+        - Charis SIL
+        - Fanwood Text
+        - Literata
+        - Rubik
