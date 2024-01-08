@@ -42,7 +42,8 @@ COPY modules /tmp/modules/
 COPY --from=docker.io/mikefarah/yq /usr/bin/yq /usr/bin/yq
 
 # Copy udev rules from https://github.com/ublue-os/config
-COPY --from=ghcr.io/ublue-os/config:latest /files/ublue-os/udev-rules /
+COPY --from=ghcr.io/ublue-os/config:latest /rpms/ublue-os-udev-rules.noarch.rpm /tmp
+RUN rpm -ivh /tmp/ublue-os-udev-rules.noarch.rpm
 
 # Run the build script, then clean up temp files and finalize container build.
 RUN chmod +x /tmp/build.sh && /tmp/build.sh && \
