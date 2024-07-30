@@ -1,0 +1,5 @@
+.idea
+cosign.key
+Containerfile
+iso-output/*.iso
+iso-output/*.iso-CHECKSUM

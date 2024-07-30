@@ -1,0 +1,91 @@
+modules:
+  - type: default-flatpaks
+    notify: true   # Send notification after install/uninstall is finished (true/false)
+#    system:
+      # If no repo information is specified, Flathub will be used by default
+#      repo-url: https://dl.flathub.org/repo/flathub.flatpakrepo
+#      repo-name: flathub
+#      repo-title: "Flathub (system-wide)" # Optional; this sets the remote's user-facing name in graphical frontends like GNOME Software
+#      install:
+      # - org.gnome.Loupe
+      # - one.ablaze.floorp//lightning # This is an example of flatpak which has multiple branches in selection (flatpak//branch).
+      # Flatpak runtimes are not supported (like org.winehq.Wine//stable-23.08).
+      # Only normal flatpak applications are (like Floorp Lightning web browser in this example).
+      # Multiple install of same flatpaks with different branches is not supported.
+#      remove:
+#        - org.gnome.eog
+      #
+    # A flatpak repo can also be added without having to install flatpaks,
+    # as long as one of the repo- fields is present
+    user:
+      repo-url: https://dl.flathub.org/repo/flathub.flatpakrepo
+      repo-name: flathub
+      repo-title: "Flathub (user)"
+## INSTALL
+      install:
+## GNOME Apps
+        - org.gnome.Calculator # Calculator
+        - org.gnome.Calendar # Calendar
+        - org.gnome.Snapshot # Camera
+        - org.gnome.Characters # Characters
+        - org.gnome.clocks # Clocks
+        - org.gnome.Connections # Connections
+        - org.gnome.Contacts # Contacts
+        - ca.desrt.dconf-editor # Dconf Editor
+        - org.gnome.baobab # Disk Usage Analyzer
+        - org.gnome.Evince # Document Viewer
+        - org.gnome.Evolution # Evolution
+        - com.mattjakeman.ExtensionManager # Extension Manager
+        - org.gnome.font-viewer # Font Viewer
+        - org.gnome.Loupe # Image Viewer
+        - org.gnome.Logs # Logs
+        - org.gnome.Maps # Maps
+        - org.gnome.Photos # Photos (Organizer)
+        - org.gnome.seahorse.Application # Seahorse
+        - org.gnome.NautilusPreviewer # Sushi (Nautilus Previewer)
+        - org.gnome.TextEditor # Text Editor
+        - org.gnome.Weather # Weather
+## System Apps
+        - org.gnome.DejaDup # Deja Dup Backups
+        - org.fedoraproject.MediaWriter # Fedora Media Writer
+        - com.github.tchx84.Flatseal # Flatseal (Permission Manager)
+## Media
+        - com.rafaelmardojai.Blanket # Blanket
+        - org.gimp.GIMP # GIMP
+        - org.videolan.VLC # VLC
+## Internet
+        - com.bitwarden.desktop # Bitwarden
+        - com.discordapp.Discord # Discord
+        - org.mozilla.firefox # Mozilla Firefox
+        - org.mozilla.Thunderbird # Mozilla Thunderbird
+        - com.microsoft.Edge # Microsoft Edge
+        - io.gitlab.news_flash.NewsFlash # NewsFlash
+        - io.github.ungoogled_software.ungoogled_chromium # Ungoogled Chromium
+## Gaming
+        - com.usebottles.bottles # Bottles
+        - com.heroicgameslauncher.hgl # Heroic Games Launcher
+#        - com.vysp3r.ProtonPlus # Proton Plus
+#        - net.davidotek.pupgui2 # ProtonUp-Qt
+#        - org.libretro.RetroArch # RetroArch
+#        - net.rpcs3.RPCS3 # RPCS3
+        - com.valvesoftware.Steam # Steam
+## Office
+        - net.cozic.joplin_desktop # Joplin
+        - org.libreoffice.LibreOffice # LibreOffice
+        - com.github.zadam.trilium # Trilium Notes
+## Tools
+        - com.github.wwmm.easyeffects # Easy Effects
+        - org.filezillaproject.Filezilla # FileZilla
+        - it.mijorus.gearlever # Gear Lever
+        - io.missioncenter.MissionCenter # Mission Center
+        - com.vscodium.codium # VS Codium
+        - io.github.flattool.Warehouse # Warehouse
+        - dev.deedles.Trayscale # Trayscale for tailscale
+## Theming
+        - org.gtk.Gtk3theme.Yaru
+        - org.gtk.Gtk3theme.Yaru-light
+        - org.gtk.Gtk3theme.Yaru-dark
+## UNINSTALL
+      remove:
+        - media.emby.EmbyTheater # Emby Theater
+        - org.gnome.Totem # GNOME Totem Videos

@@ -1,0 +1,6 @@
+[org.gnome.shell]
+favorite-apps=['org.gnome.Nautilus.desktop', 'org.mozilla.firefox.desktop', 'org.mozilla.Thunderbird.desktop', 'org.gnome.Evolution.desktop', 'com.github.zadam.trilium.desktop']
+enabled-extensions=['background-logo@fedorahosted.org', 'appindicatorsupport@rgcjonas.gmail.com', 'dash-to-panel@jderose9.github.com', 'gsconnect@andyholmes.github.io', 'launch-new-instance@gnome-shell-extensions.gcampax.github.com', 'drive-menu@gnome-shell-extensions.gcampax.github.com', 'no-overview@fthx', 'caffeine@patapon.info', 'hibernate-status@dromi', 'blur-my-shell@aunetx', 'gamemode@christian.kellner.me', 'system-monitor-next@paradoxxx.zero.gmail.com', 'Bluetooth-Battery-Meter@maniacx.github.com', 'pano@elhan.io', 'forge@jmmaranan.com', 'workspace-indicator@gnome-shell-extensions.gcampax.github.com', 'order-extensions@wa4557.github.com', 'weatherornot@somepaulo.github.io', 'tailscale@joaophi.github.com', 'tailscale-status@maxgallup.github.com']
+
+[org.gnome.shell.extensions.system-monitor]
+thermal-sensor-label='thinkpad - CPU'

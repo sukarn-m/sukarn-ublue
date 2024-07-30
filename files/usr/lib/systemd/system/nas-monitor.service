@@ -1,0 +1,11 @@
+[Unit]
+Description=Monitor NAS availability and activate/deactivate NAS mounts.
+Requires=network-online.target
+Requires=local-fs.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/sh -c '/usr/bin/nas-monitor.sh'
+
+[Install]
+WantedBy=default.target

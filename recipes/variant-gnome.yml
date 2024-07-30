@@ -1,0 +1,45 @@
+modules:
+  - from-file: base-flatpaks.yml
+  - from-file: base-fonts.yml
+  - from-file: base-packages.yml
+## This is where GNOME stuff was
+  - from-file: base-akmods-bling.yml
+  - from-file: base-files.yml
+  - from-file: base-scripts.yml
+  - from-file: base-systemd.yml
+
+## GNOME stuff starts below this line
+  - type: rpm-ostree
+    install:
+      - gnome-shell-extension-appindicator
+      - gnome-shell-extension-blur-my-shell
+      - gnome-shell-extension-caffeine
+      - gnome-shell-extension-dash-to-panel
+      - gnome-shell-extension-forge
+      - gnome-shell-extension-gsconnect
+      - nautilus-gsconnect
+      - gnome-shell-extension-system-monitor-applet
+      - gnome-shell-extension-workspace-indicator
+      - libgda # For extension Pano - Clipboard Manager
+      - libgda-sqlite # For extension Pano - Clipboard Manager
+    remove:
+      - gnome-shell-extension-background-logo
+
+
+  - type: gnome-extensions #https://github.com/blue-build/modules/blob/main/modules/gnome-extensions/module.yml
+    install:
+      - Bluetooth Battery Meter
+      - Caffeine
+#      - Clipboard History
+      - Hibernate Status Button
+      - Order Gnome Shell extensions
+      - Pano - Clipboard Manager # Requires libgda and libgda-sqlite
+      - Removable Drive Menu
+      - Weather or Not
+      - Tailscale QS
+#    uninstall:
+#      - 
+
+  - type: gschema-overrides
+    include:
+      - zz1-sukarn.gschema.override

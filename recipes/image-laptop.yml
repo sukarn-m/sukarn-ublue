@@ -1,0 +1,46 @@
+name: sukarn-ublue-laptop
+description: Customized for E14G2-AMD.
+# base-image: ghci.io/sukarn-m/sukarn-os-base
+# image-version: latest
+base-image: ghcr.io/ublue-os/silverblue-main
+image-version: gts
+
+# module configuration, executed in order
+# you can include multiple instances of the same module
+modules:
+## sukarn-os-base: disable this
+  - from-file: variant-gnome.yml
+
+## Device specific configuration starts after this line.
+## -----------------------------------------------------
+  - type: files
+    files:
+#      - laptop/usr: /usr
+      - source: laptop/usr
+        destination: /usr
+      - source: device-e14g2/usr
+        destination: /usr
+
+  - type: systemd
+    system:
+      enabled:
+        - laptop-kargs.service
+
+  - type: gnome-extensions #https://github.com/blue-build/modules/blob/main/modules/gnome-extensions/module.yml
+    install:
+      - Power Profile Switcher
+      - Thinkpad Battery Threshold
+
+  - type: gschema-overrides
+    include:
+      - zz2-sukarn-laptop.gschema.override
+
+  - type: script
+    scripts:
+      - laptop-kargs.sh
+## sukarn-os-base: enable this
+#      - remove-base-os-reference.sh
+#      - coreos_kernel.sh
+      - initramfs.sh
+
+  - type: signing # this sests up the proper policy & signing files for signed images to work fully

@@ -1,0 +1,11 @@
+[Unit]
+Description=Timer to check NAS availability
+After=network-online.target
+
+[Timer]
+Unit=nas-monitor.service
+OnBootSec=2min
+OnUnitActiveSec=5min
+
+[Install]
+WantedBy=timers.target

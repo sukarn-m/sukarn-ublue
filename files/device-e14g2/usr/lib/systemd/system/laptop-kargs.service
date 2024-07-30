@@ -1,0 +1,12 @@
+[Unit]
+Description=Configure kargs
+After=rpm-ostreed.service
+Before=systemd-user-sessions.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/laptop-kargs
+
+[Install]
+WantedBy=multi-user.target

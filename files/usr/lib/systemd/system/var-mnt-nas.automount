@@ -1,0 +1,7 @@
+[Unit]
+Description=Automount NAS share on demand
+[Automount]
+Where=/var/mnt/nas
+TimeoutIdleSec=600
+[Install]
+WantedBy=remote-fs.target
