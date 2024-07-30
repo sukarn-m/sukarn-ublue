@@ -43,4 +43,4 @@ jobs:
           
           # Optional flags
           use_unstable_cli: false
-          squash: false
+          squash: true
