@@ -6,6 +6,11 @@ on:
   push:
     paths:
       - recipes/image-budgie.yml
+      - .gitHub/workflows/build-budgie.yml
+      - files/scripts/coreos_kernel.sh
+      - files/scripts/fedora-atomic-repos.sh
+      - files/scripts/image_name.sh
+      - files/scripts/initramfs.sh
 
   workflow_dispatch: # allow manually triggering builds
 
@@ -37,4 +42,4 @@ jobs:
           
           # Optional flags
           use_unstable_cli: false
-          squash: false
+          squash: true
