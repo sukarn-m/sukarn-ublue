@@ -8,7 +8,7 @@ on:
       - "**.md"
       - "recipes/image-budgie.yml"
       - "make-*-iso.sh"
-      - ".gitHub/workflows/build-budgie.yml"
+      - ".github/workflows/build-budgie.yml"
 
   workflow_dispatch: # allow manually triggering builds
 
