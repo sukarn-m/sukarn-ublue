@@ -24,6 +24,7 @@ modules:
 
   - type: script
     scripts:
+      - set-environment-budgie.sh
       - coreos_kernel.sh
       - fedora-atomic-repos.sh
 
