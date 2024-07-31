@@ -6,22 +6,33 @@
 set -eou pipefail
 
 coreos_kernel_release=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
-major_minor_patch=$(echo "$coreos_kernel_release" | cut -d '-' -f 1)
-latest_fedora_version=$(echo "$coreos_kernel_release" | grep -oP 'fc\K[0-9]+')
-running_fedora_version=$(grep -Po "(?<=VERSION_ID=)\d+" /usr/lib/os-release)
+coreos_major_minor_patch=$(echo "$coreos_kernel_release" | cut -d '-' -f 1)
+running_fedora_release=$(grep -Po "(?<=VERSION_ID=)\d+" /usr/lib/os-release)
+running_major_minor_patch=$(echo $(uname -r | cut -d '-' -f1))
 
-dir_names=$(curl -sS https://kojipkgs.fedoraproject.org/packages/kernel/${major_minor_patch}/ 2>&1 | grep '<a href=' | sed 's|^<a href="\([^"]*\)">.*|\1|')
+# Stop the script if the kernel major and minor versions between fedora and coreos match.
+if [ "$(echo "$running_major_minor_patch" | cut -d'.' -f1-2)" == "$(echo "$coreos_major_minor_patch" | cut -d'.' -f1-2)" ]; then
+  echo "Kernel major and minor versions between coreos and fc${running_fedora_release} match, exiting script."
+  exit 0
+fi
+
+# If we reach this point, the major and minor versions do not match, continue running the script
+echo "Kernel major and minor versions between coreos and fc${running_fedora_release} do not match, continuing script..."
+
+dir_names=$(curl -sS https://kojipkgs.fedoraproject.org/packages/kernel/${coreos_major_minor_patch}/ 2>&1 | grep '<a href=' | sed 's|^<a href="\([^"]*\)">.*|\1|')
 for dir_name in $dir_names; do
-    if [[ $dir_name =~ fc${running_fedora_version} ]]; then
+    if [[ $dir_name =~ fc${running_fedora_release} ]]; then
         coreos_kernel_subnum=$(echo $dir_name | grep -oE '[0-9]{3}' | head -1)
         break
     fi
 done
 
-KERNEL_VERSION="${major_minor_patch}-${coreos_kernel_subnum}.fc$(("$running_fedora_version"))"
-KERNEL_MAJOR_MINOR_PATCH=$(echo "$KERNEL_VERSION" | cut -d '-' -f 1)
+# Set variables for downloading the appropriate files.
+KERNEL_VERSION="${coreos_major_minor_patch}-${coreos_kernel_subnum}.fc$(("$running_fedora_release"))"
+KERNEL_MAJOR_MINOR_PATCH=${coreos_major_minor_patch}
 KERNEL_RELEASE=$(echo "$KERNEL_VERSION" | cut -d '-' -f 2)
 
+# If kernel-tools is installed, downgrade kernel-tools and kernel-tools-libs.
 if rpm -q kernel-tools; then
     rpm-ostree override replace --experimental \
         "https://kojipkgs.fedoraproject.org/packages/kernel/$KERNEL_MAJOR_MINOR_PATCH/$KERNEL_RELEASE/x86_64/kernel-$KERNEL_MAJOR_MINOR_PATCH-$KERNEL_RELEASE.x86_64.rpm" \
