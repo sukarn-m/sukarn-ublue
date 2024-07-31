@@ -36,9 +36,11 @@ for dir_name in $dir_names; do
 done
 
 ## Set variables for downloading the appropriate files.
-KERNEL_VERSION="${coreos_major_minor_patch}-${coreos_kernel_subnum}.fc$(("$running_fedora_release"))"
+KERNEL_VERSION="${coreos_major_minor_patch}-${coreos_kernel_subnum}.fc${running_fedora_release}"
 KERNEL_MAJOR_MINOR_PATCH=${coreos_major_minor_patch}
 KERNEL_RELEASE=$(echo "$KERNEL_VERSION" | cut -d '-' -f 2)
+
+rpm-ostree cliwrap install-to-root /
 
 ## If kernel-tools is installed, downgrade kernel-tools and kernel-tools-libs.
 if rpm -q kernel-tools; then
