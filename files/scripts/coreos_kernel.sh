@@ -10,7 +10,7 @@ coreos_major_minor_patch=$(echo "$coreos_kernel_release" | cut -d '-' -f 1)
 running_fedora_release=$(grep -Po "(?<=VERSION_ID=)\d+" /usr/lib/os-release)
 
 ## Stop script if kernel major and minor versions match.
-if [ -z "$BLUEBUILD_VARIANT" ] || [[ $BLUEBUILD_VARIANT == "budgie" ]]; then
+if [ -z "${BLUEBUILD_VARIANT:-}" ] || [[ $BLUEBUILD_VARIANT == "budgie" ]]; then
     running_major_minor_patch=$(rpm  -q kernel | cut -d '-' -f2- | cut -d '-' -f1-1)
     
     echo "coreos kernel release: ${coreos_major_minor_patch}"
