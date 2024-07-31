@@ -4,7 +4,7 @@
 
 This is a constantly updating repository for creating [a native container image](https://fedoraproject.org/wiki/Changes/OstreeNativeContainerStable) designed to be customized.
 
-1. [Installation by rebasing from Silverblue](#Installation by rebasing from Silverblue)
+1. [Installation by rebasing from Silverblue](#installation-by-rebasing-from-silverblue)
     1. [Rebasing to `sukarn-ublue-desktop`](#rebasing-to-sukarn-ublue-desktop)
     2. [Rebasing to `sukarn-ublue-laptop`](#rebasing-to-sukarn-ublue-laptop)
     3. [Rebasing to `sukarn-ublue-budgie`](#rebasing-to-sukarn-ublue-budgie)
