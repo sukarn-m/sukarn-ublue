@@ -9,8 +9,9 @@ coreos_kernel_release=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:sta
 coreos_major_minor_patch=$(echo "$coreos_kernel_release" | cut -d '-' -f 1)
 running_fedora_release=$(grep -Po "(?<=VERSION_ID=)\d+" /usr/lib/os-release)
 
-## Stop script if kernel major and minor versions match.
-if [ -z "${BLUEBUILD_VARIANT:-}" ] || [[ $BLUEBUILD_VARIANT != "budgie" ]]; then
+if $(rpm -q budgie-desktop)
+    echo "Budgie variant detected. Skipping major minor version check."
+else
     running_major_minor_patch=$(rpm  -q kernel | cut -d '-' -f2- | cut -d '-' -f1-1)
     
     echo "coreos kernel release: ${coreos_major_minor_patch}"
@@ -24,8 +25,6 @@ if [ -z "${BLUEBUILD_VARIANT:-}" ] || [[ $BLUEBUILD_VARIANT != "budgie" ]]; then
     
     ## If we reach this point, the major and minor versions do not match, continue running the script
     echo "Kernel major and minor versions between coreos and fc${running_fedora_release} do not match, continuing script..."
-else
-    echo "Budgie variant detected. Skipping major minor version check."
 fi
 
 dir_names=$(curl -sS https://kojipkgs.fedoraproject.org/packages/kernel/${coreos_major_minor_patch}/ 2>&1 | grep '<a href=' | sed 's|^<a href="\([^"]*\)">.*|\1|')
