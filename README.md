@@ -12,8 +12,11 @@ This is a constantly updating repository for creating [a native container image]
 2. [Secure Boot](#secure-boot)
     1. [Fedora's certificate](#fedoras-certificate)
     2. [Universal-Blue's certificate](#universal-blues-certificate)
-3. [ISO](#iso)
-4. [Verification](#verification)
+3. [Encrypted Drives](#encrypted-drives)
+    1. [Enable Auto-Unlock Using TPM2](#enable-auto-unlock-using-tpm2)
+    2. [Disable Auto-Unlock Using TPM2](#disable-auto-unlock-using-tpm2)
+5. [ISO](#iso)
+6. [Verification](#verification)
 
 **Based on BlueBuild Template**: See the [BlueBuild docs](https://blue-build.org/how-to/setup/) for quick setup instructions for setting up your own repository based on this template.
 
@@ -103,6 +106,32 @@ sudo mokutil --timeout -1
 sudo mokutil --import /etc/pki/akmods/certs/akmods-ublue.der
 sudo systemctl reboot
 ```
+
+---
+
+## Encrypted Drives
+
+TPM2 equipped devices can be set to automatically unlock encrypted drives.
+
+### Enable Auto-Unlock Using TPM2
+
+Images based on Universal-Blue builds can run the following command to enable auto-unlock using  TPM2:
+
+```bash
+ujust setup-luks-tpm-unlock
+```
+
+For manual steps, refer to [https://github.com/ublue-os/config/blob/main/build/ublue-os-luks/luks-enable-tpm2-autounlock](https://github.com/ublue-os/config/blob/main/build/ublue-os-luks/luks-enable-tpm2-autounlock).
+
+### Disable Auto-Unlock Using TPM2
+
+Images based on Universal-Blue builds can run the following command to enable auto-unlock using  TPM2:
+
+```bash
+ujust remove-luks-tpm-unlock
+```
+
+For manual steps, refer to [https://github.com/ublue-os/config/blob/main/build/ublue-os-luks/luks-disable-tpm2-autounlock](https://github.com/ublue-os/config/blob/main/build/ublue-os-luks/luks-disable-tpm2-autounlock).
 
 ---
 
