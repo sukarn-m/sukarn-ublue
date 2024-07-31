@@ -4,11 +4,15 @@
 
 This is a constantly updating repository for creating [a native container image](https://fedoraproject.org/wiki/Changes/OstreeNativeContainerStable) designed to be customized.
 
+**Based on BlueBuild Template**: See the [BlueBuild docs](https://blue-build.org/how-to/setup/) for quick setup instructions for setting up your own repository based on this template.
+
+## Table of Contents
+
 1. [Installation by rebasing from Silverblue](#installation-by-rebasing-from-silverblue)
     1. [Rebasing to `sukarn-ublue-desktop`](#rebasing-to-sukarn-ublue-desktop)
     2. [Rebasing to `sukarn-ublue-laptop`](#rebasing-to-sukarn-ublue-laptop)
     3. [Rebasing to `sukarn-ublue-budgie`](#rebasing-to-sukarn-ublue-budgie)
-    4. [Installation - Additional information](#installation---additional-information)
+    4. [Pinning to a Specific Tag](#pinning-to-a-specific-tag)
 2. [Secure Boot](#secure-boot)
     1. [Fedora's certificate](#fedoras-certificate)
     2. [Universal-Blue's certificate](#universal-blues-certificate)
@@ -17,8 +21,6 @@ This is a constantly updating repository for creating [a native container image]
     2. [Disable Auto-Unlock Using TPM2](#disable-auto-unlock-using-tpm2)
 5. [ISO](#iso)
 6. [Verification](#verification)
-
-**Based on BlueBuild Template**: See the [BlueBuild docs](https://blue-build.org/how-to/setup/) for quick setup instructions for setting up your own repository based on this template.
 
 ---
 
@@ -40,6 +42,8 @@ Then rebase to the signed image. The system will reboot automatically upon compl
 rpm-ostree rebase ostree-image-signed:docker://ghcr.io/sukarn-m/sukarn-ublue-desktop:latest --reboot
 ```
 
+[Go back to Table of Contents](#table-of-contents)
+
 ### Rebasing to `sukarn-ublue-laptop`
 
 First rebase to the unsigned image, to get the proper signing keys and policies installed. The system will reboot automatically upon completion of this step.
@@ -53,6 +57,8 @@ Then rebase to the signed image. The system will reboot automatically upon compl
 ```bash
 rpm-ostree rebase ostree-image-signed:docker://ghcr.io/sukarn-m/sukarn-ublue-laptop:latest --reboot
 ```
+
+[Go back to Table of Contents](#table-of-contents)
 
 ### Rebasing to `sukarn-ublue-budgie`
 
@@ -68,7 +74,9 @@ Then rebase to the signed image. The system will reboot automatically upon compl
 rpm-ostree rebase ostree-image-signed:docker://ghcr.io/sukarn-m/sukarn-ublue-budgie:latest --reboot
 ```
 
-### Installation - Additional information
+[Go back to Table of Contents](#table-of-contents)
+
+### Pinning to a Specific Tag
 
 This repository builds date tags as well, so if you want to rebase to a particular day's build:
 
@@ -77,6 +85,8 @@ This repository builds date tags as well, so if you want to rebase to a particul
 This repository by default also supports signing.
 
 The `latest` tag will automatically point to the latest build. That build will still always use the Fedora version specified in `recipe.yml`, so you won't get accidentally updated to the next major version.
+
+[Go back to Table of Contents](#table-of-contents)
 
 ---
 
@@ -107,6 +117,8 @@ sudo mokutil --import /etc/pki/akmods/certs/akmods-ublue.der
 sudo systemctl reboot
 ```
 
+[Go back to Table of Contents](#table-of-contents)
+
 ---
 
 ## Encrypted Drives
@@ -133,6 +145,8 @@ ujust remove-luks-tpm-unlock
 
 For manual steps, refer to [https://github.com/ublue-os/config/blob/main/build/ublue-os-luks/luks-disable-tpm2-autounlock](https://github.com/ublue-os/config/blob/main/build/ublue-os-luks/luks-disable-tpm2-autounlock).
 
+[Go back to Table of Contents](#table-of-contents)
+
 ---
 
 ## ISO
@@ -143,6 +157,8 @@ The `make-laptop-iso.sh` and `make-desktop-iso.sh` scripts can make ISOs using `
 
 The Action currently uses [ublue-os/isogenerator-old](https://github.com/ublue-os/isogenerator-old). The ISO is a netinstaller and should always pull the latest version of your image. Note that this release-iso action is not a replacement for a full-blown release automation like [release-please](https://github.com/googleapis/release-please).
 
+[Go back to Table of Contents](#table-of-contents)
+
 ---
 
 ## Verification
@@ -152,3 +168,5 @@ These images are signed with [Sigstore](https://www.sigstore.dev/)'s [cosign](ht
 ```bash
 cosign verify --key cosign.pub ghcr.io/sukarn-m/sukarn-ublue
 ```
+
+[Go back to Table of Contents](#table-of-contents)
