@@ -20,12 +20,13 @@ modules:
   - type: copy
     from: ghcr.io/ublue-os/config:latest
     src: /files/ublue-os/udev-rules/
-    dest: /
+    dest: /tmp/rpms/
 
   - type: script
     scripts:
       - coreos_kernel.sh
       - fedora-atomic-repos.sh
+      - ublue-config.sh
 
   - type: rpm-ostree
     install:
