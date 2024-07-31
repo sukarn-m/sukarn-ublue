@@ -4,32 +4,20 @@
 
 This is a constantly updating repository for creating [a native container image](https://fedoraproject.org/wiki/Changes/OstreeNativeContainerStable) designed to be customized.
 
-## Secure Boot
+1. [Installation by rebasing from Silverblue](#Installation by rebasing from Silverblue)
+    1. [Rebasing to `sukarn-ublue-desktop`](#rebasing-to-sukarn-ublue-desktop)
+    2. [Rebasing to `sukarn-ublue-laptop`](#rebasing-to-sukarn-ublue-laptop)
+    3. [Rebasing to `sukarn-ublue-budgie`](#rebasing-to-sukarn-ublue-budgie)
+    4. [Installation - Additional information](#installation---additional-information)
+2. [Secure Boot](#secure-boot)
+    1. [Fedora's certificate](#fedoras-certificate)
+    2. [Universal-Blue's certificate](#universal-blues-certificate)
+3. [ISO](#iso)
+4. [Verification](#verification)
 
-To use these images with secure boot, you may need to manually install relevant certificates.
+**Based on BlueBuild Template**: See the [BlueBuild docs](https://blue-build.org/how-to/setup/) for quick setup instructions for setting up your own repository based on this template.
 
-### Fedora's certificate
-
-Download Fedora's certificate from [https://src.fedoraproject.org/rpms/shim-unsigned-x64/tree/rawhide](https://src.fedoraproject.org/rpms/shim-unsigned-x64/tree/rawhide) and save it to `/tmp/fedora-ca.cer`.
-
-As of writing, the relevant file is located at `https://src.fedoraproject.org/rpms/shim-unsigned-x64/blob/rawhide/f/fedora-ca-20200709.cer`.
-
-```bash
-wget --output-file=/tmp/fedora-ca.cer https://src.fedoraproject.org/rpms/shim-unsigned-x64/blob/rawhide/f/fedora-ca-20200709.cer
-sudo mokutil --timeout -1
-sudo mokutil --import /tmp/fedora-ca.cer
-sudo systemctl reboot
-```
-
-### Universal-Blue's certificate
-
-The akmods key is located on the ublue-os based images at `/etc/pki/akmods/certs/akmods-ublue.der`.
-
-```bash
-sudo mokutil --timeout -1
-sudo mokutil --import /etc/pki/akmods/certs/akmods-ublue.der
-sudo systemctl reboot
-```
+---
 
 ## Installation by rebasing from Silverblue
 
@@ -87,6 +75,37 @@ This repository by default also supports signing.
 
 The `latest` tag will automatically point to the latest build. That build will still always use the Fedora version specified in `recipe.yml`, so you won't get accidentally updated to the next major version.
 
+---
+
+## Secure Boot
+
+To use these images with secure boot, you may need to manually install relevant certificates.
+
+### Fedora's certificate
+
+Download Fedora's certificate from [https://src.fedoraproject.org/rpms/shim-unsigned-x64/tree/rawhide](https://src.fedoraproject.org/rpms/shim-unsigned-x64/tree/rawhide) and save it to `/tmp/fedora-ca.cer`.
+
+As of writing, the relevant file is located at `https://src.fedoraproject.org/rpms/shim-unsigned-x64/blob/rawhide/f/fedora-ca-20200709.cer`.
+
+```bash
+wget --output-file=/tmp/fedora-ca.cer https://src.fedoraproject.org/rpms/shim-unsigned-x64/blob/rawhide/f/fedora-ca-20200709.cer
+sudo mokutil --timeout -1
+sudo mokutil --import /tmp/fedora-ca.cer
+sudo systemctl reboot
+```
+
+### Universal-Blue's certificate
+
+The akmods key is located on the ublue-os based images at `/etc/pki/akmods/certs/akmods-ublue.der`.
+
+```bash
+sudo mokutil --timeout -1
+sudo mokutil --import /etc/pki/akmods/certs/akmods-ublue.der
+sudo systemctl reboot
+```
+
+---
+
 ## ISO
 
 If build on Fedora Atomic, you can generate an offline ISO with the instructions available [here](https://blue-build.org/learn/universal-blue/#fresh-install-from-an-iso).
@@ -95,6 +114,8 @@ The `make-laptop-iso.sh` and `make-desktop-iso.sh` scripts can make ISOs using `
 
 The Action currently uses [ublue-os/isogenerator-old](https://github.com/ublue-os/isogenerator-old). The ISO is a netinstaller and should always pull the latest version of your image. Note that this release-iso action is not a replacement for a full-blown release automation like [release-please](https://github.com/googleapis/release-please).
 
+---
+
 ## Verification
 
 These images are signed with [Sigstore](https://www.sigstore.dev/)'s [cosign](https://github.com/sigstore/cosign). You can verify the signature by downloading the `cosign.pub` file from this repo and running the following command:
@@ -102,7 +123,3 @@ These images are signed with [Sigstore](https://www.sigstore.dev/)'s [cosign](ht
 ```bash
 cosign verify --key cosign.pub ghcr.io/sukarn-m/sukarn-ublue
 ```
-
-# Based on BlueBuild Template
-
-See the [BlueBuild docs](https://blue-build.org/how-to/setup/) for quick setup instructions for setting up your own repository based on this template.
