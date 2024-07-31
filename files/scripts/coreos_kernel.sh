@@ -8,7 +8,7 @@ set -eou pipefail
 coreos_kernel_release=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
 coreos_major_minor_patch=$(echo "$coreos_kernel_release" | cut -d '-' -f 1)
 running_fedora_release=$(grep -Po "(?<=VERSION_ID=)\d+" /usr/lib/os-release)
-running_major_minor_patch=$(echo $(uname -r | cut -d '-' -f1))
+running_major_minor_patch=$(rpm  -q kernel | cut -d '-' -f2- | cut -d '-' -f1-1)
 
 echo "coreos kernel release: ${coreos_major_minor_patch}"
 echo "running kernel release: ${running_major_minor_patch}"
