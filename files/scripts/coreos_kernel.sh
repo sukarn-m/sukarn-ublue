@@ -9,7 +9,7 @@ coreos_kernel_release=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:sta
 coreos_major_minor_patch=$(echo "$coreos_kernel_release" | cut -d '-' -f 1)
 running_fedora_release=$(grep -Po "(?<=VERSION_ID=)\d+" /usr/lib/os-release)
 
-if $(rpm -q budgie-desktop); then
+if rpm -q budgie-desktop; then
     echo "Budgie variant detected. Skipping major minor version check."
 else
     running_major_minor_patch=$(rpm  -q kernel | cut -d '-' -f2- | cut -d '-' -f1-1)
