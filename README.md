@@ -4,6 +4,33 @@
 
 This is a constantly updating repository for creating [a native container image](https://fedoraproject.org/wiki/Changes/OstreeNativeContainerStable) designed to be customized.
 
+## Secure Boot
+
+To use these images with secure boot, you may need to manually install relevant certificates.
+
+### Fedora's certificate
+
+Download Fedora's certificate from [https://src.fedoraproject.org/rpms/shim-unsigned-x64/tree/rawhide](https://src.fedoraproject.org/rpms/shim-unsigned-x64/tree/rawhide) and save it to `/tmp/fedora-ca.cer`.
+
+As of writing, the relevant file is located at `https://src.fedoraproject.org/rpms/shim-unsigned-x64/blob/rawhide/f/fedora-ca-20200709.cer`.
+
+```bash
+wget --output-file=/tmp/fedora-ca.cer https://src.fedoraproject.org/rpms/shim-unsigned-x64/blob/rawhide/f/fedora-ca-20200709.cer
+sudo mokutil --timeout -1
+sudo mokutil --import /tmp/fedora-ca.cer
+sudo systemctl reboot
+```
+
+### Universal-Blue's certificate
+
+The akmods key is located on the ublue-os based images at `/etc/pki/akmods/certs/akmods-ublue.der`.
+
+```bash
+sudo mokutil --timeout -1
+sudo mokutil --import /etc/pki/akmods/certs/akmods-ublue.der
+sudo systemctl reboot
+```
+
 ## Installation by rebasing from Silverblue
 
 To rebase an existing Silverblue installation to the latest build:
