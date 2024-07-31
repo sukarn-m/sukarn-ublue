@@ -19,7 +19,7 @@ modules:
 
   - type: copy
     from: ghcr.io/ublue-os/config:latest
-    src: /files/ublue-os/udev-rules
+    src: /rpms
     dest: /tmp/rpms
 
   - type: script
