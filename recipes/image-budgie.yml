@@ -63,10 +63,12 @@ modules:
         destination: /usr
       - source: laptop/usr
         destination: /usr
+      - source: theme-v/usr
+        destination: /usr
 
   - type: script
     scripts:
-      - image_name.sh
+      - image_name-v.sh
       - initramfs.sh
 
   - type: signing # this sests up the proper policy & signing files for signed images to work fully

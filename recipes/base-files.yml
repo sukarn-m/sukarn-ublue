@@ -13,3 +13,5 @@ modules:
         destination: /usr
       - source: tailscale/usr
         destination: /usr
+      - source: theme-s/usr
+        destination: /usr

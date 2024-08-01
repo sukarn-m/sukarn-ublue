@@ -3,7 +3,7 @@ modules:
     scripts:
       - nextcloud-vfs.sh
       - coreos_kernel.sh
-      - image_name.sh
+      - image_name-s.sh
       - nas.sh
 #      - canon-lbp2900.sh
       - tailscale.sh
