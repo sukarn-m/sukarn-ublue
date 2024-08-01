@@ -10,4 +10,4 @@ IMAGE_REPO=ghcr.io/sukarn-m \
 IMAGE_NAME=sukarn-ublue-budgie \
 IMAGE_TAG=latest \
 ISO_NAME=build/sukarn-ublue-budgie.iso \
-VARIANT=Silverblue # should match the variant your image is based on
+VARIANT=Onyx # should match the variant your image is based on

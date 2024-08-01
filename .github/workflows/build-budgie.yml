@@ -11,9 +11,9 @@ on:
       - files/scripts/fedora-atomic-repos.sh
       - files/scripts/image_name-v.sh
       - files/scripts/initramfs.sh
-      - files/theme-v/*
-      - files/usr/*
-      - files/laptop/*
+      - files/theme-v/**
+      - files/usr/**
+      - files/laptop/**
 
   workflow_dispatch: # allow manually triggering builds
 
