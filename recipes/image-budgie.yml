@@ -34,6 +34,7 @@ modules:
   - type: rpm-ostree
     install:
       - flatpak-spawn
+      - fzf
       - grub2-tools-extra
       - htop
       - just
