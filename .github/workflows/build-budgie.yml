@@ -9,8 +9,11 @@ on:
       - .github/workflows/build-budgie.yml
       - files/scripts/coreos_kernel.sh
       - files/scripts/fedora-atomic-repos.sh
-      - files/scripts/image_name.sh
+      - files/scripts/image_name-v.sh
       - files/scripts/initramfs.sh
+      - files/theme-v/*
+      - files/usr/*
+      - files/laptop/*
 
   workflow_dispatch: # allow manually triggering builds
 

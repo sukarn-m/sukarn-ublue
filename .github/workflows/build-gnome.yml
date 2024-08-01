@@ -11,6 +11,8 @@ on:
 #      - ".github/workflows/build-budgie.yml"
       - ".github/workflows/*.yml"
       - "boot_menu.yml"
+      - "files/theme-v/*"
+      - "files/scripts/image_name-v.sh"
 
   workflow_dispatch: # allow manually triggering builds
 
