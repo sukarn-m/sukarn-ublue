@@ -10,6 +10,7 @@ on:
       - "make-*-iso.sh"
 #      - ".github/workflows/build-budgie.yml"
       - ".github/workflows/*.yml"
+      - "boot_menu.yml"
 
   workflow_dispatch: # allow manually triggering builds
 
