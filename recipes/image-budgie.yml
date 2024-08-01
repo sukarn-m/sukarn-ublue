@@ -27,7 +27,7 @@ modules:
   - type: copy
     from: ghcr.io/ublue-os/ublue-update:latest
     src: /rpms/ublue-update.noarch.rpm
-    dest: /tmp/rpms/
+    dest: /tmp/rpms/ublue-update.noarch.rpm
 
   - type: script
     scripts:
