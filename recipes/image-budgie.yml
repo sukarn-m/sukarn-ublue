@@ -25,10 +25,10 @@ modules:
 #    src: /rpms
 #    dest: /tmp/rpms
 
-  - type: script
-    scripts:
-      - coreos_kernel.sh
-      - fedora-atomic-repos.sh
+#  - type: script
+#    scripts:
+#      - coreos_kernel.sh
+#      - fedora-atomic-repos.sh
 #      - ublue-config.sh
 
   - type: rpm-ostree
