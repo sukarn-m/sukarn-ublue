@@ -33,7 +33,6 @@ modules:
 
   - type: rpm-ostree
     install:
-      - binutils
       - flatpak-spawn
       - grub2-tools-extra
       - htop
