@@ -16,7 +16,7 @@ on:
 
 jobs:
   bluebuild:
-    name: Build Custom Image
+    name: Budgie Image
     runs-on: ubuntu-latest
     permissions:
       contents: read

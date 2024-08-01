@@ -8,7 +8,8 @@ on:
       - "**.md"
       - "recipes/image-budgie.yml"
       - "make-*-iso.sh"
-      - ".github/workflows/build-budgie.yml"
+#      - ".github/workflows/build-budgie.yml"
+      - ".github/workflows/*.yml"
 
   workflow_dispatch: # allow manually triggering builds
 
@@ -16,7 +17,7 @@ on:
 #  repository_dispatch: # allow trigerring through another repository
 jobs:
   bluebuild:
-    name: Build Custom Image
+    name: Gnome Image
     runs-on: ubuntu-latest
     permissions:
       contents: read

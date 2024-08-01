@@ -1,7 +1,10 @@
 name: sukarn-ublue-budgie
 description: Customized budgie image.
-base-image: quay.io/fedora-ostree-desktops/onyx
-image-version: 40
+#base-image: quay.io/fedora-ostree-desktops/onyx
+#image-version: 40
+base-image: ghcr.io/ublue-os/onyx-main
+image-version: gts
+
 
 modules:
   - type: default-flatpaks
@@ -17,42 +20,42 @@ modules:
         - org.videolan.VLC # VLC
         - org.libreoffice.LibreOffice # LibreOffice
 
-  - type: copy
-    from: ghcr.io/ublue-os/config:latest
-    src: /rpms
-    dest: /tmp/rpms
+#  - type: copy
+#    from: ghcr.io/ublue-os/config:latest
+#    src: /rpms
+#    dest: /tmp/rpms
 
   - type: script
     scripts:
       - coreos_kernel.sh
       - fedora-atomic-repos.sh
-      - ublue-config.sh
+#      - ublue-config.sh
 
   - type: rpm-ostree
     install:
-      - flatpak-spawn
-      - grub2-tools-extra
-      - htop
-      - just
-      - powerstat
-      - smartmontools
-      - squashfs-tools
-      - symlinks
-      - traceroute
-      - zstd
+#      - flatpak-spawn
+#      - grub2-tools-extra
+#      - htop
+#      - just
+#      - powerstat
+#      - smartmontools
+#      - squashfs-tools
+#      - symlinks
+#      - traceroute
+#      - zstd
     remove:
       ## Firefox has to be removed in 'main' image, but not in bluefin, bazzite, and aurora.
       - firefox
       - firefox-langpacks
 
-  - type: akmods
-    base: coreos-stable
-    install:
-      - wl
+#  - type: akmods
+#    base: coreos-stable
+#    install:
+#      - wl
 
-  - type: bling # https://raw.githubusercontent.com/blue-build/modules/main/modules/bling/README.md
-    install:
-      - ublue-update # https://github.com/ublue-os/ublue-update
+#  - type: bling # https://raw.githubusercontent.com/blue-build/modules/main/modules/bling/README.md
+#    install:
+#      - ublue-update # https://github.com/ublue-os/ublue-update
 
   - type: files
     files:
