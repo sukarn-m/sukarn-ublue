@@ -24,19 +24,12 @@ modules:
     from: ghcr.io/ublue-os/config:latest
     src: /rpms
     dest: /tmp/rpms
-  - type: copy
-    from: ghcr.io/ublue-os/ublue-update:latest
-    src: /rpms/ublue-update.noarch.rpm
-    dest: /tmp/rpms/ublue-update.noarch.rpm
 
   - type: script
     scripts:
       - coreos_kernel.sh
       - fedora-atomic-repos.sh
       - ublue-rpms.sh
-#  - type: script
-#    snippets:
-#      - "rpm-ostree install /tmp/rpms/*.noarch.rpm"
 
   - type: rpm-ostree
     install:
@@ -59,6 +52,10 @@ modules:
     base: coreos-stable
     install:
       - wl
+
+  - type: bling # https://raw.githubusercontent.com/blue-build/modules/main/modules/bling/README.md
+    install:
+      - ublue-update # https://github.com/ublue-os/ublue-update
 
   - type: files
     files:
