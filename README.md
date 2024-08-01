@@ -101,7 +101,7 @@ Download Fedora's certificate from [https://src.fedoraproject.org/rpms/shim-unsi
 As of writing, the relevant file is located at `https://src.fedoraproject.org/rpms/shim-unsigned-x64/blob/rawhide/f/fedora-ca-20200709.cer`.
 
 ```bash
-wget --output-file=/tmp/fedora-ca.cer https://src.fedoraproject.org/rpms/shim-unsigned-x64/blob/rawhide/f/fedora-ca-20200709.cer
+wget --output-document=/tmp/fedora-ca.cer https://src.fedoraproject.org/rpms/shim-unsigned-x64/blob/rawhide/f/fedora-ca-20200709.cer
 sudo mokutil --timeout -1
 sudo mokutil --import /tmp/fedora-ca.cer
 sudo systemctl reboot
