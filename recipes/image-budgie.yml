@@ -1,9 +1,9 @@
 name: sukarn-ublue-budgie
 description: Customized budgie image.
-#base-image: quay.io/fedora-ostree-desktops/onyx
-#image-version: 40
-base-image: ghcr.io/ublue-os/onyx-main
-image-version: gts
+base-image: quay.io/fedora-ostree-desktops/onyx
+image-version: 40
+#base-image: ghcr.io/ublue-os/onyx-main
+#image-version: gts
 
 
 modules:
@@ -20,43 +20,45 @@ modules:
         - org.videolan.VLC # VLC
         - org.libreoffice.LibreOffice # LibreOffice
 
-#  - type: copy
-#    from: ghcr.io/ublue-os/config:latest
-#    src: /rpms
-#    dest: /tmp/rpms
+  - type: copy
+    from: ghcr.io/ublue-os/config:latest
+    src: /rpms
+    dest: /tmp/rpms
+  - type: copy
+    from: ghcr.io/ublue-os/ublue-update:latest
+    src: /rpms/ublue-update.noarch.rpm
+    dest: /tmp/rpms/
 
-#  - type: script
-#    scripts:
-#      - coreos_kernel.sh
-#      - fedora-atomic-repos.sh
-#      - ublue-config.sh
+  - type: script
+    scripts:
+      - coreos_kernel.sh
+      - fedora-atomic-repos.sh
+#      - ublue-rpms.sh  # Replaced by copy and script snippet
+  - type: script
+    snippets:
+      - "rpm-ostree install /tmp/rpms/*.noarch.rpm"
 
   - type: rpm-ostree
     install:
       - binutils
-#      - flatpak-spawn
-#      - grub2-tools-extra
-#      - htop
-#      - just
-#      - powerstat
-#      - smartmontools
-#      - squashfs-tools
-#      - symlinks
-#      - traceroute
-#      - zstd
+      - flatpak-spawn
+      - grub2-tools-extra
+      - htop
+      - just
+      - powerstat
+      - smartmontools
+      - squashfs-tools
+      - symlinks
+      - traceroute
+      - zstd
     remove:
-      ## Firefox has to be removed in 'main' image, but not in bluefin, bazzite, and aurora.
       - firefox
       - firefox-langpacks
 
-#  - type: akmods
-#    base: coreos-stable
-#    install:
-#      - wl
-
-#  - type: bling # https://raw.githubusercontent.com/blue-build/modules/main/modules/bling/README.md
-#    install:
-#      - ublue-update # https://github.com/ublue-os/ublue-update
+  - type: akmods
+    base: coreos-stable
+    install:
+      - wl
 
   - type: files
     files:
