@@ -50,9 +50,9 @@ modules:
         - org.fedoraproject.MediaWriter # Fedora Media Writer
         - com.github.tchx84.Flatseal # Flatseal (Permission Manager)
 ## Media
-        - com.rafaelmardojai.Blanket # Blanket
-        - org.gimp.GIMP # GIMP
-        - org.videolan.VLC # VLC
+        - com.rafaelmardojai.Blanket # Blanket (soundscapes)
+        - com.github.PintaProject.Pinta # Pinta (image editor)
+        - org.videolan.VLC # VLC (media player)
 ## Internet
         - com.bitwarden.desktop # Bitwarden
         - org.mozilla.firefox # Mozilla Firefox
@@ -89,3 +89,4 @@ modules:
         - media.emby.EmbyTheater # Emby Theater
         - org.gnome.Totem # GNOME Totem Videos
         - com.discordapp.Discord # Discord
+        - org.gimp.GIMP # GIMP (image editor)
