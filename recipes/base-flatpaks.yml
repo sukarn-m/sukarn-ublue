@@ -55,7 +55,6 @@ modules:
         - org.videolan.VLC # VLC
 ## Internet
         - com.bitwarden.desktop # Bitwarden
-        - com.discordapp.Discord # Discord
         - org.mozilla.firefox # Mozilla Firefox
         - org.mozilla.Thunderbird # Mozilla Thunderbird
         - com.microsoft.Edge # Microsoft Edge
@@ -89,3 +88,4 @@ modules:
       remove:
         - media.emby.EmbyTheater # Emby Theater
         - org.gnome.Totem # GNOME Totem Videos
+        - com.discordapp.Discord # Discord
