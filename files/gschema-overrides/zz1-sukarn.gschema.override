@@ -38,8 +38,8 @@ night-light-enabled=true
 
 [org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0]
 binding='F12'
-command='gnome-terminal'
-name='gnome-terminal'
+command='flatpak run app.devsuite.Ptyxis --new-window'
+name='Terminal'
 
 [org.gnome.settings-daemon.plugins.media-keys]
 custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/']

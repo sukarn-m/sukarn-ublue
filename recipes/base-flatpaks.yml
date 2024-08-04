@@ -49,6 +49,7 @@ modules:
         - org.gnome.DejaDup # Deja Dup Backups
         - org.fedoraproject.MediaWriter # Fedora Media Writer
         - com.github.tchx84.Flatseal # Flatseal (Permission Manager)
+        - app.devsuite.Ptyxis # Ptyxis terminal
 ## Media
         - com.rafaelmardojai.Blanket # Blanket (soundscapes)
         - com.github.PintaProject.Pinta # Pinta (image editor)
