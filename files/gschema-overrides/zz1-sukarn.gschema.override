@@ -41,8 +41,13 @@ binding='F12'
 command='flatpak run app.devsuite.Ptyxis --new-window'
 name='Terminal'
 
+[org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom1]
+binding='Favorites'
+command='flatpak run app.devsuite.Ptyxis --new-window'
+name='Terminal'
+
 [org.gnome.settings-daemon.plugins.media-keys]
-custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/']
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/']
 
 [org.gnome.settings-daemon.plugins.power]
 sleep-inactive-battery-timeout=600
