@@ -3,7 +3,7 @@ modules:
     install:
 # Terminal
       - byobu
-      # - guake # Also requires the script configure-screen.sh
+#      - zoxide
 # Gaming
       # - mangohud
       # - gamemode.i686
@@ -12,12 +12,12 @@ modules:
       - nextcloud-client-devel # Required on Fedora for virtual files.
       - nextcloud-client-nautilus # The main nextcloud client.
 # Miscellaneous
-      - android-tools
+      - android-tools # ADB and Fastboot
+#      - gtk2 # For ePass2003
+      - gnome-boxes # Virtualization
+      - libcupsfilters # For Canon LBP2900 printer
       - simple-scan # Scanner
       - syncthing # File sync
-      - libcupsfilters # For Canon LBP2900 printer
-      - gtk2 # For ePass2003
-      - gnome-boxes # Virtualization
 # Gnome Themes
       - gnome-shell-theme-yaru
       - yaru-gtk2-theme
