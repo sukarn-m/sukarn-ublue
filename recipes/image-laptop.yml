@@ -28,7 +28,6 @@ modules:
 
   - type: gnome-extensions #https://github.com/blue-build/modules/blob/main/modules/gnome-extensions/module.yml
     install:
-      - Power Profile Switcher
       - Thinkpad Battery Threshold
 
   - type: gschema-overrides
@@ -40,7 +39,6 @@ modules:
       - laptop-kargs.sh
 ## sukarn-os-base: enable this
 #      - remove-base-os-reference.sh
-#      - coreos_kernel.sh
       - initramfs.sh
 
   - type: signing # this sests up the proper policy & signing files for signed images to work fully
