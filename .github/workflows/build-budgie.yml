@@ -1,7 +1,7 @@
 name: build-budgie
 on:
   schedule:
-    - cron: "30 04 * * 6" # Set in UTC: 4:30 AM on Saturday.
+    - cron: "30 6 1,15 * *" # Set in UTC: 6:30 AM on 1st and 15th day of each month.
 
   push:
     paths:
