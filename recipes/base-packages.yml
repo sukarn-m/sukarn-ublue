@@ -9,8 +9,8 @@ modules:
       # - gamemode.i686
       - gamescope
 # Nextcloud. Also requires the script nextcloud-vfs.sh
-      - nextcloud-client-devel # Required on Fedora for virtual files.
-      - nextcloud-client-nautilus # The main nextcloud client.
+      # - nextcloud-client-devel # Required on Fedora for virtual files.
+      # - nextcloud-client-nautilus # The main nextcloud client.
 # Miscellaneous
       - android-tools # ADB and Fastboot
 #      - gtk2 # For ePass2003

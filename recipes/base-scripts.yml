@@ -1,7 +1,7 @@
 modules:
   - type: script
     scripts:
-      - nextcloud-vfs.sh
+#      - nextcloud-vfs.sh
       - coreos_kernel.sh
       - image_name-s.sh
       - nas.sh

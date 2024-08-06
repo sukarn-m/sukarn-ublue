@@ -60,6 +60,7 @@ modules:
         - org.mozilla.Thunderbird # Mozilla Thunderbird
         - com.microsoft.Edge # Microsoft Edge
         - io.gitlab.news_flash.NewsFlash # NewsFlash
+        - com.nextcloud.desktopclient.nextcloud # Nextcloud Desktop client
         - io.github.ungoogled_software.ungoogled_chromium # Ungoogled Chromium
 ## Gaming
         - com.usebottles.bottles # Bottles
