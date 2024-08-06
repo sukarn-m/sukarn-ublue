@@ -3,7 +3,7 @@ modules:
     install:
 # Terminal
       - byobu
-#      - zoxide
+      - zoxide
 # Gaming
       # - mangohud
       # - gamemode.i686
