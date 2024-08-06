@@ -63,17 +63,17 @@ legacy-tray-enabled=true
 countdown-timer=30
 indicator-position-max=4
 
-#[org.gnome.shell.extensions.pano]
-#history-length=20
-#item-date-font-family='Bitter'
-#item-date-font-size=11
-#item-title-font-family='Bitter'
-#item-title-font-size=20
-#paste-on-select=true
-#play-audio-on-copy=false
-#search-bar-font-family='Bitter'
-#search-bar-font-size=14
-#send-notification-on-copy=false
+[org.gnome.shell.extensions.pano]
+history-length=20
+item-date-font-family='Bitter'
+item-date-font-size=11
+item-title-font-family='Bitter'
+item-title-font-size=20
+paste-on-select=true
+play-audio-on-copy=false
+search-bar-font-family='Bitter'
+search-bar-font-size=14
+send-notification-on-copy=false
 
 [org.gnome.shell.extensions.dash-to-panel]
 animate-appicon-hover-animation-extent={'RIPPLE': 4, 'PLANK': 4, 'SIMPLE': 1}
