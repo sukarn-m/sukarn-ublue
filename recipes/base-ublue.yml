@@ -1,0 +1,15 @@
+modules:
+  - type: copy
+    from: ghcr.io/ublue-os/config:latest
+    src: /rpms
+    dest: /tmp/config-rpms
+
+  - type: copy
+    from: ghcr.io/ublue-os/ublue-update:latest
+    src: /rpms
+    dest: /tmp/update-rpm
+
+  - type: script
+    scripts:
+      - ublue-rpms.sh
+      - ublue-update.sh # Must be after ublue-rpms.sh

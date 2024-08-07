@@ -20,16 +20,7 @@ modules:
         - org.videolan.VLC # VLC
         - org.libreoffice.LibreOffice # LibreOffice
 
-  - type: copy
-    from: ghcr.io/ublue-os/config:latest
-    src: /rpms
-    dest: /tmp/rpms
-
-  - type: script
-    scripts:
-      - coreos_kernel.sh
-      - fedora-atomic-repos.sh
-      - ublue-rpms.sh
+  - from-file: base-ublue.yml
 
   - type: rpm-ostree
     install:
