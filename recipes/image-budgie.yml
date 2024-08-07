@@ -35,7 +35,7 @@ modules:
     scripts:
       - coreos_kernel.sh
       - fedora-atomic-repos.sh
-#      - ublue-rpms.sh
+      - ublue-rpms.sh
 
   - type: rpm-ostree
     install:
@@ -77,7 +77,7 @@ modules:
 
   - type: script
     scripts:
-      - ublue-update.sh # Must be after ublue-rpms.sh
+#      - ublue-update.sh # Must be after ublue-rpms.sh
       - image_name-v.sh
       - initramfs.sh
 
