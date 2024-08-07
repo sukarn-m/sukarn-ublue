@@ -17,6 +17,9 @@ show-battery-percentage=true
 tap-to-click=true
 two-finger-scrolling-enabled=true
 
+[org/gnome/desktop/peripherals/keyboard]
+numlock-state=true
+
 [org.gnome.desktop.wm.preferences]
 focus-mode='sloppy'
 titlebar-font='Bitter Bold 11'
@@ -46,8 +49,13 @@ binding='Favorites'
 command='flatpak run app.devsuite.Ptyxis --new-window'
 name='Terminal'
 
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2]
+binding='<Control><Shift>Escape'
+command="flatpak run io.missioncenter.MissionCenter"
+name='mission-center'
+
 [org.gnome.settings-daemon.plugins.media-keys]
-custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/']
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/']
 
 [org.gnome.settings-daemon.plugins.power]
 sleep-inactive-battery-timeout=600

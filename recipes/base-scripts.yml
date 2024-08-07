@@ -7,3 +7,4 @@ modules:
       - nas.sh
 #      - canon-lbp2900.sh
       - tailscale.sh
+      - gnome-system-monitor.sh # Not needed on bluefin
