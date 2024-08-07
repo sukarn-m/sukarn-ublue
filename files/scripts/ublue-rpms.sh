@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-# Tell build process to exit if there are any errors.
+## Only for non-ublue derived images.
+
 set -oue pipefail
 
 rpm-ostree install /tmp/config-rpms/*.noarch.rpm
