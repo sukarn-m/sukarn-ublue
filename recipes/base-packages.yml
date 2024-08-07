@@ -18,6 +18,9 @@ modules:
       - libcupsfilters # For Canon LBP2900 printer
       - simple-scan # Scanner
       - syncthing # File sync
+# ublue-update dependencies
+      - python3-psutil
+      - libnotify
 # Gnome Themes
       - gnome-shell-theme-yaru
       - yaru-gtk2-theme

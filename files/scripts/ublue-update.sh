@@ -32,7 +32,8 @@ REPO="https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-${OS_
 wget -O "/etc/yum.repos.d/ublue-os-staging-fedora-${OS_VERSION}.repo" "${REPO//[$'\t\r\n ']}"
 
 # topgrade is REQUIRED by ublue-update to install
-rpm-ostree install topgrade
+#rpm-ostree install topgrade
+pip install topgrade
 rpm-ostree install /tmp/update-rpm/ublue-update.noarch.rpm
 
 # Remove ublue COPR
