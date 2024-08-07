@@ -26,16 +26,16 @@ modules:
     src: /rpms
     dest: /tmp/config-rpms
 
-  - type: copy
-    from: ghcr.io/ublue-os/ublue-update:latest
-    src: /rpms
-    dest: /tmp/update-rpm
+#  - type: copy
+#    from: ghcr.io/ublue-os/ublue-update:latest
+#    src: /rpms
+#    dest: /tmp/update-rpm
 
   - type: script
     scripts:
       - coreos_kernel.sh
       - fedora-atomic-repos.sh
-      - ublue-rpms.sh
+#      - ublue-rpms.sh
 
   - type: rpm-ostree
     install:
@@ -44,9 +44,9 @@ modules:
       - grub2-tools-extra
       - htop
       - just # Needed by ujust
-      - libnotify # Needed by ublue-update
-      - python3-pip # Required to install topgrade for ublue-update
-      - python3-psutil # Needed by ublue-update
+#      - libnotify # Needed by ublue-update
+#      - python3-pip # Required to install topgrade for ublue-update
+#      - python3-psutil # Needed by ublue-update
       - powerstat
       - smartmontools
       - squashfs-tools
@@ -61,6 +61,10 @@ modules:
     base: coreos-stable
     install:
       - wl
+
+  - type: bling # https://raw.githubusercontent.com/blue-build/modules/main/modules/bling/README.md
+    install:
+      - ublue-update # https://github.com/ublue-os/ublue-update
 
   - type: files
     files:

@@ -19,9 +19,9 @@ modules:
       - simple-scan # Scanner
       - syncthing # File sync
 # ublue-update dependencies
-      - python3-pip
-      - python3-psutil
-      - libnotify
+      # - python3-pip
+      # - python3-psutil
+      # - libnotify
 # Gnome Themes
       - gnome-shell-theme-yaru
       - yaru-gtk2-theme

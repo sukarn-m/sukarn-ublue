@@ -3,16 +3,7 @@ modules:
   - from-file: base-fonts.yml
   - from-file: base-packages.yml
   - from-file: base-gnome.yml
-#  - from-file: base-akmods-bling.yml
+  - from-file: base-akmods-bling.yml
   - from-file: base-files.yml
   - from-file: base-scripts.yml
   - from-file: base-systemd.yml
-
-  - type: copy
-    from: ghcr.io/ublue-os/ublue-update:latest
-    src: /rpms
-    dest: /tmp/update-rpm
-
-  - type: script
-    scripts:
-      - ublue-update.sh # Must be after ublue-rpms.sh

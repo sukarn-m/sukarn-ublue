@@ -1,3 +1,5 @@
+# Currently unused.
+
 modules:
   - type: copy
     from: ghcr.io/ublue-os/config:latest
