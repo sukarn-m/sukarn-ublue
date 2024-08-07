@@ -19,6 +19,7 @@ modules:
       - simple-scan # Scanner
       - syncthing # File sync
 # ublue-update dependencies
+      - python3-pip
       - python3-psutil
       - libnotify
 # Gnome Themes

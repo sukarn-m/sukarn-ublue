@@ -34,7 +34,7 @@ wget -O "/etc/yum.repos.d/ublue-os-staging-fedora-${OS_VERSION}.repo" "${REPO//[
 # topgrade is REQUIRED by ublue-update to install
 #rpm-ostree install topgrade
 pip install topgrade
-rpm-ostree install /tmp/update-rpm/ublue-update.noarch.rpm
+rpm-ostree install /tmp/update-rpm/*.noarch.rpm
 
 # Remove ublue COPR
 rm /etc/yum.repos.d/ublue-os-staging-fedora-*.repo
