@@ -5,6 +5,6 @@ modules:
       - xpadneo # xbox one controller bluetooth driver
       - xone # xbox one controller USB wired/RF driver modified to work along-side xpad
 
-  - type: bling # https://raw.githubusercontent.com/blue-build/modules/main/modules/bling/README.md
-    install:
-      - ublue-update # https://github.com/ublue-os/ublue-update
+#  - type: bling # https://raw.githubusercontent.com/blue-build/modules/main/modules/bling/README.md
+#    install:
+#      - ublue-update # https://github.com/ublue-os/ublue-update

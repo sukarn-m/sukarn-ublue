@@ -62,9 +62,9 @@ modules:
     install:
       - wl
 
-  - type: bling # https://raw.githubusercontent.com/blue-build/modules/main/modules/bling/README.md
-    install:
-      - ublue-update # https://github.com/ublue-os/ublue-update
+#  - type: bling # https://raw.githubusercontent.com/blue-build/modules/main/modules/bling/README.md
+#    install:
+#      - ublue-update # https://github.com/ublue-os/ublue-update
 
   - type: files
     files:
