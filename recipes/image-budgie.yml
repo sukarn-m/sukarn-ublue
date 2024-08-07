@@ -44,6 +44,7 @@ modules:
       - htop
       - just # Needed by ujust
       - libnotify # Needed by ublue-update
+      - python3-pip # Required to install topgrade for ublue-update
       - python3-psutil # Needed by ublue-update
       - powerstat
       - smartmontools
