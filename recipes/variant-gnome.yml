@@ -40,6 +40,10 @@ modules:
 #    uninstall:
 #      - 
 
+  - type: script
+    scripts:
+      - dash-to-panel.sh
+
   - type: gschema-overrides
     include:
       - zz1-sukarn.gschema.override
