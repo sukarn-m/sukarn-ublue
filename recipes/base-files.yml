@@ -1,16 +1,12 @@
 modules:
   - type: files
     files:
-#      - usr: /usr
-#      - canon-lbp2900/usr: /usr
-#      - epass2003/usr: /usr
-#      - tailscale/usr: /usr
       - source: usr
         destination: /usr
       - source: canon-lbp2900
         destination: /usr
-      - source: epass2003/usr
-        destination: /usr
+#      - source: epass2003/usr
+#        destination: /usr
       - source: tailscale/usr
         destination: /usr
       - source: theme-s/usr
