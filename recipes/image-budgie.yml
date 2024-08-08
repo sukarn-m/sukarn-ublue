@@ -75,6 +75,15 @@ modules:
       - source: theme-v/usr
         destination: /usr
 
+  - type: systemd
+    system:
+      enabled:
+        - rpm-ostreed-automatic.timer
+        - flatpak-system-update.timer
+    user:
+      enabled:
+        - flatpak-user-update.timer
+
   - type: script
     scripts:
 #      - ublue-update.sh # Must be after ublue-rpms.sh

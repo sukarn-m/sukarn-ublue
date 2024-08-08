@@ -8,5 +8,10 @@ modules:
         - var-mnt-roms.mount
         - nas-monitor.timer
         - generate-ssh-certificate.service
+        - rpm-ostreed-automatic.timer
+        - flatpak-system-update.timer
       disabled:
         - tailscaled.service
+    user:
+      enabled:
+        - flatpak-user-update.timer
