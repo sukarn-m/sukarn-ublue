@@ -4,6 +4,9 @@
 
 set -oue pipefail
 
+tree /tmp/
+exit 1
+
 # rpm-ostree install /tmp/config-rpms/*.noarch.rpm
 rpm-ostree install \
 /tmp/config-rpms/ublue-os-just*.noarch.rpm \
