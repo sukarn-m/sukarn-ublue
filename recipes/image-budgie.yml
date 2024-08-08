@@ -39,7 +39,6 @@ modules:
 
   - type: rpm-ostree
     install:
-      - akmod-wl
       - flatpak-spawn
       - fzf # Needed by ujust
       - grub2-tools-extra
@@ -58,10 +57,10 @@ modules:
       - firefox
       - firefox-langpacks
 
-#  - type: akmods
-#    base: coreos-stable
-#    install:
-#      - wl
+  - type: akmods
+    base: coreos-stable
+    install:
+      - wl
 
 #  - type: bling # https://raw.githubusercontent.com/blue-build/modules/main/modules/bling/README.md
 #    install:
