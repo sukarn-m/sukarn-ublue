@@ -8,7 +8,7 @@ on:
       - "**.md"
       - "recipes/image-budgie.yml"
       - "make-*-iso.sh"
-#      - ".github/workflows/build-budgie.yml"
+      - ".github/workflows/build-budgie.yml"
       - ".github/workflows/*.yml"
       - "boot_menu.yml"
       - "files/theme-v/**"
@@ -47,5 +47,5 @@ jobs:
           maximize_build_space: false
           
           # Optional flags
-          use_unstable_cli: true
+          use_unstable_cli: false
           squash: true
