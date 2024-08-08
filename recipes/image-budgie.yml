@@ -93,6 +93,5 @@ modules:
     scripts:
 #      - ublue-update.sh # Must be after ublue-rpms.sh
       - image_name-v.sh
-      - initramfs.sh
 
-  - type: signing # this sests up the proper policy & signing files for signed images to work fully
+  - from-file: base-last-steps.yml

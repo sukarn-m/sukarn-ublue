@@ -38,9 +38,5 @@ modules:
   - type: script
     scripts:
       - nvidia.sh
-## sukarn-os-base: enable this
-#      - remove-base-os-reference.sh
-#      - coreos_kernel.sh
-      - initramfs.sh
 
-  - type: signing # this sests up the proper policy & signing files for signed images to work fully
+  - from-file: base-last-steps.yml

@@ -37,9 +37,5 @@ modules:
   - type: script
     scripts:
       - laptop-kargs.sh
-## sukarn-os-base: enable this
-#      - remove-base-os-reference.sh
-      - initramfs.sh
-      - clear-tmp.sh
 
-  - type: signing # this sests up the proper policy & signing files for signed images to work fully
+  - from-file: base-last-steps.yml
