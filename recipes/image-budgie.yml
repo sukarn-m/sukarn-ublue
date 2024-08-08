@@ -1,7 +1,7 @@
 name: sukarn-ublue-budgie
 description: Customized budgie image.
 base-image: quay.io/fedora-ostree-desktops/onyx
-image-version: 40
+image-version: 40 # Note: Must match the tag at the end of the type:copy for kernel.
 #base-image: ghcr.io/ublue-os/onyx-main
 #image-version: gts
 
@@ -32,7 +32,7 @@ modules:
 #    dest: /tmp/update-rpm
 
   - type: copy
-    from: ghcr.io/ublue-os/coreos-stable-kernel:${OS_VERSION}
+    from: ghcr.io/ublue-os/coreos-stable-kernel:40
     src: /tmp/rpms
     dest: /tmp/kernel-rpms
 
