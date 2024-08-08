@@ -10,6 +10,7 @@ modules:
         - generate-ssh-certificate.service
         - rpm-ostreed-automatic.timer
         - flatpak-system-update.timer
+        - cachefilesd.service
       disabled:
         - tailscaled.service
     user:
