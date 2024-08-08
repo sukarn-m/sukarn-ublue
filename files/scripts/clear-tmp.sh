@@ -1,5 +1,3 @@
 #!/bin/bash
 
-set -oeu pipefail
-
-rm -r /tmp/*
+rm -rf /tmp/*
