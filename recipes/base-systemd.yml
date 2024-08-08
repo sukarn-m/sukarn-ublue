@@ -10,7 +10,7 @@ modules:
         - generate-ssh-certificate.service
         - rpm-ostreed-automatic.timer
         - flatpak-system-update.timer
-        - cachefilesd.service
+#        - cachefilesd.service # This is enabled through ujust enable-nfs-cache
       disabled:
         - tailscaled.service
     user:
