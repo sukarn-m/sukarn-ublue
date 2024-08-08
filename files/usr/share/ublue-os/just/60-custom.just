@@ -1,9 +1,6 @@
 # vim: set ft=make :
 # This file can be modified downstream to add custom just commands
 
-uid := `id -u`
-shell := `grep :$(id -u): /etc/passwd | cut -d: -f7`
-
 # Remove NFS caching and cached files
 remove-nfs-cache:
     #!/usr/bin/bash
