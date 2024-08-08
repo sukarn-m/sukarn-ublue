@@ -11,6 +11,7 @@ on:
       - files/scripts/fedora-atomic-repos.sh
       - files/scripts/image_name-v.sh
       - files/scripts/initramfs.sh
+      - files/scripts/ublue-rpms.sh
       - files/theme-v/**
       - files/usr/**
       - files/laptop/**
