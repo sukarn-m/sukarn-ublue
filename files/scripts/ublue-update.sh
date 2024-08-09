@@ -37,4 +37,5 @@ pip install topgrade
 rpm-ostree install /tmp/update-rpm/*.noarch.rpm
 
 # Remove ublue COPR
-rm /etc/yum.repos.d/ublue-os-staging-fedora-*.repo
+rm -v /etc/yum.repos.d/ublue-os-staging-fedora-*.repo
+rm -rv /tmp/update-rpm

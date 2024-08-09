@@ -73,10 +73,14 @@ modules:
 
   - type: files
     files:
-      - source: usr
+      - source: system/usr
         destination: /usr
+      - source: system/etc
+        destination: /etc
       - source: laptop/usr
         destination: /usr
+      - source: laptop/etc
+        destination: /etc
       - source: theme-v/usr
         destination: /usr
 

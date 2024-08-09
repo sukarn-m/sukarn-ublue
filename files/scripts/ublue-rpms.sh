@@ -17,3 +17,6 @@ rpm-ostree install \
 /tmp/config-rpms/ublue-os-update-services.noarch.rpm
 
 rpm-ostree override replace --experimental /tmp/kernel-rpms/*.rpm
+
+rm -rv /tmp/config-rpms
+rm -rv /tmp/kernel-rpms

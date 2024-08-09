@@ -22,9 +22,10 @@ modules:
 
   - type: files
     files:
-#      - desktop/usr: /usr
       - source: desktop/usr
         destination: /usr
+      - source: desktop/etc
+        destination: /etc
 
   - type: gschema-overrides
     include:

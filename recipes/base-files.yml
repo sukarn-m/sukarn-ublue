@@ -1,13 +1,23 @@
 modules:
   - type: files
     files:
-      - source: usr
+      - source: system/etc
+        destination: /etc
+      - source: system/usr
         destination: /usr
-      - source: canon-lbp2900
+      - source: nas/etc
+        destination: /etc
+      - source: nas/usr
+        destination: /usr
+      - source: canon-lbp2900/etc
+        destination: /etc
+      - source: canon-lbp2900/usr
         destination: /usr
 #      - source: epass2003/usr
 #        destination: /usr
-      - source: tailscale/usr
-        destination: /usr
+#      - source: epass2003/etc
+#        destination: /etc
+      - source: tailscale/etc
+        destination: /etc
       - source: theme-s/usr
         destination: /usr
