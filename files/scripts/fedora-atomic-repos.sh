@@ -22,3 +22,5 @@ curl -Lo /etc/yum.repos.d/negativo17-fedora-multimedia.repo https://negativo17.o
 rpm-ostree install \
     /tmp/rpm-repos/*.rpm \
     fedora-repos-archive
+
+rm -rv /tmp/rpm-repos
