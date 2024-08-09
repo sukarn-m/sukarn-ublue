@@ -96,6 +96,7 @@ modules:
   - type: script
     scripts:
 #      - ublue-update.sh # Must be after ublue-rpms.sh
+      - laptop-overrides.sh
       - image_name-v.sh
 
   - from-file: base-last-steps.yml
