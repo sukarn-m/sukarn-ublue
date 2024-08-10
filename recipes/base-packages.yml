@@ -3,7 +3,7 @@ modules:
     install:
 # Terminal
       - byobu
-      - neovim
+      # - neovim
       - zoxide
 # Gaming
       # - mangohud
