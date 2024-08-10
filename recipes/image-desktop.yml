@@ -1,6 +1,6 @@
 name: sukarn-ublue-desktop
 description: Customized for desktops with nvidia graphics card.
-base-image: ghci.io/sukarn-m/sukarn-os-gnome
+base-image: ghcr.io/sukarn-m/sukarn-os-gnome
 image-version: latest
 
 modules:

@@ -1,6 +1,6 @@
 name: sukarn-ublue-laptop
 description: Customized for E14G2-AMD.
-base-image: ghci.io/sukarn-m/sukarn-os-gnome
+base-image: ghcr.io/sukarn-m/sukarn-os-gnome
 image-version: latest
 
 modules:
