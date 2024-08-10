@@ -1,7 +1,7 @@
 name: sukarn-ublue-budgie
 description: Customized budgie image.
 base-image: quay.io/fedora-ostree-desktops/onyx
-image-version: 40 # Note: Must match the tag at the end of the type:copy for kernel.
+image-version: 40
 #base-image: ghcr.io/ublue-os/onyx-main
 #image-version: gts
 
@@ -32,7 +32,7 @@ modules:
 #    dest: /tmp/update-rpm
 
   - type: copy
-    from: ghcr.io/ublue-os/coreos-stable-kernel:40
+    from: ghcr.io/ublue-os/coreos-stable-kernel:%OS_VERSION%
     src: /tmp/rpms
     dest: /tmp/kernel-rpms
 
@@ -49,9 +49,6 @@ modules:
       - grub2-tools-extra
       - htop
       - just # Needed by ujust
-#      - libnotify # Needed by ublue-update
-#      - python3-pip # Required to install topgrade for ublue-update
-#      - python3-psutil # Needed by ublue-update
       - powerstat
       - smartmontools
       - squashfs-tools
@@ -66,10 +63,6 @@ modules:
     base: coreos-stable
     install:
       - wl
-
-#  - type: bling # https://raw.githubusercontent.com/blue-build/modules/main/modules/bling/README.md
-#    install:
-#      - ublue-update # https://github.com/ublue-os/ublue-update
 
   - type: files
     files:
@@ -95,7 +88,6 @@ modules:
 
   - type: script
     scripts:
-#      - ublue-update.sh # Must be after ublue-rpms.sh
       - laptop-overrides.sh
       - image_name-v.sh
 

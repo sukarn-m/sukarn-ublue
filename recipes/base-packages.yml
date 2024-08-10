@@ -3,6 +3,8 @@ modules:
     install:
 # Terminal
       - byobu
+      - eza
+      - neovim
       - zoxide
 # Gaming
       # - mangohud
