@@ -40,7 +40,6 @@ modules:
         - org.gnome.Loupe # Image Viewer
         - org.gnome.Logs # Logs
         - org.gnome.Maps # Maps
-        - org.gnome.Photos # Photos (Organizer)
         - org.gnome.seahorse.Application # Seahorse
         - org.gnome.NautilusPreviewer # Sushi (Nautilus Previewer)
         - org.gnome.TextEditor # Text Editor
@@ -91,3 +90,4 @@ modules:
         - org.gnome.Totem # GNOME Totem Videos
         - com.discordapp.Discord # Discord
         - org.gimp.GIMP # GIMP (image editor)
+        - org.gnome.Photos # Photos (Organizer)
