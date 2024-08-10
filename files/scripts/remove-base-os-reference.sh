@@ -6,5 +6,5 @@ set -oue pipefail
 file=/usr/etc/containers/registries.d/sukarn-os-base.yaml
 
 if [ -f "${file}" ]; then
-  rm -v "${file}
+  rm -v "${file}"
 fi
