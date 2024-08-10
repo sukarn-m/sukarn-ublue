@@ -1,7 +1,7 @@
 modules:
   - type: script
     scripts:
-      # - remove-base-os-reference.sh
+      - remove-base-os-reference.sh
       - initramfs.sh
 
   - type: signing # this sests up the proper policy & signing files for signed images to work fully
