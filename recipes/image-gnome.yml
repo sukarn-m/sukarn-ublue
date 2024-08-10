@@ -10,6 +10,5 @@ modules:
   - from-file: base-gnome.yml
   - from-file: base-files.yml
   - from-file: base-scripts.yml
-  - from-file: base-akmods-bling.yml
   - from-file: base-systemd.yml
   - type: signing

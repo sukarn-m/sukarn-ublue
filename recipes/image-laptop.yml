@@ -4,6 +4,8 @@ base-image: ghcr.io/sukarn-m/sukarn-os-gnome
 image-version: latest
 
 modules:
+  - from-file: base-akmods-bling.yml
+
   - type: files
     files:
       - source: laptop/usr
