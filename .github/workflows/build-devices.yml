@@ -1,4 +1,4 @@
-name: build-gnome
+name: build-device
 on:
   workflow_dispatch: # allow manually triggering builds
   repository_dispatch: # allow trigerring through another repository
