@@ -1,8 +1,3 @@
-name: sukarn-os-gnome
-description: Base Gnome image.
-base-image: ghcr.io/ublue-os/silverblue-main
-image-version: gts
-
 modules:
   - from-file: base-flatpaks.yml
   - from-file: base-fonts.yml
@@ -10,5 +5,5 @@ modules:
   - from-file: base-gnome.yml
   - from-file: base-files.yml
   - from-file: base-scripts.yml
+  - from-file: base-akmods-bling.yml
   - from-file: base-systemd.yml
-  - type: signing

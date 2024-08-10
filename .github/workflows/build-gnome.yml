@@ -17,6 +17,7 @@ on:
 
   workflow_dispatch: # allow manually triggering builds
 
+#  repository_dispatch: # allow trigerring through another repository
 jobs:
   bluebuild:
     name: Gnome Image
@@ -29,7 +30,8 @@ jobs:
       fail-fast: false # stop GH from cancelling all matrix builds if one fails
       matrix:
         recipe:
-          - image-gnome.yml
+          - image-desktop.yml
+          - image-laptop.yml
     steps:
        # the build is fully handled by the reusable github action
       - name: Build Custom Image
@@ -47,9 +49,9 @@ jobs:
           use_unstable_cli: false
           squash: true
       # start device-specific builds
-      - name: Build Device Specific Images
-        run: |
-          curl -X POST https://api.github.com/repos/sukarn-m/sukarn-ublue/dispatches \
-          -H 'Accept: application/vnd.github.everest-preview+json' \
-          -u ${{ secrets.PERSONAL_ACCESS_TOKEN }} \
-          --data '{"event_type": "Initiated from sukarn-os-base", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
+#      - name: Build Device Specific Images
+#        run: |
+#          curl -X POST https://api.github.com/repos/sukarn-m/sukarn-ublue/dispatches \
+#          -H 'Accept: application/vnd.github.everest-preview+json' \
+#          -u ${{ secrets.PERSONAL_ACCESS_TOKEN }} \
+#          --data '{"event_type": "Initiated from sukarn-os-base", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'

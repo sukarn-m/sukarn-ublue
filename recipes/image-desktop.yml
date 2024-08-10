@@ -1,11 +1,12 @@
 name: sukarn-ublue-desktop
 description: Customized for desktops with nvidia graphics card.
-base-image: ghcr.io/sukarn-m/sukarn-os-gnome
-image-version: latest
+#base-image: ghcr.io/sukarn-m/sukarn-os-gnome
+#image-version: latest
+base-image: ghcr.io/ublue-os/silverblue-main
+image-version: gts
+
 
 modules:
-  - from-file: base-akmods-bling.yml
-
   - type: akmods
     base: coreos-stable
     nvidia: true
