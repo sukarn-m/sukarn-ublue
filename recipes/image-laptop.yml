@@ -21,8 +21,6 @@ modules:
         destination: /etc
       - source: device-e14g2/usr
         destination: /usr
-      - source: device-e14g2/etc
-        destination: /etc
 
   - type: systemd
     system:
