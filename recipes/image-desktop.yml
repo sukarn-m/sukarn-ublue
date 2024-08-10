@@ -2,7 +2,8 @@ name: sukarn-ublue-desktop
 description: Customized for desktops with nvidia graphics card.
 # base-image: ghci.io/sukarn-m/sukarn-os-base
 # image-version: latest
-base-image: ghcr.io/ublue-os/silverblue-nvidia
+#base-image: ghcr.io/ublue-os/silverblue-nvidia
+base-image: ghcr.io/ublue-os/silverblue-main
 image-version: gts
 
 # module configuration, executed in order
@@ -14,11 +15,11 @@ modules:
 ## Device specific configuration starts after this line.
 ## -----------------------------------------------------
 
-## sukarn-os-base: enable this
-#  - type: akmods
-#    nvidia: true
-#    install:
-#      - nvidia
+  - type: akmods
+    base: coreos-stable
+    nvidia: true
+    install:
+      - nvidia
 
   - type: files
     files:
