@@ -46,3 +46,10 @@ jobs:
           # Optional flags
           use_unstable_cli: false
           squash: true
+      # start device-specific builds
+      - name: Build Device Specific Images
+        run: |
+          curl -X POST https://api.github.com/repos/sukarn-m/sukarn-ublue/dispatches \
+          -H 'Accept: application/vnd.github.everest-preview+json' \
+          -u ${{ secrets.PERSONAL_ACCESS_TOKEN }} \
+          --data '{"event_type": "Initiated from sukarn-os-base", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
