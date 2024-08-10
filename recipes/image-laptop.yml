@@ -1,18 +1,9 @@
 name: sukarn-ublue-laptop
 description: Customized for E14G2-AMD.
-# base-image: ghci.io/sukarn-m/sukarn-os-base
-# image-version: latest
-base-image: ghcr.io/ublue-os/silverblue-main
-image-version: gts
+base-image: ghci.io/sukarn-m/sukarn-os-gnome
+image-version: latest
 
-# module configuration, executed in order
-# you can include multiple instances of the same module
 modules:
-## sukarn-os-base: disable this
-  - from-file: variant-gnome.yml
-
-## Device specific configuration starts after this line.
-## -----------------------------------------------------
   - type: files
     files:
       - source: laptop/usr

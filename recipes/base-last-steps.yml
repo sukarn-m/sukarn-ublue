@@ -1,8 +1,7 @@
 modules:
   - type: script
     scripts:
-## sukarn-os-base: enable this
-#      - remove-base-os-reference.sh
+      # - remove-base-os-reference.sh
       - initramfs.sh
 
   - type: signing # this sests up the proper policy & signing files for signed images to work fully

@@ -1,22 +1,7 @@
 name: build-gnome
 on:
-  schedule:
-    - cron: "30 06 * * 6" # Set in UTC: 6:30 AM on Saturday.
-
-  push:
-    paths-ignore: # don't rebuild if only documentation has changed
-      - "**.md"
-      - "recipes/image-budgie.yml"
-      - "make-*-iso.sh"
-      - ".github/workflows/build-budgie.yml"
-      - ".github/workflows/*.yml"
-      - "boot_menu.yml"
-      - "files/theme-v/**"
-      - "files/scripts/image_name-v.sh"
-      - "files/scripts/ublue-rpms.sh"
-
   workflow_dispatch: # allow manually triggering builds
-
+  repository_dispatch: # allow trigerring through another repository
 jobs:
   bluebuild:
     name: Gnome Image
@@ -29,7 +14,8 @@ jobs:
       fail-fast: false # stop GH from cancelling all matrix builds if one fails
       matrix:
         recipe:
-          - image-gnome.yml
+          - image-desktop.yml
+          - image-laptop.yml
     steps:
        # the build is fully handled by the reusable github action
       - name: Build Custom Image
