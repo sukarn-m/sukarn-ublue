@@ -8,8 +8,9 @@ modules:
       # - neovim
       - zoxide
 # Gaming
-      # - mangohud
-      # - gamemode.i686
+      - mangohud
+      - gamemode.i686
+      - gamemode.x86_64
       - gamescope
 # Nextcloud. Also requires the script nextcloud-vfs.sh
       - nextcloud-client-devel # Required on Fedora for virtual files.

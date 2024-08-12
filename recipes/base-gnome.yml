@@ -6,6 +6,7 @@ modules:
       - gnome-shell-extension-caffeine
       - gnome-shell-extension-dash-to-panel
       - gnome-shell-extension-forge
+      - gnome-shell-extension-gamemode
       - gnome-shell-extension-gsconnect
       - nautilus-gsconnect
       - gnome-shell-extension-system-monitor-applet
