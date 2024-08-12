@@ -6,7 +6,6 @@ modules:
       - gnome-shell-extension-caffeine
       - gnome-shell-extension-dash-to-panel
       - gnome-shell-extension-forge
-      - gnome-shell-extension-gamemode
       - gnome-shell-extension-gsconnect
       - nautilus-gsconnect
       - gnome-shell-extension-system-monitor-applet
@@ -17,11 +16,12 @@ modules:
       - gnome-shell-extension-background-logo
 
 
-  - type: gnome-extensions #https://github.com/blue-build/modules/blob/main/modules/gnome-extensions/module.yml
+  - type: gnome-extensions # https://github.com/blue-build/modules/blob/main/modules/gnome-extensions/module.yml
     install:
       - Bluetooth Battery Meter
       - Caffeine
 #      - Clipboard History
+      - GameMode Shell Extension
       - Hibernate Status Button
       - Order Gnome Shell extensions
       - Pano - Clipboard Manager # Requires libgda and libgda-sqlite
