@@ -4,8 +4,8 @@ After=network-online.target
 
 [Timer]
 Unit=nas-monitor.service
-OnBootSec=2min
-OnUnitActiveSec=2min
+OnBootSec=1min
+OnUnitActiveSec=1min
 
 [Install]
 WantedBy=timers.target

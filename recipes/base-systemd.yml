@@ -2,10 +2,6 @@ modules:
   - type: systemd
     system:
       enabled:
-        - var-mnt-nas.automount
-        - var-mnt-nas.mount
-        - var-mnt-roms.automount
-        - var-mnt-roms.mount
         - nas-monitor.timer
         - generate-ssh-certificate.service
         - rpm-ostreed-automatic.timer
@@ -13,6 +9,10 @@ modules:
 #        - cachefilesd.service # This is enabled through ujust enable-nfs-cache
       disabled:
         - tailscaled.service
+        - var-mnt-nas.automount
+        - var-mnt-nas.mount
+        - var-mnt-roms.automount
+        - var-mnt-roms.mount
     user:
       enabled:
         - flatpak-user-update.timer
