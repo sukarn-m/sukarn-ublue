@@ -5,7 +5,6 @@ modules:
     install:
 # Terminal
       - byobu
-      # - neovim
       - zoxide
 # Gaming
       - mangohud

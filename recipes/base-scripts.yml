@@ -6,4 +6,3 @@ modules:
       - image_name-s.sh
       - nas.sh
 #      - canon-lbp2900.sh
-#      - tailscale.sh
