@@ -2,6 +2,6 @@
     min_battery_percent = 50.0
     max_cpu_load_percent = 50.0
     max_mem_percent = 90.0
-    network_not_metered = false
+    network_not_metered = true
 [notify]
     dbus_notify = false
