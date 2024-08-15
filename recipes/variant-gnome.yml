@@ -6,5 +6,5 @@ modules:
   - from-file: base-files.yml
   - from-file: base-scripts.yml
   # - from-file: base-akmods-bling.yml
-  - from-file: base-brew.yml
+  # - from-file: base-brew.yml
   - from-file: base-systemd.yml
