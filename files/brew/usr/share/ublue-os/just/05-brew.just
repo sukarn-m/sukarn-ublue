@@ -3,17 +3,17 @@ alias brew := enable-brew
 # Enable Homebrew | https://brew.sh
 enable-brew:
     #!/usr/bin/env bash
-    systemctl enable --now brew-setup.service
-    systemctl enable --now brew-update.timer
-    systemctl enable --now brew-upgrade.timer
-    systemctl start brew-update.service
-    systemctl start brew-upgrade.service
+    sudo systemctl enable --now brew-setup.service
+    sudo systemctl enable --now brew-update.timer
+    sudo systemctl enable --now brew-upgrade.timer
+    sudo systemctl start brew-update.service
+    suod systemctl start brew-upgrade.service
 
 disable-brew:
     #!/usr/bin/env bash
-    systemctl disable --now brew-setup.service
-    systemctl disable --now brew-update.timer
-    systemctl disable --now brew-upgrade.timer
+    sudo systemctl disable --now brew-setup.service
+    sudo systemctl disable --now brew-update.timer
+    sudo systemctl disable --now brew-upgrade.timer
 
 remove-brew:
     #!/usr/bin/env bash
