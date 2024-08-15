@@ -17,10 +17,8 @@ modules:
 
   - type: files
     files:
-      - source: desktop/usr
-        destination: /usr
-      - source: desktop/etc
-        destination: /etc
+      - source: desktop
+        destination: /
 
   - type: gschema-overrides
     include:

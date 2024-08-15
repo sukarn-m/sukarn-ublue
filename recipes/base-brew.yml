@@ -12,3 +12,17 @@ modules:
     auto-upgrade: true # Whether to auto-upgrade all installed Brew packages using a systemd service.
     upgrade-interval: 8h # Defines how often the Brew upgrade service should run. The string is passed directly to OnUnitInactiveSec in systemd timer. (Syntax: [‘1d’, ‘6h’, ‘10m’]).
     upgrade-wait-after-boot: 30min # Time delay after system boot before the first Brew package upgrade runs. The string is passed directly to OnBootSec in systemd timer. (Syntax: [‘1d’, ‘6h’, ‘10m’]).
+
+  - type: files
+    files:
+      - source: brew
+        destination: /
+
+  - type: systemd
+    system:
+      disabled:
+        - brew-setup.service
+        - brew-update.timer
+        - brew-update.service
+        - brew-upgrade.timer
+        - brew-upgrade.service

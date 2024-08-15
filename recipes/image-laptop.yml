@@ -11,12 +11,10 @@ modules:
 
   - type: files
     files:
-      - source: laptop/usr
-        destination: /usr
-      - source: laptop/etc
-        destination: /etc
-      - source: device-e14g2/usr
-        destination: /usr
+      - source: laptop
+        destination: /
+      - source: device-e14g2
+        destination: /
 
   - type: systemd
     system:

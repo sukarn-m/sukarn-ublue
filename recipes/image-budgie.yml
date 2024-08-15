@@ -66,16 +66,12 @@ modules:
 
   - type: files
     files:
-      - source: system/usr
-        destination: /usr
-      - source: system/etc
-        destination: /etc
-      - source: laptop/usr
-        destination: /usr
-      - source: laptop/etc
-        destination: /etc
-      - source: theme-v/usr
-        destination: /usr
+      - source: system
+        destination: /
+      - source: laptop
+        destination: /
+      - source: theme-v
+        destination: /
 
   - type: systemd
     system:
