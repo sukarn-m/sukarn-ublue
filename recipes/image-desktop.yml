@@ -1,6 +1,6 @@
 name: sukarn-ublue-desktop
 description: Customized for desktops with nvidia graphics card.
-base-image: ghcr.io/ublue-os/silverblue-main
+base-image: ghcr.io/ublue-os/silverblue-nvidia
 image-version: gts
 # Possible options for `image-version`:
 # Numbered fedora release (`39`, `40`); `latest`; `gts`.
@@ -9,11 +9,11 @@ image-version: gts
 modules:
   - from-file: variant-gnome.yml
 
-  - type: akmods
-    base: coreos-stable
-    nvidia: true
-    install:
-      - nvidia
+#  - type: akmods
+#    base: coreos-stable
+#    nvidia: true
+#    install:
+#      - nvidia
 
   - type: files
     files:
