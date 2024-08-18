@@ -85,9 +85,5 @@ modules:
         - org.gtk.Gtk3theme.Yaru-light
         - org.gtk.Gtk3theme.Yaru-dark
 ## UNINSTALL
-      remove:
-        - media.emby.EmbyTheater # Emby Theater
-        - org.gnome.Totem # GNOME Totem Videos
-        - com.discordapp.Discord # Discord
-        - org.gimp.GIMP # GIMP (image editor)
-        - org.gnome.Photos # Photos (Organizer)
+#      remove:
+#        - 
