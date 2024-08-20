@@ -19,6 +19,7 @@ This is a constantly updating repository for creating [a native container image]
 3. [Encrypted Drives](#encrypted-drives)
     1. [Enable Auto-Unlock Using TPM2](#enable-auto-unlock-using-tpm2)
     2. [Disable Auto-Unlock Using TPM2](#disable-auto-unlock-using-tpm2)
+4. [Custom Commands](#custom-commands)
 5. [ISO](#iso)
 6. [Verification](#verification)
 
@@ -100,6 +101,12 @@ Download Fedora's certificate from [https://src.fedoraproject.org/rpms/shim-unsi
 
 As of writing, the relevant file is located at `https://src.fedoraproject.org/rpms/shim-unsigned-x64/blob/rawhide/f/fedora-ca-20200709.cer`.
 
+Automated method:
+```bash
+ujust sukarn-enroll-fedora-certificate
+```
+
+Manual method:
 ```bash
 wget --output-document=/tmp/fedora-ca.cer https://src.fedoraproject.org/rpms/shim-unsigned-x64/blob/rawhide/f/fedora-ca-20200709.cer
 sudo mokutil --timeout -1
@@ -111,6 +118,12 @@ sudo systemctl reboot
 
 The akmods key is located on the ublue-os based images at `/etc/pki/akmods/certs/akmods-ublue.der`.
 
+Automated method:
+```bash
+ujust enroll-secure-boot-key
+```
+
+Manual method:
 ```bash
 sudo mokutil --timeout -1
 sudo mokutil --import /etc/pki/akmods/certs/akmods-ublue.der
@@ -146,6 +159,27 @@ ujust remove-luks-tpm-unlock
 For manual steps, refer to [https://github.com/ublue-os/config/blob/main/build/ublue-os-luks/luks-disable-tpm2-autounlock](https://github.com/ublue-os/config/blob/main/build/ublue-os-luks/luks-disable-tpm2-autounlock).
 
 [Go back to Table of Contents](#table-of-contents)
+
+---
+
+## Custom Commands
+
+**Note:** To see a list of all custom commands available, run:
+
+```bash
+ujust --choose
+```
+
+These images contain custom commands from the universal-blue project, and custom commands added by the maintainer of this repository. List of custom commands added by the maintainer of this repository:
+
+| Command                            | Purpose                                            |
+| ---------------------------------- | -------------------------------------------------- |
+| `sukarn-enable-nfs-cache`          | Enable NFS caching                                 |
+| `sukarn-remove-nfs-cache`          | Remove NFS caching and cached files                |
+| `sukarn-added-canon-lbp-2900`      | Add this printer to the printers list              |
+| `sukarn-fix-grub-double-entry`     | Fix the grub double entries issue in Fedora Atomic |
+| `sukarn-enroll-fedora-certificate` | Enroll the upstream fedora certificate             |
+| `sukarn-grub-toggle-savedefault`   | Enable or disable GRUB_SAVEDEFAULT                 |
 
 ---
 
