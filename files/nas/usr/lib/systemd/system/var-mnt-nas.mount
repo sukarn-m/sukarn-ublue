@@ -3,7 +3,6 @@ Description=NFS Share
 DefaultDependencies=no
 Conflicts=umount.target
 After=network-online.target local-fs.target
-After=tailscaled.service
 Requires=network-online.target local-fs.target
 Before=umount.target
 [Mount]
