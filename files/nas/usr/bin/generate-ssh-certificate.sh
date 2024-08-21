@@ -16,7 +16,7 @@ echo "$DAYS_UNTIL_RENEWAL days left until certificate renewal."
 if [ "$DAYS_UNTIL_RENEWAL" -lt "0" ]
 then
 	echo "Trying to renew the certificate."
-	HOSTNAME=$(/usr/bin/cat /etc/hostname)
+	HOSTNAME=$(/usr/bin/hostnamectl hostname)
 	/usr/bin/mkdir -p $nas_mount/$HOSTNAME/ssh
 	/usr/bin/cp $HOMEDIR/.ssh/id_ed25519.pub $nas_mount/$HOSTNAME/ssh/$HOSTNAME.pub
 	echo "Files are in place. Let the waiting games begin."

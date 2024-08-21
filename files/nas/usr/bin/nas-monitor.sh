@@ -1,14 +1,14 @@
 #!/bin/bash
 
 function systemctl_start () {
-  if [ ! $(systemctl is-active --quiet ${1} ]; then
-    systemctl start ${1}
+  if [ ! $(systemctl is-active --quiet $1 ]; then
+    systemctl start $1
   fi
 }
 
 function systemctl_stop () {
-  if [ $(systemctl is-active --quiet ${1} ]; then
-    systemctl stop ${1}
+  if [ $(systemctl is-active --quiet $1 ]; then
+    systemctl stop $1
   fi
 }
 
