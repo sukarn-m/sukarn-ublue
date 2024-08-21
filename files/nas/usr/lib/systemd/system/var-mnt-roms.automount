@@ -1,5 +1,6 @@
 [Unit]
 Description=Automount NAS share on demand
+After=tailscaled.service
 [Automount]
 Where=/var/mnt/roms
 TimeoutIdleSec=600

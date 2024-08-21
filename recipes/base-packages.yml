@@ -16,7 +16,6 @@ modules:
       - nextcloud-client-nautilus # The main nextcloud client.
 # Miscellaneous
       - android-tools # ADB and Fastboot
-      - at # Simple time-based command scheduling
       - cachefilesd # For NFS caching.
       # - gtk2 # For ePass2003
       - gnome-boxes # Virtualization
