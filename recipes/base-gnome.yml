@@ -15,16 +15,15 @@ modules:
     remove:
       - gnome-shell-extension-background-logo
 
-
   - type: gnome-extensions # https://github.com/blue-build/modules/blob/main/modules/gnome-extensions/module.yml
     install:
       - Bluetooth Battery Meter
       - Caffeine
-#      - Clipboard History
+      - Clipboard History
       - GameMode Shell Extension
       - Hibernate Status Button
       - Order Gnome Shell extensions
-#      - Pano - Clipboard Manager # Requires libgda and libgda-sqlite
+#      - Pano - Clipboard Manager # Requires libgda and libgda-sqlite. Fedora 40+ currently blocked: https://github.com/oae/gnome-shell-pano/issues/271
       - Removable Drive Menu
       - Weather or Not
       - Tailscale QS

@@ -1,22 +1,13 @@
 name: sukarn-ublue-laptop
 description: Customized for E14G2-AMD.
 base-image: ghcr.io/ublue-os/silverblue-main
-image-version: gts
+image-version: 40
 # Possible options for `image-version`:
 # Numbered fedora release (`39`, `40`); `latest`; `gts`.
 # Some images also support `stable`. Check the available tags of the image being used.
 
 modules:
   - from-file: variant-gnome.yml
-
-  - type: rpm-ostree
-    install:
-      - libgda # For extension Pano - Clipboard Manager
-      - libgda-sqlite # For extension Pano - Clipboard Manager
-
-  - type: gnome-extensions # https://github.com/blue-build/modules/blob/main/modules/gnome-extensions/module.yml
-    install:
-      - Pano - Clipboard Manager # Requires libgda and libgda-sqlite
 
   - type: files
     files:
