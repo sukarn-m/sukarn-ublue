@@ -1,7 +1,7 @@
 name: sukarn-ublue-desktop
 description: Customized for desktops with nvidia graphics card.
 base-image: ghcr.io/ublue-os/silverblue-nvidia
-image-version: gts
+image-version: 40
 # Possible options for `image-version`:
 # Numbered fedora release (`39`, `40`); `latest`; `gts`.
 # Some images also support `stable`. Check the available tags of the image being used.
