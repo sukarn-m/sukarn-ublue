@@ -10,8 +10,8 @@ modules:
       - nautilus-gsconnect
       - gnome-shell-extension-system-monitor-applet
       - gnome-shell-extension-workspace-indicator
-      - libgda # For extension Pano - Clipboard Manager
-      - libgda-sqlite # For extension Pano - Clipboard Manager
+#      - libgda # For extension Pano - Clipboard Manager
+#      - libgda-sqlite # For extension Pano - Clipboard Manager
     remove:
       - gnome-shell-extension-background-logo
 
@@ -24,7 +24,7 @@ modules:
       - GameMode Shell Extension
       - Hibernate Status Button
       - Order Gnome Shell extensions
-      - Pano - Clipboard Manager # Requires libgda and libgda-sqlite
+#      - Pano - Clipboard Manager # Requires libgda and libgda-sqlite
       - Removable Drive Menu
       - Weather or Not
       - Tailscale QS

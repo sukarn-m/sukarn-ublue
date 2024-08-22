@@ -9,6 +9,15 @@ image-version: gts
 modules:
   - from-file: variant-gnome.yml
 
+  - type: rpm-ostree
+    install:
+      - libgda # For extension Pano - Clipboard Manager
+      - libgda-sqlite # For extension Pano - Clipboard Manager
+
+  - type: gnome-extensions # https://github.com/blue-build/modules/blob/main/modules/gnome-extensions/module.yml
+    install:
+      - Pano - Clipboard Manager # Requires libgda and libgda-sqlite
+
   - type: files
     files:
       - source: laptop

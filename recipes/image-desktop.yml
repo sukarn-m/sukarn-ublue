@@ -9,6 +9,10 @@ image-version: gts
 modules:
   - from-file: variant-gnome.yml
 
+  - type: gnome-extensions # https://github.com/blue-build/modules/blob/main/modules/gnome-extensions/module.yml
+    install:
+      - Clipboard History
+
 #  - type: akmods
 #    base: coreos-stable
 #    nvidia: true
