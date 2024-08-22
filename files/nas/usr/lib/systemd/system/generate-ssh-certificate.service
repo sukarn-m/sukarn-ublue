@@ -2,15 +2,17 @@
 Description=Generate ssh host certificate for authentication
 After=network-online.target remote-fs.target local-fs.target
 After=nas-monitor.service
-RequiresMountsFor=/var/mnt/nas
+Requires=var-mnt-nas.automount
+#RequiresMountsFor=/var/mnt/nas
 #AssertPathIsMountPoint=/var/mnt/nas 
 Before=umount.target
 [Service]
-Type=simple
+Type=oneshot
 ExecStart=/usr/bin/generate-ssh-certificate.sh
 ExecStopPost=-/usr/bin/sh -c 'export HOSTNAME=$(/usr/bin/hostnamectl hostname) && /usr/bin/rm -r /mnt/nas/$HOSTNAME/ssh'
 RuntimeMaxSec=1h
 TimeoutStopSec=2
 Restart=on-failure
+RemainAfterExit=no
 [Install]
 WantedBy=default.target
