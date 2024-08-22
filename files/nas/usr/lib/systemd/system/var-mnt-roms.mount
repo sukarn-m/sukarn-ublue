@@ -2,8 +2,8 @@
 Description=NFS Share
 DefaultDependencies=no
 Conflicts=umount.target
-After=network-online.target local-fs.target
-Requires=network-online.target local-fs.target
+After=network-online.target local-fs.target nfs-client.target
+Requires=network-online.target local-fs.target nfs-client.target
 Before=umount.target
 
 [Mount]

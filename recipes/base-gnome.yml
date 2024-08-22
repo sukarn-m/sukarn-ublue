@@ -22,6 +22,7 @@ modules:
       - Clipboard History
       - GameMode Shell Extension
       - Hibernate Status Button
+      - Night Theme Switcher
       - Order Gnome Shell extensions
 #      - Pano - Clipboard Manager # Requires libgda and libgda-sqlite. Fedora 40+ currently blocked: https://github.com/oae/gnome-shell-pano/issues/271
       - Removable Drive Menu
