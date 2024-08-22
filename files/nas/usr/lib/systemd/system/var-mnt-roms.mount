@@ -9,7 +9,7 @@ Before=umount.target
 What=nas.home:/mnt/Pool1/Media/roms
 Where=/var/mnt/roms
 Type=nfs
-Options=defaults,fsc,soft
+Options=defaults,fsc
 ForceUnmount=on
 TimeoutSec=10
 [Install]
