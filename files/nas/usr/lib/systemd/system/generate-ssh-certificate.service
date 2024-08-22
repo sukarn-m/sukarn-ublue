@@ -2,8 +2,8 @@
 Description=Generate ssh host certificate for authentication
 After=network-online.target remote-fs.target local-fs.target
 After=nas-monitor.service
-#RequiresMountsFor=/var/mnt/nas
-AssertPathIsMountPoint=/var/mnt/nas 
+RequiresMountsFor=/var/mnt/nas
+#AssertPathIsMountPoint=/var/mnt/nas 
 Before=umount.target
 [Service]
 Type=simple
