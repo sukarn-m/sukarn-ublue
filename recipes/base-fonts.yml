@@ -2,6 +2,7 @@ modules:
   - type: fonts
     fonts:
       nerd-fonts:
+        - NerdFontsSymbolsOnly
         - SourceCodePro
         - Tinos
       google-fonts:

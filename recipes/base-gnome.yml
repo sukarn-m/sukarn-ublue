@@ -21,6 +21,7 @@ modules:
       - Caffeine
       - Clipboard History
       - GameMode Shell Extension
+      - Gnome 4x UI Improvements
       - Hibernate Status Button
       - Night Theme Switcher
       - Order Gnome Shell extensions
