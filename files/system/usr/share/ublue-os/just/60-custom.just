@@ -127,6 +127,7 @@ sukarn-grub-toggle-savedefault:
         echo "You chose to regenerate grub configuration only."
 	regenerate_grub
 	exit 0
+	;;
       *)
         echo "Error. Invalid option"
         exit 1
