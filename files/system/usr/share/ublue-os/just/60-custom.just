@@ -31,6 +31,7 @@ sukarn-fix-grub-double-entry:
     if [ -d /sys/firmware/efi ]; then
       sudo grub2-switch-to-blscfg
       sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
+      sudo cp /boot/grub2/grubenv /boot/efi/EFI/fedora/grubenv
     else
       block_device=$(lsblk -spnlo name $(grub2-probe --target=device /boot/grub2) | tail -n1)
       sudo grub2-install $block_device
@@ -75,16 +76,16 @@ sukarn-grub-toggle-savedefault:
     else
       echo "${bold}Current setting: Not set.${normal} What would you like to do?"
     fi
-    OPTION=$(ugum choose "Nothing" "Enable" "Disable")
+    OPTION=$(ugum choose "Nothing" "Enable" "Disable" "Regenerate")
     # This is where the magic happens
     case $OPTION in
       Nothing)
-        echo "Bye bye!"
+        echo "You chose to do nothing. Bye bye!"
         exit 0
         ;;
       Enable)
         if [[ ${current_value} == true ]] && [[ ${line_present} == true ]]; then
-          echo "Nothing to do here."
+          echo "Already enabled. Nothing to do here."
           exit 0
         elif [[ ${current_value} == false ]] && [[ ${line_present} == true ]]; then
           echo "Changing from false to true"
@@ -104,7 +105,7 @@ sukarn-grub-toggle-savedefault:
       Disable)
         echo "Asked to disable"
         if [[ ${current_value} == false ]] && [[ ${line_present} == true ]]; then
-          echo "Nothing to do here."
+          echo "Already disabled. Nothing to do here."
           exit 0
         elif [[ ${current_value} == true ]] && [[ ${line_present} == true ]]; then
           echo "Changing from true to false"
@@ -122,6 +123,10 @@ sukarn-grub-toggle-savedefault:
         fi
         exit 0
         ;;
+      Regenerate)
+        echo "You chose to regenerate grub configuration only."
+	regenerate_grub
+	exit 0
       *)
         echo "Error. Invalid option"
         exit 1
