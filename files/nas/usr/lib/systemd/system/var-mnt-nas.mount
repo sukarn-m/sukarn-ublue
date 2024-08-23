@@ -10,7 +10,7 @@ Before=umount.target
 What=nas.home:/mnt/Pool1/devices/linux
 Where=/var/mnt/nas
 Type=nfs
-Options=defaults,fsc,soft
+Options=defaults,fsc
 #ForceUnmount=on
 TimeoutSec=10
 
