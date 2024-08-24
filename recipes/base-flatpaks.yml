@@ -49,7 +49,6 @@ modules:
         - org.gnome.World.PikaBackup # Pika Backup
         - org.fedoraproject.MediaWriter # Fedora Media Writer
         - com.github.tchx84.Flatseal # Flatseal (Permission Manager)
-        - app.devsuite.Ptyxis # Ptyxis terminal
 ## Media
         - com.rafaelmardojai.Blanket # Blanket (soundscapes)
         - com.github.PintaProject.Pinta # Pinta (image editor)
@@ -86,5 +85,6 @@ modules:
         - org.gtk.Gtk3theme.Yaru-light
         - org.gtk.Gtk3theme.Yaru-dark
 ## UNINSTALL
-#      remove:
+      remove:
+        - app.devsuite.Ptyxis # Ptyxis terminal
 #        - 

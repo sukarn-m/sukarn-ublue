@@ -5,6 +5,8 @@ modules:
     install:
 # Terminal
       - byobu
+      - ptyxis
+      - wl-clipboard
       - zoxide
 # Gaming
       - mangohud
