@@ -17,6 +17,10 @@ if [[ ! $KARGS =~ "nvidia-drm.modeset=1" ]]; then
   NEEDED_KARGS+=("--append-if-missing=nvidia-drm.modeset=1")
 fi
 
+if [[ ! $KARGS =~ "nvidia_drm.fbdev=1" ]]; then
+  NEEDED_KARGS+=("--append-if-missing=nvidia_drm.fbdev=1")
+fi
+
 # For disabling GSP firmware, in case of performance issues
 if [[ ! $KARGS =~ "nvidia.NVreg_EnableGpuFirmware=0" ]]; then
   NEEDED_KARGS+=("--append-if-missing=nvidia.NVreg_EnableGpuFirmware=0")
