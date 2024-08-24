@@ -46,6 +46,7 @@ modules:
         - org.gnome.Weather # Weather
 ## System Apps
         - org.gnome.DejaDup # Deja Dup Backups
+        - org.gnome.World.PikaBackup # Pika Backup
         - org.fedoraproject.MediaWriter # Fedora Media Writer
         - com.github.tchx84.Flatseal # Flatseal (Permission Manager)
         - app.devsuite.Ptyxis # Ptyxis terminal
