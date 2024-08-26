@@ -36,6 +36,7 @@ modules:
         - org.gnome.Evince # Document Viewer
         - org.gnome.Evolution # Evolution
         - com.mattjakeman.ExtensionManager # Extension Manager
+        - org.gnome.FileRoller # Archive viewer and extractor
         - org.gnome.font-viewer # Font Viewer
         - org.gnome.Loupe # Image Viewer
         - org.gnome.Logs # Logs
@@ -86,5 +87,4 @@ modules:
         - org.gtk.Gtk3theme.Yaru-dark
 ## UNINSTALL
       remove:
-        - app.devsuite.Ptyxis # Ptyxis terminal
 #        - 
