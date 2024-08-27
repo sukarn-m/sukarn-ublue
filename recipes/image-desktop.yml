@@ -27,7 +27,7 @@ modules:
   - type: systemd
     system:
       enabled:
-        - nvidia-kargs.service
+        - desktop-kargs.service
 
   - type: script
     scripts:
