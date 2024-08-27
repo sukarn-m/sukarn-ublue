@@ -32,7 +32,6 @@ modules:
   - type: script
     scripts:
       - coreos_kernel.sh
-      - device-e14g2-kargs.sh
       - laptop-overrides.sh
 
   - from-file: base-last-steps.yml

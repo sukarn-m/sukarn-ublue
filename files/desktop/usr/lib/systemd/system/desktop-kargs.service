@@ -6,7 +6,7 @@ Before=systemd-user-sessions.service
 [Service]
 Type=oneshot
 RemainAfterExit=no
-ExecStart=/usr/bin/nvidia-kargs
+ExecStart=/usr/bin/desktop-kargs
 
 [Install]
 WantedBy=multi-user.target

@@ -3,8 +3,6 @@
 # Tell build process to exit if there are any errors.
 set -oue pipefail
 
-chmod 0700 /usr/bin/nvidia-kargs
-
 # Nvidia specific Gnome fixes
 echo "## Required for use of OBS-VkCapture in X11 environments" >> /etc/environment
 echo "## Nvidia users must additionally have nvidia-drm.modeset=1 in their kargs" >> /etc/environment
