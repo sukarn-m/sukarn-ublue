@@ -13,7 +13,6 @@ modules:
       - gamemode.i686
       - gamemode.x86_64
       - gamescope
-      - input-remapper
 # Nextcloud. Also requires the script nextcloud-vfs.sh
       - nextcloud-client-devel # Required on Fedora for virtual files.
       - nextcloud-client-nautilus # The main nextcloud client.
