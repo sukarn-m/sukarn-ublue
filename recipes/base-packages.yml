@@ -29,7 +29,8 @@ modules:
       # - python3-pip
       # - python3-psutil
       # - libnotify
-# Gnome Themes
+# Theming - Look and Feel
+      - variety # Wallpapers
       - gnome-shell-theme-yaru
       - yaru-gtk2-theme
       - yaru-gtk3-theme
