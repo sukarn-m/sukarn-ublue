@@ -19,7 +19,7 @@ modules:
     install:
       - Bluetooth Battery Meter
       - Caffeine
-      - Clipboard History
+#      - Clipboard History
       - GameMode Shell Extension
       - Gnome 4x UI Improvements
       - Hibernate Status Button
