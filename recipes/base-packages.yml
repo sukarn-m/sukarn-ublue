@@ -7,7 +7,6 @@ modules:
       - byobu
       - ptyxis
       - wl-clipboard
-      - zoxide
 # Gaming
       - mangohud
       # - gamemode.i686
@@ -31,14 +30,6 @@ modules:
       # - libnotify
 # Theming - Look and Feel
       - variety # Wallpapers
-      - gnome-shell-theme-yaru
-      - yaru-gtk2-theme
-      - yaru-gtk3-theme
-      - yaru-gtk4-theme
-      - yaru-gtksourceview-theme
-      - yaru-icon-theme
-      - yaru-sound-theme
-      - yaru-theme
     remove:
       ## Firefox has to be removed in 'main' image, but not in bluefin, bazzite, and aurora.
       - firefox

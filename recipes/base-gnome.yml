@@ -1,7 +1,7 @@
 modules:
   - type: rpm-ostree
     install:
-      - libappindicator # For extension appindicator
+# Extensions
       - gnome-shell-extension-appindicator
       - gnome-shell-extension-blur-my-shell
       - gnome-shell-extension-caffeine
@@ -13,6 +13,15 @@ modules:
       - gnome-shell-extension-workspace-indicator
       - libgda # For extension Pano - Clipboard Manager
       - libgda-sqlite # For extension Pano - Clipboard Manager
+# Theming
+      - gnome-shell-theme-yaru
+      - yaru-gtk2-theme
+      - yaru-gtk3-theme
+      - yaru-gtk4-theme
+      - yaru-gtksourceview-theme
+      - yaru-icon-theme
+      - yaru-sound-theme
+      - yaru-theme
     remove:
       - gnome-shell-extension-background-logo
 
