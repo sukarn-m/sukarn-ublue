@@ -1,6 +1,7 @@
 modules:
   - type: rpm-ostree
     install:
+      - libappindicator # For extension appindicator
       - gnome-shell-extension-appindicator
       - gnome-shell-extension-blur-my-shell
       - gnome-shell-extension-caffeine
