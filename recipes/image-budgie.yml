@@ -23,7 +23,6 @@ modules:
   - type: script
     scripts:
       - coreos_kernel.sh
-      - fedora-atomic-repos.sh
 
   - type: rpm-ostree
     remove:
