@@ -5,7 +5,7 @@
 set -oue pipefail
 
 # To get the list of packages available in a workflow log:
-# tree /tmp && exit 1
+tree /tmp && exit 1
 
 # rpm-ostree install /tmp/config-rpms/*.noarch.rpm
 

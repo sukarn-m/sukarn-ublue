@@ -45,5 +45,5 @@ jobs:
           maximize_build_space: false
           
           # Optional flags
-          use_unstable_cli: true
+          use_unstable_cli: false
           squash: true
