@@ -16,15 +16,10 @@ modules:
       - source: device-e14g2
         destination: /
 
-  - type: script
-    scripts:
-      - linux-amdgpu-configuration-tool.sh
-
   - type: systemd
     system:
       enabled:
         - laptop-kargs.service
-        - lactd.service
 
   - type: gnome-extensions
     install:
