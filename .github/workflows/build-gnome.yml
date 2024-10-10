@@ -1,7 +1,7 @@
 name: build-gnome
 on:
   schedule:
-    - cron: "30 06 * * 6" # Set in UTC: 6:30 AM on Saturday.
+    - cron: "30 06 * * 0" # Set in UTC: 6:30 AM on Sunday.
 
   push:
     paths-ignore: # don't rebuild if only documentation has changed
