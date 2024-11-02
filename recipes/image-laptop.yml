@@ -1,7 +1,7 @@
 name: sukarn-ublue-laptop
 description: Customized for E14G2-AMD.
 base-image: ghcr.io/ublue-os/silverblue-main
-image-version: 40
+image-version: gts
 # Possible options for `image-version`:
 # Numbered fedora release (`39`, `40`); `latest`; `gts`.
 # Some images also support `stable`. Check the available tags of the image being used.
