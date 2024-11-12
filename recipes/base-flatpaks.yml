@@ -82,9 +82,9 @@ modules:
         - io.github.flattool.Warehouse # Warehouse
         - dev.deedles.Trayscale # Trayscale for tailscale
 ## Theming
-        - org.gtk.Gtk3theme.Yaru
-        - org.gtk.Gtk3theme.Yaru-light
-        - org.gtk.Gtk3theme.Yaru-dark
+#        - org.gtk.Gtk3theme.Yaru
+#        - org.gtk.Gtk3theme.Yaru-light
+#        - org.gtk.Gtk3theme.Yaru-dark
 ## UNINSTALL
       remove:
 #        - 

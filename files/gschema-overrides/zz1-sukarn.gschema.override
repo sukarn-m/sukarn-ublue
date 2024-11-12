@@ -3,12 +3,10 @@ show-weekdate=true
 
 [org.gnome.desktop.interface]
 clock-show-weekday=true
-cursor-theme='Yaru'
 document-font-name='Bitter 11'
 enable-hot-corners=false
 font-antialiasing='rgba'
 font-name='Bitter 11'
-gtk-theme='Yaru'
 icon-theme='Yaru'
 monospace-font-name='SauceCodePro Nerd Font Mono 10'
 show-battery-percentage=true
