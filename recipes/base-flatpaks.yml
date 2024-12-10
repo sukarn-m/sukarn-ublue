@@ -87,5 +87,5 @@ modules:
 #        - org.gtk.Gtk3theme.Yaru-light
 #        - org.gtk.Gtk3theme.Yaru-dark
 ## UNINSTALL
-      remove:
+#      remove:
 #        - 
