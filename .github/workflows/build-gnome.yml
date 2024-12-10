@@ -47,7 +47,8 @@ jobs:
           
           # Optional flags
           use_unstable_cli: false
-          squash: true
+#          squash: true
+          rechunk: true
       # start device-specific builds
 #      - name: Build Device Specific Images
 #        run: |
