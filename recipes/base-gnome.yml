@@ -27,18 +27,18 @@ modules:
 
   - type: gnome-extensions # https://github.com/blue-build/modules/blob/main/modules/gnome-extensions/module.yml
     install:
-      - Bluetooth Battery Meter
-      - Caffeine
-#      - Clipboard History
-      - GameMode Shell Extension
-      - Gnome 4x UI Improvements
-      - Hibernate Status Button
-      - Night Theme Switcher
-      - Order Gnome Shell extensions
-#      - Pano - Clipboard Manager # Requires libgda and libgda-sqlite. Fedora 40+ currently blocked: https://github.com/oae/gnome-shell-pano/issues/271
-      - Removable Drive Menu
-      - Weather or Not
-      - Tailscale QS
+      - 6670 # Bluetooth Battery Meter
+      - 517 # Caffeine
+#      - 4839 # Clipboard History
+      - 7074 # GameMode Shell Extension
+      - 4158 # Gnome 4x UI Improvements
+      - 755 # Hibernate Status Button
+      - 2236 # Night Theme Switcher
+      - 2114 # Order Gnome Shell extensions
+#      - 5278 # Pano - Clipboard Manager # Requires libgda and libgda-sqlite. Fedora 40+ currently blocked: https://github.com/oae/gnome-shell-pano/issues/271
+      - 7 # Removable Drive Menu
+      - 5660 # Weather or Not
+      - 6139 # Tailscale QS
 #    uninstall:
 #      - 
 
