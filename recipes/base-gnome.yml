@@ -39,6 +39,7 @@ modules:
       - 7 # Removable Drive Menu
       - 5660 # Weather or Not
       - 6139 # Tailscale QS
+      - 3569 # Task Widget
 #    uninstall:
 #      - 
 
