@@ -23,7 +23,8 @@ modules:
 
   - type: gnome-extensions
     install:
-      - Thinkpad Battery Threshold
+      - 5724 # Battery Health Charging
+#      - 4798 # Thinkpad Battery Threshold
 
   - type: gschema-overrides
     include:
