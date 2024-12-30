@@ -74,6 +74,7 @@ modules:
         - net.cozic.joplin_desktop # Joplin
         - org.libreoffice.LibreOffice # LibreOffice
         - com.github.zadam.trilium # Trilium Notes
+        - io.github.alainm23.planify # Planify (Tasks / ToDo)
 ## Tools
         - com.github.wwmm.easyeffects # Easy Effects
         - org.filezillaproject.Filezilla # FileZilla
