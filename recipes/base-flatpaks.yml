@@ -50,6 +50,7 @@ modules:
         - org.gnome.World.PikaBackup # Pika Backup
         - org.fedoraproject.MediaWriter # Fedora Media Writer
         - com.github.tchx84.Flatseal # Flatseal (Permission Manager)
+#        - page.tesk.Refine # Gnome settings editor
 ## Media
         - com.rafaelmardojai.Blanket # Blanket (soundscapes)
         - com.github.PintaProject.Pinta # Pinta (image editor)
@@ -75,6 +76,7 @@ modules:
         - org.libreoffice.LibreOffice # LibreOffice
         - com.github.zadam.trilium # Trilium Notes
         - io.github.alainm23.planify # Planify (Tasks / ToDo)
+        - org.kde.okular # Okular PDF
 ## Tools
         - com.github.wwmm.easyeffects # Easy Effects
         - org.filezillaproject.Filezilla # FileZilla
