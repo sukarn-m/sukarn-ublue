@@ -59,6 +59,9 @@ custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybin
 sleep-inactive-battery-timeout=600
 sleep-inactive-ac-timeout=1800
 
+[org.gnome.shell]
+favorite-apps=['org.gnome.Nautilus.desktop', 'one.ablaze.floorp.desktop', 'org.mozilla.firefox.desktop', 'org.gnome.Evolution.desktop', 'com.github.zadam.trilium.desktop', 'io.github.alainm23.planify.desktop']
+
 [org.gnome.shell.app-switcher]
 current-workspace-only=true
 
