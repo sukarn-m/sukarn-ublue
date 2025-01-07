@@ -173,6 +173,15 @@ thermal-tz0-color='#77767bff'
 [org.gnome.shell.extensions.weatherornot]
 position='clock-left'
 
+[org.gnome.shell.extensions.workspaces-indicator-by-open-apps]
+apps-all-desaturate=true
+icons-group='OFF'
+indicator-round-borders=false
+indicator-show-active-workspace=true
+indicator-show-indexes=false
+position-in-panel='RIGHT'
+scroll-enable=false
+
 [org.gnome.software]
 allow-updates=false
 

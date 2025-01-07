@@ -10,7 +10,7 @@ modules:
       - gnome-shell-extension-gsconnect
       - nautilus-gsconnect
       - gnome-shell-extension-system-monitor-applet
-      - gnome-shell-extension-workspace-indicator
+#      - gnome-shell-extension-workspace-indicator
       - libgda # For extension Pano - Clipboard Manager
       - libgda-sqlite # For extension Pano - Clipboard Manager
 ## Theming
@@ -40,6 +40,7 @@ modules:
       - 5660 # Weather or Not
       - 6139 # Tailscale QS
       - 3569 # Task Widget
+      - 5967 # Workspaces indicator by open apps
 #    uninstall:
 #      - 
 
