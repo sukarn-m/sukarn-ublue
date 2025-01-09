@@ -51,6 +51,7 @@ modules:
         - org.fedoraproject.MediaWriter # Fedora Media Writer
         - com.github.tchx84.Flatseal # Flatseal (Permission Manager)
 #        - page.tesk.Refine # Gnome settings editor
+        - io.github.dvlv.boxbuddyrs # BoxBuddy
 ## Media
         - com.rafaelmardojai.Blanket # Blanket (soundscapes)
         - com.github.PintaProject.Pinta # Pinta (image editor)
