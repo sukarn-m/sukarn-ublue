@@ -1,14 +1,19 @@
 name: sukarn-ublue-desktop
 description: Customized for desktops with nvidia graphics card.
-base-image: ghcr.io/ublue-os/silverblue-nvidia
-#base-image: ghcr.io/ublue-os/silverblue-main
-image-version: gts
+#base-image: ghcr.io/ublue-os/silverblue-nvidia
+base-image: ghcr.io/ublue-os/silverblue-main
+image-version: gts # When the version changes, the COPY line below will need an accompanying version change.
 # Possible options for `image-version`:
 # Numbered fedora release (`39`, `40`); `latest`; `gts`.
 # Some images also support `stable`. Check the available tags of the image being used.
 
 modules:
   - from-file: variant-gnome.yml
+
+# Based on: https://github.com/secureblue/secureblue/blob/live/recipes/common/nvidia-open-server-modules.yml
+  - type: containerfile
+    snippets:
+      - COPY --from=ghcr.io/ublue-os/akmods-nvidia-open:coreos-stable-40 /rpms /tmp/rpms
 
 #  - type: akmods
 #    base: coreos-stable
@@ -34,6 +39,8 @@ modules:
 
   - type: script
     scripts:
-      - nvidia.sh
+      - coreos_kernel.sh
+      - nvidia-open.sh
+#      - nvidia.sh
 
   - from-file: base-last-steps.yml

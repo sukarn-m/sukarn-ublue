@@ -33,9 +33,9 @@ if [[ ! $KARGS =~ "nvidia_drm.fbdev=1" ]]; then
   NEEDED_KARGS+=("--append-if-missing=nvidia_drm.fbdev=1")
 fi
 
-if [[ ! $KARGS =~ "nvidia.NVreg_EnableGpuFirmware=0" ]]; then
-  NEEDED_KARGS+=("--append-if-missing=nvidia.NVreg_EnableGpuFirmware=0")
-fi
+# if [[ ! $KARGS =~ "nvidia.NVreg_EnableGpuFirmware=0" ]]; then
+#   NEEDED_KARGS+=("--append-if-missing=nvidia.NVreg_EnableGpuFirmware=0")
+# fi
 
 ## Apply the kargs
 
