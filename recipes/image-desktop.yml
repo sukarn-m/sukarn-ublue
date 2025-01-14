@@ -10,10 +10,19 @@ image-version: gts # When the version changes, the COPY line below will need an 
 modules:
   - from-file: variant-gnome.yml
 
+  - type: script
+    scripts:
+      - coreos_kernel.sh
+
 # Based on: https://github.com/secureblue/secureblue/blob/live/recipes/common/nvidia-open-server-modules.yml
   - type: containerfile
     snippets:
       - COPY --from=ghcr.io/ublue-os/akmods-nvidia-open:coreos-stable-40 /rpms /tmp/rpms
+
+  - type: script
+    scripts:
+      - nvidia-open.sh
+#      - nvidia.sh
 
 #  - type: akmods
 #    base: coreos-stable
@@ -36,11 +45,5 @@ modules:
     system:
       enabled:
         - desktop-kargs.service
-
-  - type: script
-    scripts:
-      - coreos_kernel.sh
-      - nvidia-open.sh
-#      - nvidia.sh
 
   - from-file: base-last-steps.yml
