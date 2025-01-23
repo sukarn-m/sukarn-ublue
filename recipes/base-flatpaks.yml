@@ -86,6 +86,7 @@ modules:
         - com.vscodium.codium # VS Codium
         - io.github.flattool.Warehouse # Warehouse
         - dev.deedles.Trayscale # Trayscale for tailscale
+        - io.github.flattool.Ignition # Ignition for managing startup apps and scripts
 ## Theming
 #        - org.gtk.Gtk3theme.Yaru
 #        - org.gtk.Gtk3theme.Yaru-light
