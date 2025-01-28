@@ -73,7 +73,6 @@ modules:
 #        - net.rpcs3.RPCS3 # RPCS3
         - com.valvesoftware.Steam # Steam
 ## Office
-        - net.cozic.joplin_desktop # Joplin
         - org.libreoffice.LibreOffice # LibreOffice
         - com.github.zadam.trilium # Trilium Notes
         - io.github.alainm23.planify # Planify (Tasks / ToDo)
