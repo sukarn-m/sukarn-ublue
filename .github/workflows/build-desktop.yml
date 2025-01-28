@@ -1,4 +1,4 @@
-name: build-gnome
+name: build-desktop
 on:
   schedule:
     - cron: "30 06 * * 0" # Set in UTC: 6:30 AM on Sunday.
