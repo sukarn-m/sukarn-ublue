@@ -1,7 +1,7 @@
-name: build-laptop
+name: build-gnome
 on:
   schedule:
-    - cron: "30 06 * * 0,3" # Set in UTC: 6:30 AM on Sunday.
+    - cron: "30 06 * * 0" # Set in UTC: 6:30 AM on Sunday.
 
   push:
     paths-ignore: # don't rebuild if only documentation has changed
@@ -30,6 +30,7 @@ jobs:
       fail-fast: false # stop GH from cancelling all matrix builds if one fails
       matrix:
         recipe:
+          - image-desktop.yml
           - image-laptop.yml
     steps:
        # the build is fully handled by the reusable github action
