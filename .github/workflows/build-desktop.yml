@@ -1,0 +1,57 @@
+name: build-gnome
+on:
+  schedule:
+    - cron: "30 06 * * 0" # Set in UTC: 6:30 AM on Sunday.
+
+  push:
+    paths-ignore: # don't rebuild if only documentation has changed
+      - "**.md"
+      - "recipes/image-budgie.yml"
+      - "make-*-iso.sh"
+      - ".github/workflows/build-budgie.yml"
+      - ".github/workflows/*.yml"
+      - "boot_menu.yml"
+      - "files/theme-v/**"
+      - "files/scripts/image_name-v.sh"
+      - "files/scripts/ublue-rpms.sh"
+
+  workflow_dispatch: # allow manually triggering builds
+
+#  repository_dispatch: # allow trigerring through another repository
+jobs:
+  bluebuild:
+    name: Gnome Image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    strategy:
+      fail-fast: false # stop GH from cancelling all matrix builds if one fails
+      matrix:
+        recipe:
+          - image-desktop.yml
+    steps:
+       # the build is fully handled by the reusable github action
+      - name: Build Custom Image
+        uses: blue-build/github-action@v1.8
+        with:
+          recipe: ${{ matrix.recipe }}
+          cosign_private_key: ${{ secrets.SIGNING_SECRET }}
+          registry_token: ${{ github.token }}
+          pr_event_number: ${{ github.event.number }}
+
+          # enabled by default, disable if your image is small and you want faster builds      
+          maximize_build_space: true
+          
+          # Optional flags
+          use_unstable_cli: false
+#          squash: true
+          rechunk: true
+      # start device-specific builds
+#      - name: Build Device Specific Images
+#        run: |
+#          curl -X POST https://api.github.com/repos/sukarn-m/sukarn-ublue/dispatches \
+#          -H 'Accept: application/vnd.github.everest-preview+json' \
+#          -u ${{ secrets.PERSONAL_ACCESS_TOKEN }} \
+#          --data '{"event_type": "Initiated from sukarn-os-base", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
