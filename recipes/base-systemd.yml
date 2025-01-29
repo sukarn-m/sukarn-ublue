@@ -6,13 +6,13 @@ modules:
         - var-mnt-nas.automount
         - var-mnt-roms.automount
         - generate-ssh-certificate.service
-#        - cachefilesd.service # This is enabled through ujust enable-nfs-cache
       disabled:
         - tailscaled.service
         - var-mnt-nas.mount
         - var-mnt-roms.mount
         - rpm-ostreed-automatic.timer
         - flatpak-system-update.timer
+        - cachefilesd.service # This is enabled through ujust enable-nfs-cache
     user:
 #      enabled:
 #        - 

@@ -11,5 +11,3 @@ modules:
         destination: /
       - source: theme-s
         destination: /
-#      - source: epass2003
-#        destination: /

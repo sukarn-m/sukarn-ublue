@@ -1,1 +1,0 @@
-BUS=="usb", SYSFS{idVendor}=="096e", MODE="0666"

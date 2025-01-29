@@ -18,16 +18,11 @@ modules:
 # Miscellaneous
       - android-tools # ADB and Fastboot
       - cachefilesd # For NFS caching.
-      # - gtk2 # For ePass2003
       - gnome-boxes # Virtualization
       - libcupsfilters # For Canon LBP2900 printer
       - simple-scan # Scanner
       - syncthing # File sync
       - tailscale
-# ublue-update dependencies
-      # - python3-pip
-      # - python3-psutil
-      # - libnotify
 # Theming - Look and Feel
       - variety # Wallpapers
     remove:

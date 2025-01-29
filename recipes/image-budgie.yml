@@ -29,11 +29,6 @@ modules:
       - firefox
       - firefox-langpacks
 
-#  - type: akmods
-#    base: coreos-stable
-#    install:
-#      - wl
-
   - type: files
     files:
       - source: system

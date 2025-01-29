@@ -1,0 +1,6 @@
+modules:
+  - type: akmods # See [Module info](https://github.com/blue-build/modules/blob/main/modules/akmods/module.yml) and [akmods list](https://github.com/ublue-os/akmods)
+    base: coreos-stable
+    install:
+      - xpadneo # xbox one controller bluetooth driver
+      - xone # xbox one controller USB wired/RF driver modified to work along-side xpad
