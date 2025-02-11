@@ -8,13 +8,14 @@ echo "Current kargs: $KARGS"
 ## Fix storage crash.
 ## 0 completely disables NVMe power savings. 5500 is recommended by https://esc.sh/blog/nvme-ssd-and-linux-freezing/ and https://wiki.archlinux.org/title/Talk:Solid_state_drive/NVMe
 #if [[ ! $KARGS =~ "nvme_core.default_ps_max_latency_us" ]]; then
-#  NEEDED_KARGS+=("--append-if-missing=nvme_core.default_ps_max_latency_us=0")
+#  NEEDED_KARGS+=("--append-if-missing=nvme_core.default_ps_max_latency_us=5500")
 #fi
 
-## Attempt to fix AMD S3 sleep crash.
-#if [[ ! $KARGS =~ "amd_iommu" ]]; then
-#  NEEDED_KARGS+=("--append-if-missing=amd_iommu=off")
-#fi
+# Attempt to fix AMD S3 sleep crash.
+# Previously using "off". Switched to "fullflush" based on https://artofcode.wordpress.com/2018/06/16/amd_iommuoff-or-amd_iommufullflush/
+if [[ ! $KARGS =~ "amd_iommu" ]]; then
+  NEEDED_KARGS+=("--append-if-missing=amd_iommu=off")
+fi
 
 if [[ -n "$NEEDED_KARGS" ]]; then
   echo "Found needed karg changes, applying the following: ${NEEDED_KARGS[*]}"
