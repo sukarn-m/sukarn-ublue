@@ -2,7 +2,6 @@ modules:
   - type: rpm-ostree
     repos:
       - https://pkgs.tailscale.com/stable/fedora/tailscale.repo
-      - https://copr.fedorainfracloud.org/coprs/ilyaz/LACT/repo/fedora-%OS_VERSION%/ilyaz-LACT-fedora-%OS_VERSION%.repo
     install:
 # Terminal
       - byobu
@@ -20,7 +19,6 @@ modules:
       - android-tools # ADB and Fastboot
       - cachefilesd # For NFS caching.
       - gnome-boxes # Virtualization
-      - lact #Linux GPU Control Application; also requires the associated copr in repos above.
       - libcupsfilters # For Canon LBP2900 printer
       - simple-scan # Scanner
       - syncthing # File sync
