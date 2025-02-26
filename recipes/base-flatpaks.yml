@@ -33,16 +33,17 @@ modules:
         - org.gnome.Contacts # Contacts
         - ca.desrt.dconf-editor # Dconf Editor
         - org.gnome.baobab # Disk Usage Analyzer
-        - org.gnome.Evince # Document Viewer
+#        - org.gnome.Evince # Document Viewer - replaced by Papers
         - org.gnome.Evolution # Evolution
         - com.mattjakeman.ExtensionManager # Extension Manager
         - org.gnome.FileRoller # Archive viewer and extractor
         - org.gnome.font-viewer # Font Viewer
         - org.gnome.Loupe # Image Viewer
         - org.gnome.Logs # Logs
-        - org.gnome.Maps # Maps
+#        - org.gnome.Maps # Maps
         - org.gnome.seahorse.Application # Seahorse
         - org.gnome.NautilusPreviewer # Sushi (Nautilus Previewer)
+        - org.gnome.Papers # Document Viewer
         - org.gnome.TextEditor # Text Editor
         - org.gnome.Weather # Weather
 ## System Apps
