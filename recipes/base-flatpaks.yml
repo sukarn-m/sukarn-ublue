@@ -24,7 +24,7 @@ modules:
 ## INSTALL
       install:
 ## GNOME Apps
-        - org.gnome.Boxes # Virtualization
+#        - org.gnome.Boxes # Virtualization
         - org.gnome.Calculator # Calculator
         - org.gnome.Calendar # Calendar
         - org.gnome.Snapshot # Camera

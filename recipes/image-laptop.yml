@@ -31,7 +31,7 @@ modules:
 
   - type: script
     scripts:
-      - coreos_kernel.sh
+#      - coreos_kernel.sh
       - laptop-overrides.sh
 
   - from-file: base-last-steps.yml

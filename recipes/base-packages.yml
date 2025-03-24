@@ -18,7 +18,7 @@ modules:
 # Miscellaneous
       - android-tools # ADB and Fastboot
       - cachefilesd # For NFS caching.
-      # - gnome-boxes # Virtualization - Shifted to Flatpak
+      - gnome-boxes # Virtualization
       - libcupsfilters # For Canon LBP2900 printer
       - simple-scan # Scanner
       - syncthing # File sync
