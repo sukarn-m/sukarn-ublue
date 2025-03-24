@@ -24,6 +24,7 @@ modules:
 ## INSTALL
       install:
 ## GNOME Apps
+        - org.gnome.Boxes # Virtualization
         - org.gnome.Calculator # Calculator
         - org.gnome.Calendar # Calendar
         - org.gnome.Snapshot # Camera
@@ -33,7 +34,6 @@ modules:
         - org.gnome.Contacts # Contacts
         - ca.desrt.dconf-editor # Dconf Editor
         - org.gnome.baobab # Disk Usage Analyzer
-#        - org.gnome.Evince # Document Viewer - replaced by Papers
         - org.gnome.Evolution # Evolution
         - com.mattjakeman.ExtensionManager # Extension Manager
         - org.gnome.FileRoller # Archive viewer and extractor
