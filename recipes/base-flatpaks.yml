@@ -73,7 +73,7 @@ modules:
         - com.valvesoftware.Steam # Steam
 ## Office
         - org.libreoffice.LibreOffice # LibreOffice
-        - com.github.zadam.trilium # Trilium Notes
+#        - com.github.zadam.trilium # Trilium Notes
         - io.github.alainm23.planify # Planify (Tasks / ToDo)
         - org.kde.okular # Okular PDF
 ## Tools
