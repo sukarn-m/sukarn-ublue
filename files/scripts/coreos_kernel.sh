@@ -64,6 +64,9 @@ for package in $(rpm -qa | grep kernel); do
     NEEDED_PACKAGES+=("$package_name")
 done
 
+# Remove kernel-headers from the list
+NEEDED_PACKAGES=(${NEEDED_PACKAGES[@]/kernel-headers})
+
 # Build the URL list for all needed packages
 PACKAGES_LIST=""
 for package in "${NEEDED_PACKAGES[@]}"; do
