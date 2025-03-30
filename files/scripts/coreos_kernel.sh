@@ -1,79 +1,35 @@
 #!/usr/bin/bash
 
-# Set bash options for error handling and variable safety
-# -e: Exit immediately if a command exits with non-zero status
-# -o pipefail: Return value of a pipeline is the value of the last command to exit with non-zero status
-# -u: Treat unset variables as an error
+## Reference: https://github.com/ublue-os/bluefin/blob/main/build_files/base/03-install-kernel-akmods.sh
+
 set -eou pipefail
 
-# Get the kernel release version from the stable Fedora CoreOS container image
-coreos_kernel_release=$(skopeo inspect docker://quay.io/fedora/fedora-coreos:stable | jq -r '.Labels["ostree.linux"] | split(".x86_64")[0]')
+AKMODS_FLAVOR="coreos-stable"
+# KERNEL="$(rpm -q kernel | sed 's/^kernel-//')"
+FEDORA_VERSION="$(rpm -E %fedora)"
 
-# Extract the major.minor.patch version from the kernel release
-coreos_major_minor_patch=$(echo "$coreos_kernel_release" | cut -d '-' -f 1)
+touch /tmp/coreos_kernel
 
-# Get the running Fedora release version from os-release file
-running_fedora_release=$(grep -Po "(?<=VERSION_ID=)\d+" /usr/lib/os-release)
-
-# Fetch directory names from Fedora's Koji build system for the specific kernel version
-dir_names=$(curl -sS https://kojipkgs.fedoraproject.org/packages/kernel/${coreos_major_minor_patch}/ 2>&1 | grep '<a href=' | sed 's|^<a href="\([^"]*\)">.*|\1|')
-
-# Find the appropriate kernel build for the current Fedora release
-for dir_name in $dir_names; do
-    if [[ $dir_name =~ fc${running_fedora_release} ]]; then
-        # Extract the kernel subversion number
-        coreos_kernel_subnum=$(echo $dir_name | grep -oE '[0-9]{3}' | head -1)
-        break
-    fi
+for pkg in kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra kernel-uki-virt; do
+    rpm --erase $pkg --nodeps
 done
 
-## Set variables for downloading the appropriate files.
-# Construct the full kernel version string
-KERNEL_VERSION="${coreos_major_minor_patch}-${coreos_kernel_subnum}.fc${running_fedora_release}"
-# Store the major.minor.patch for later use
-KERNEL_MAJOR_MINOR_PATCH=${coreos_major_minor_patch}
-# Extract the release number from the kernel version
-KERNEL_RELEASE=$(echo "$KERNEL_VERSION" | cut -d '-' -f 2)
+skopeo copy --retry-times 3 docker://ghcr.io/ublue-os/akmods:"${AKMODS_FLAVOR}"-"${FEDORA_VERSION}" dir:/tmp/akmods
+AKMODS_TARGZ=$(jq -r '.layers[].digest' </tmp/akmods/manifest.json | cut -d : -f 2)
+tar -xvzf /tmp/akmods/"$AKMODS_TARGZ" -C /tmp/
+mv /tmp/rpms/* /tmp/akmods/
 
-# Install packages to the root filesystem
-# rpm-ostree cliwrap install-to-root /
+dnf5 -y install /tmp/kernel-rpms/*.rpm
 
-## Define a static list of kernel packages with specific additions based on presence of specific packages. Replaced by a more appropriate and dynamic version below.
-#NEEDED_PACKAGES=("kernel" "kernel-core" "kernel-modules" "kernel-modules-core" "kernel-modules-extra")
-#
-#if rpm -q kernel-tools; then
-#  NEEDED_PACKAGES+=("kernel-tools")
-#  NEEDED_PACKAGES+=("kernel-tools-libs")
-#fi
-#
-#if rpm -q kernel-uki-virt; then
-#  NEEDED_PACKAGES+=("kernel-uki-virt")
-#fi
-#
-#PACKAGES_LIST=""
+dnf5 -y install \
+    /tmp/akmods/kmods/*xone*.rpm \
+    /tmp/akmods/kmods/*xpadneo*.rpm
 
-# Initialize an empty array to store needed packages
-NEEDED_PACKAGES=()
+# RPMFUSION Dependent AKMODS
+dnf5 -y install \
+    https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-"${FEDORA_VERSION}".noarch.rpm \
+    https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-"${FEDORA_VERSION}".noarch.rpm
+dnf5 -y install \
+    v4l2loopback /tmp/akmods/kmods/*v4l2loopback*.rpm
 
-# Dynamically determine which kernel packages are installed on the system and add them to the NEEDED_PACKAGES array
-for package in $(rpm -qa | grep kernel); do
-    # Extract the package name without version information
-    package_name=$(echo "$package" | sed -E 's/(-[0-9].*)$//')
-    
-    # Add the package name to the array
-    NEEDED_PACKAGES+=("$package_name")
-done
-
-# Remove kernel-headers from the list
-NEEDED_PACKAGES=(${NEEDED_PACKAGES[@]/kernel-headers})
-
-# Build the URL list for all needed packages
-PACKAGES_LIST=""
-for package in "${NEEDED_PACKAGES[@]}"; do
-  PACKAGES_LIST="${PACKAGES_LIST} https://kojipkgs.fedoraproject.org/packages/kernel/$KERNEL_MAJOR_MINOR_PATCH/$KERNEL_RELEASE/x86_64/$package-$KERNEL_MAJOR_MINOR_PATCH-$KERNEL_RELEASE.x86_64.rpm"
-done
-
-# Replace the current kernel packages with the versions from Koji
-# --experimental flag is required for this operation
-rpm-ostree override replace --experimental $PACKAGES_LIST
-
+dnf5 -y remove rpmfusion-free-release rpmfusion-nonfree-release

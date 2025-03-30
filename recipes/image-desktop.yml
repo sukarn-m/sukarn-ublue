@@ -13,16 +13,15 @@ modules:
   - type: script
     scripts:
       - coreos_kernel.sh
+      - nvidia.sh
 
 # Based on: https://github.com/secureblue/secureblue/blob/live/recipes/common/nvidia-open-server-modules.yml
-  - type: containerfile
-    snippets:
-      - COPY --from=ghcr.io/ublue-os/akmods-nvidia-open:coreos-stable-40 /rpms /tmp/rpms
-
-  - type: script
-    scripts:
-      - nvidia-open.sh
-#      - nvidia.sh
+#  - type: containerfile
+#    snippets:
+#      - COPY --from=ghcr.io/ublue-os/akmods-nvidia-open:coreos-stable-40 /rpms /tmp/rpms
+#  - type: script
+#    scripts:
+#      - nvidia-open.sh
 
 #  - type: akmods
 #    base: coreos-stable
