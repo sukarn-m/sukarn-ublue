@@ -14,7 +14,10 @@ set -oue pipefail
 # echo "## Gnome flickering / tearing fix" >> /etc/environment
 # echo "# MUTTER_DEBUG_FORCE_EGL_STREAM=1" >> /etc/environment
 
-# Reference https://github.com/ublue-os/bluefin/blob/main/build_files/base/03-install-kernel-akmods.sh
+## References:
+## - https://github.com/ublue-os/bluefin/blob/main/build_files/base/03-install-kernel-akmods.sh
+## - https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh
+
 # KERNEL="$(rpm -q kernel | sed 's/^kernel-//')"
 FEDORA_VERSION="$(rpm -E %fedora)"
 
@@ -31,6 +34,6 @@ mv /tmp/rpms/* /tmp/akmods-rpms/
 
 curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh # Change when nvidia-install.sh updates
 chmod +x /tmp/nvidia-install.sh
-IMAGE_NAME="${BASE_IMAGE_NAME}" RPMFUSION_MIRROR="" /tmp/nvidia-install.sh
+IMAGE_NAME="silverblue" RPMFUSION_MIRROR="" /tmp/nvidia-install.sh
 rm -f /usr/share/vulkan/icd.d/nouveau_icd.*.json
 ln -sf libnvidia-ml.so.1 /usr/lib64/libnvidia-ml.so
