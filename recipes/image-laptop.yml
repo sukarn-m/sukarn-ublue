@@ -20,6 +20,7 @@ modules:
     system:
       enabled:
         - laptop-kargs.service
+        - e14-quirks.timer
 
   - type: gnome-extensions
     install:
