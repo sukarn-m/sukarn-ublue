@@ -1,9 +1,0 @@
-[Unit]
-Description=Run e14-quirks service at boot
-
-[Timer]
-OnBootSec=1s
-Unit=e14-quirks.service
-
-[Install]
-WantedBy=multi-user.target

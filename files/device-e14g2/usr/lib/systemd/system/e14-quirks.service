@@ -1,5 +1,6 @@
 [Unit]
 Description=Suspend and wake system after 1 seconds
+After=multi-user.target
 
 [Service]
 Type=oneshot
