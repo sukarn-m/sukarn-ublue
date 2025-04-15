@@ -2,9 +2,7 @@ name: sukarn-ublue-budgie
 description: Customized budgie image.
 #base-image: quay.io/fedora-ostree-desktops/onyx
 base-image: ghcr.io/ublue-os/onyx-main
-image-version: 40 # Must match the coreos-stable-kernel tag in the copy module below.
-#image-version: gts
-
+image-version: gts
 
 modules:
   - type: default-flatpaks
