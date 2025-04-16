@@ -5,7 +5,7 @@
 set -eou pipefail
 
 AKMODS_FLAVOR="coreos-stable"
-# KERNEL="$(rpm -q kernel | sed 's/^kernel-//')"
+KERNEL_PRE="$(rpm -q kernel | sed 's/^kernel-//')"
 FEDORA_VERSION="$(rpm -E %fedora)"
 
 touch /tmp/coreos_kernel
@@ -33,3 +33,11 @@ dnf5 -y install \
     v4l2loopback /tmp/akmods/kmods/*v4l2loopback*.rpm
 
 dnf5 -y remove rpmfusion-free-release rpmfusion-nonfree-release
+
+KERNEL_POST="$(rpm -q kernel | sed 's/^kernel-//')"
+
+if [ "$KERNEL_PRE" != "$KERNEL_POST" ]; then
+    rm -rf "/usr/lib/modules/${KERNEL_PRE}"
+    rm -rf "/usr/share/doc/kernel-keys/${KERNEL_PRE}"
+    rm -rf "/usr/src/kernels/${KERNEL_PRE}"
+fi
