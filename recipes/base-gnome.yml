@@ -34,12 +34,13 @@ modules:
       - 4158 # Gnome 4x UI Improvements
       - 755 # Hibernate Status Button
       - 2236 # Night Theme Switcher
-      - 2114 # Order Gnome Shell extensions
+#      - 2114 # Order Gnome Shell extensions # Not compatible with Gnome 47+
 #      - 5278 # Pano - Clipboard Manager # Requires libgda and libgda-sqlite. Fedora 40+ currently blocked: https://github.com/oae/gnome-shell-pano/issues/271
       - 7 # Removable Drive Menu
       - 5660 # Weather or Not
       - 6139 # Tailscale QS
       - 3569 # Task Widget
+      - 4356 # Top Bar Organizer
       - 5967 # Workspaces indicator by open apps
 #    uninstall:
 #      - 
