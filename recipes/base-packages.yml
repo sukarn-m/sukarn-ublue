@@ -23,6 +23,7 @@ modules:
 # Theming - Look and Feel
         - variety # Wallpapers
     remove:
+      packages:
       ## Firefox has to be removed in 'main' image, but not in bluefin, bazzite, and aurora.
-      - firefox
-      - firefox-langpacks
+        - firefox
+        - firefox-langpacks
