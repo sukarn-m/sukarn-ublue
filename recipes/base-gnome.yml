@@ -10,18 +10,10 @@ modules:
       - gnome-shell-extension-gsconnect
       - nautilus-gsconnect
       - gnome-shell-extension-system-monitor-applet
-#      - gnome-shell-extension-workspace-indicator # Replaced by 5967
       - libgda # For extension Pano - Clipboard Manager
       - libgda-sqlite # For extension Pano - Clipboard Manager
 ## Theming
-#      - gnome-shell-theme-yaru
-#      - yaru-gtk2-theme
-#      - yaru-gtk3-theme
-#      - yaru-gtk4-theme
-#      - yaru-gtksourceview-theme
       - yaru-icon-theme
-#      - yaru-sound-theme
-#      - yaru-theme
     remove:
       - gnome-shell-extension-background-logo
 
@@ -29,12 +21,10 @@ modules:
     install:
       - 6670 # Bluetooth Battery Meter
       - 517 # Caffeine
-#      - 4839 # Clipboard History
       - 7074 # GameMode Shell Extension
       - 4158 # Gnome 4x UI Improvements
       - 755 # Hibernate Status Button
       - 2236 # Night Theme Switcher
-#      - 2114 # Order Gnome Shell extensions # Not compatible with Gnome 47+
 #      - 5278 # Pano - Clipboard Manager # Requires libgda and libgda-sqlite. Fedora 40+ currently blocked: https://github.com/oae/gnome-shell-pano/issues/271
       - 7 # Removable Drive Menu
       - 5660 # Weather or Not

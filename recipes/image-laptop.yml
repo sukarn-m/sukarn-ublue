@@ -19,7 +19,7 @@ modules:
   - type: systemd
     system:
       enabled:
-        - laptop-kargs.service
+#        - laptop-kargs.service
         - e14-quirks.service
 
   - type: gnome-extensions
@@ -34,5 +34,11 @@ modules:
     scripts:
       - coreos_kernel.sh
       - laptop-overrides.sh
+
+  - type: kargs
+    arch: x86_64
+    kargs:
+      - nvme_core.default_ps_max_latency_us=5500
+      - amd_iommu=off
 
   - from-file: base-last-steps.yml

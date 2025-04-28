@@ -1,30 +1,27 @@
 modules:
-  - type: rpm-ostree
+  - type: dnf
     repos:
-      - https://pkgs.tailscale.com/stable/fedora/tailscale.repo
+      files:
+        - https://pkgs.tailscale.com/stable/fedora/tailscale.repo
     install:
+      packages:
 # Terminal
-      - byobu
-      - ptyxis
-      - wl-clipboard
-# Gaming
-      # - mangohud
-      # - gamemode.i686
-      # - gamemode.x86_64
-      # - gamescope
+        - byobu
+        - ptyxis
+        - wl-clipboard
 # Nextcloud. Also requires the script nextcloud-vfs.sh
-      - nextcloud-client-devel # Required on Fedora for virtual files.
-      - nextcloud-client-nautilus # The main nextcloud client.
+        - nextcloud-client-devel # Required on Fedora for virtual files.
+        - nextcloud-client-nautilus # The main nextcloud client.
 # Miscellaneous
-      - android-tools # ADB and Fastboot
-      - cachefilesd # For NFS caching.
-      - gnome-boxes # Virtualization
-      - libcupsfilters # For Canon LBP2900 printer
-      - simple-scan # Scanner
-      - syncthing # File sync
-      - tailscale
+        - android-tools # ADB and Fastboot
+        - cachefilesd # For NFS caching.
+        - gnome-boxes # Virtualization
+        - libcupsfilters # For Canon LBP2900 printer
+        - simple-scan # Scanner
+        - syncthing # File sync
+        - tailscale
 # Theming - Look and Feel
-      - variety # Wallpapers
+        - variety # Wallpapers
     remove:
       ## Firefox has to be removed in 'main' image, but not in bluefin, bazzite, and aurora.
       - firefox

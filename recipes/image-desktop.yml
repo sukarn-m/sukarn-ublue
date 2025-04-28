@@ -15,22 +15,6 @@ modules:
       - coreos_kernel.sh
       - nvidia.sh
 
-# Based on: https://github.com/secureblue/secureblue/blob/live/recipes/common/nvidia-open-server-modules.yml
-#  - type: containerfile
-#    snippets:
-#      - COPY --from=ghcr.io/ublue-os/akmods-nvidia-open:coreos-stable-40 /rpms /tmp/rpms
-#  - type: script
-#    scripts:
-#      - nvidia-open.sh
-
-#  - type: akmods
-#    base: coreos-stable
-#    nvidia: open # Options: true, false, proprietary, open
-#    install:
-#      - nvidia
-#      - ublue-os-nvidia-addons
-#      - kmod-nvidia
-
   - type: files
     files:
       - source: desktop
@@ -40,9 +24,20 @@ modules:
     include:
       - zz2-sukarn-desktop.gschema.override
 
-  - type: systemd
-    system:
-      enabled:
-        - desktop-kargs.service
+#  - type: systemd
+#    system:
+#      enabled:
+#        - desktop-kargs.service
+
+  - type: kargs
+    arch: x86_64
+    kargs:
+      - nvme_core.default_ps_max_latency_us=0
+      - amd_iommu=off
+      - rd.driver.blacklist=nouveau
+      - modprobe.blacklist=nouveau
+      - nvidia-drm.modeset=1
+      - nvidia_drm.fbdev=1
+#      - nvidia.NVreg_EnableGpuFirmware=0
 
   - from-file: base-last-steps.yml
