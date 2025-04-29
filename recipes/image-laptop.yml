@@ -32,7 +32,8 @@ modules:
 
   - type: script
     scripts:
-      - coreos_kernel.sh
+      - bazzite_kernel.sh
+#      - coreos_kernel.sh
       - laptop-overrides.sh
 
   - type: kargs

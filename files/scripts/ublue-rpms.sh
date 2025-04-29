@@ -10,11 +10,11 @@ tree /tmp && exit 1
 # rpm-ostree install /tmp/config-rpms/*.noarch.rpm
 
 # Skipping installation of ublue-os-signing.noarch.rpm:
-rpm-ostree install \
-/tmp/config-rpms/ublue-os-just.noarch.rpm \
-/tmp/config-rpms/ublue-os-luks.noarch.rpm \
-/tmp/config-rpms/ublue-os-udev-rules.noarch.rpm \
-/tmp/config-rpms/ublue-os-update-services.noarch.rpm
+dnf5 -y install \
+  /tmp/config-rpms/ublue-os-just.noarch.rpm \
+  /tmp/config-rpms/ublue-os-luks.noarch.rpm \
+  /tmp/config-rpms/ublue-os-udev-rules.noarch.rpm \
+  /tmp/config-rpms/ublue-os-update-services.noarch.rpm
 
 rpm-ostree override replace --experimental /tmp/kernel-rpms/*.rpm
 
