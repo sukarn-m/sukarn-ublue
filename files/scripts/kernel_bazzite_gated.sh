@@ -15,7 +15,7 @@ done
 
 GATED_KERNEL_VERSION="$(skopeo list-tags --retry-times 3 docker://ghcr.io/ublue-os/akmods | grep ${COREOS_TAG}-${FEDORA_VERSION} | sort -r | head -n 1 | cut -d '-' -f 4)"
 
-RETRIEVAL_TAG="$(skopeo list-tags --retry_times 3 docker://ghcr.io/ublue-os/akmods | grep ${AKMODS_FLAVOR}-${FEDORA_VERSION} | grep ${GATED_KERNEL_VERSION} | sort -r | head -n 1 | cut -d '"' -f 2)"
+RETRIEVAL_TAG="$(skopeo list-tags --retry-times 3 docker://ghcr.io/ublue-os/akmods | grep ${AKMODS_FLAVOR}-${FEDORA_VERSION} | grep ${GATED_KERNEL_VERSION} | sort -r | head -n 1 | cut -d '"' -f 2)"
 
 echo "${RETRIEVAL_TAG}" > /tmp/kernel_tag
 
