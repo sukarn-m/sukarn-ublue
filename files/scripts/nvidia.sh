@@ -21,13 +21,15 @@ set -oue pipefail
 # KERNEL="$(rpm -q kernel | sed 's/^kernel-//')"
 FEDORA_VERSION="$(rpm -E %fedora)"
 
+RETRIEVAL_TAG="$(cat /tmp/kernel_tag)"
+
 if [ -f /tmp/coreos_kernel ]; then
   AKMODS_TYPE="coreos-stable"
 else
   AKMODS_TYPE="main" # The 'bazzite' variant does not have Fedora 40 releases.
 fi
 
-skopeo copy --retry-times 3 docker://ghcr.io/ublue-os/akmods-nvidia:"${AKMODS_TYPE}"-"${FEDORA_VERSION}" dir:/tmp/akmods-rpms
+skopeo copy --retry-times 3 docker://ghcr.io/ublue-os/akmods-nvidia:"${RETRIEVAL_TAG}" dir:/tmp/akmods-rpms
 NVIDIA_TARGZ=$(jq -r '.layers[].digest' </tmp/akmods-rpms/manifest.json | cut -d : -f 2)
 tar -xvzf /tmp/akmods-rpms/"$NVIDIA_TARGZ" -C /tmp/
 mv /tmp/rpms/* /tmp/akmods-rpms/

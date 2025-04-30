@@ -19,7 +19,6 @@ modules:
   - type: systemd
     system:
       enabled:
-#        - laptop-kargs.service
         - e14-quirks.service
 
   - type: gnome-extensions
@@ -32,8 +31,7 @@ modules:
 
   - type: script
     scripts:
-      - bazzite_kernel.sh
-#      - coreos_kernel.sh
+      - kernel_bazzite_latest.sh
       - laptop-overrides.sh
 
   - type: kargs

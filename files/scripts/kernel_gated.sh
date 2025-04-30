@@ -8,7 +8,7 @@ AKMODS_FLAVOR="coreos-stable"
 KERNEL_PRE="$(rpm -q kernel | sed 's/^kernel-//')"
 FEDORA_VERSION="$(rpm -E %fedora)"
 
-touch /tmp/coreos_kernel
+echo "${AKMODS_FLAVOR}-${FEDORA_VERSION}" > /tmp/kernel_tag
 
 for pkg in kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra kernel-uki-virt; do
     rpm --erase $pkg --nodeps
