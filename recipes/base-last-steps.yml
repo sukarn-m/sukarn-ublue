@@ -3,7 +3,6 @@ modules:
     scripts:
       - kargs.sh
       - remove-base-os-reference.sh
-      - initramfs.sh
 
-#  - type: initramfs # Fedora 41+
+  - type: initramfs
   - type: signing # this sests up the proper policy & signing files for signed images to work fully
