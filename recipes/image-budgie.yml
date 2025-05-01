@@ -18,10 +18,11 @@ modules:
         - org.videolan.VLC # VLC
         - org.libreoffice.LibreOffice # LibreOffice
 
-  - type: rpm-ostree
+  - type: dnf
     remove:
-      - firefox
-      - firefox-langpacks
+      packages:
+        - firefox
+        - firefox-langpacks
 
   - type: files
     files:
