@@ -31,7 +31,7 @@ modules:
 
   - type: script
     scripts:
-      - kernel_bazzite_latest.sh
+      - kernel_gated.sh
       - laptop-overrides.sh
 
   - type: kargs

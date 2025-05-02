@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# /usr/lib/systemd/system-sleep/wifi-reset
+# Unload iwlwifi module before sleep and reload after resume.
+# May also require iwlmvm unloading before iwlwifi unloading if the solution below does not work.
+
+case $1/$2 in
+  pre/*)
+    echo "Unloading iwlwifi module before suspend..."
+    /sbin/modprobe -r iwlwifi
+    ;;
+  post/*)
+    echo "Reloading iwlwifi module post-suspend..."
+    # Adding a small delay can sometimes help
+    sleep 1
+    /sbin/modprobe iwlwifi
+    ;;
+esac
+
+exit 0
