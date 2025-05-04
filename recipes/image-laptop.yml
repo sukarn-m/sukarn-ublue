@@ -33,6 +33,8 @@ modules:
     scripts:
       - kernel_gated.sh
       - laptop-overrides.sh
+    snippets:
+      - "chmod 700 /usr/lib/systemd/system-sleep/wifi-reset"
 
   - type: kargs
     arch: x86_64
