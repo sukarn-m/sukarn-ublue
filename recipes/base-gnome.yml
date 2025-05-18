@@ -1,21 +1,23 @@
 modules:
-  - type: rpm-ostree
+  - type: dnf
     install:
+      packages:
 ## Extensions
-      - gnome-shell-extension-appindicator
-      - gnome-shell-extension-blur-my-shell
-      - gnome-shell-extension-caffeine
-      - gnome-shell-extension-dash-to-panel
-      - gnome-shell-extension-forge
-      - gnome-shell-extension-gsconnect
-      - nautilus-gsconnect
-      - gnome-shell-extension-system-monitor-applet
-      - libgda # For extension Pano - Clipboard Manager
-      - libgda-sqlite # For extension Pano - Clipboard Manager
+        - gnome-shell-extension-appindicator
+        - gnome-shell-extension-blur-my-shell
+        - gnome-shell-extension-caffeine
+        - gnome-shell-extension-dash-to-panel
+        - gnome-shell-extension-forge
+        - gnome-shell-extension-gsconnect
+        - nautilus-gsconnect
+        - gnome-shell-extension-system-monitor-applet
+        - libgda # For extension Pano - Clipboard Manager
+        - libgda-sqlite # For extension Pano - Clipboard Manager
 ## Theming
-      - yaru-icon-theme
+        - yaru-icon-theme
     remove:
-      - gnome-shell-extension-background-logo
+      packages:
+        - gnome-shell-extension-background-logo
 
   - type: gnome-extensions # https://github.com/blue-build/modules/blob/main/modules/gnome-extensions/module.yml
     install:
