@@ -41,3 +41,5 @@ if [ "$KERNEL_PRE" != "$KERNEL_POST" ]; then
     rm -rf "/usr/share/doc/kernel-keys/${KERNEL_PRE}"
     rm -rf "/usr/src/kernels/${KERNEL_PRE}"
 fi
+
+dnf5 versionlock add kernel kernel-devel kernel-devel-matched kernel-core kernel-modules kernel-modules-core kernel-modules-extra
