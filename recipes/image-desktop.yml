@@ -19,15 +19,20 @@ modules:
         - bluefin-cli-logos
         - bluefin-faces
         - bluefin-fastfetch
+        - bluefin-logos
+        - bluefin-plymouth
         - bluefin-schemas
         - borgbackup
         - cryfs
         - ddcutil
+        - epson-inkjet-printer-escpr
+        - epson-inkjet-printer-escpr2
         - evtest
         - fastfetch
         - firewall-config
         - fish
         - foo2zjs
+        - framework-laptop-kmod-common-0.0.git.326.1665246e-1.fc41.noarch
         - fuse-encfs
         - git-credential-libsecret
         - glow
@@ -41,13 +46,19 @@ modules:
         - ifuse
         - input-remapper
         - jetbrains-mono-fonts-all
+        - kmod-framework-laptop
+        - kmod-openrazer
+        - kmod-zfs
         - krb5-workstation
         - libsss-autofs
         - libxcrypt-compat
+        - libzfs6
+        - libzpool6
         - mozc
         - nerd-fonts
         - oddjob-mkhomedir
         - opendyslexic-fonts
+        - openrazer-kmod-common
         - openssh-askpass
         - powertop
         - printer-driver-brlaser
@@ -72,6 +83,7 @@ modules:
         - usbmuxd
         - yaru-theme
         - zenity
+        - zfs
         - zsh
 
 ## General
