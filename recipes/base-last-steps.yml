@@ -1,7 +1,6 @@
 modules:
   - type: script
     scripts:
-      - kargs.sh
       - remove-base-os-reference.sh
 
   - type: initramfs

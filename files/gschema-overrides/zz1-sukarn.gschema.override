@@ -68,10 +68,6 @@ current-workspace-only=true
 [org.gnome.shell.extensions.appindicator]
 legacy-tray-enabled=true
 
-# [org.gnome.shell.extensions.caffeine]
-# countdown-timer=30
-# indicator-position-max=4
-
 [org.gnome.shell.extensions.pano]
 history-length=20
 item-date-font-family='Bitter'
