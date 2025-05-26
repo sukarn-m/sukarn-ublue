@@ -44,7 +44,8 @@ modules:
 
   - type: script
     scripts:
-      - kernel_bazzite_gated.sh
+      - kernel-config-bazzite-gated.sh
+      - kernel.sh
       - laptop-overrides.sh
       - image_name-v.sh
 
