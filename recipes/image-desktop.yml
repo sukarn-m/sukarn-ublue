@@ -1,21 +1,21 @@
 name: sukarn-ublue-desktop
 description: Customized for desktops with nvidia graphics card.
-#base-image: ghcr.io/ublue-os/silverblue-nvidia # Cannot use coreos_kernel.sh
-#base-image: ghcr.io/ublue-os/silverblue-main
-base-image: ghcr.io/ublue-os/bluefin-nvidia
+#base-image: ghcr.io/ublue-os/silverblue-nvidia # Cannot use kernel replacement scripts.
+base-image: ghcr.io/ublue-os/silverblue-main
+#base-image: ghcr.io/ublue-os/bluefin-nvidia # Cannot use kernel replacement scripts.
 image-version: gts # When the version changes, the COPY line below for nvidia-open will need an accompanying version change.
 # Possible options for `image-version`:
 # Numbered fedora release (`40`, `41`); `latest`; `gts`.
 # Some images also support `stable`. Check the available tags of the image being used.
 
 modules:
-  - from-file: base-bluefin-changes.yml
+#  - from-file: base-bluefin-changes.yml
   - from-file: variant-gnome.yml
 
-#  - type: script
-#    scripts:
-#      - kernel_bazzite_gated.sh
-#      - nvidia.sh
+  - type: script
+    scripts:
+      - kernel_bazzite_gated.sh
+      - nvidia.sh
 
   - type: files
     files:
