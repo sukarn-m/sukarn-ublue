@@ -16,6 +16,7 @@ modules:
     scripts:
       - kernel-config-bazzite-gated-nvidia.sh
       - kernel.sh
+      - nvidia-install.sh
 
   - type: files
     files:

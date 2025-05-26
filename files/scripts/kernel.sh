@@ -11,7 +11,7 @@ KERNEL_PRE="$(rpm -q kernel | sed 's/^kernel-//')"
 FEDORA_VERSION="$(rpm -E %fedora)"
 # Set CoreOS tag for gated kernel systems
 COREOS_TAG="coreos-stable"
-# Set NVIDIA tag - options include "nvidia" and "nvidia-open"
+# Set NVIDIA tag
 NVIDIA_TAG="nvidia" # Options: (i) "nvidia" (possibly deprecated); and (ii) "nvidia-open"
 
 # Remove all existing kernel packages without dependency checks
@@ -60,7 +60,7 @@ echo "${RETRIEVAL_TAG}" > /tmp/kernel_tag
 skopeo copy --retry-times 3 docker://ghcr.io/ublue-os/akmods:"${RETRIEVAL_TAG}" dir:/tmp/akmods
 # Extract the layer digest from the manifest
 AKMODS_TARGZ=$(jq -r '.layers[].digest' </tmp/akmods/manifest.json | cut -d : -f 2)
-# Extract the compressed layer containing RPM packages
+# Extract the compressed layer containing RPM and kernel packages
 tar -xvzf /tmp/akmods/"$AKMODS_TARGZ" -C /tmp/
 # Move extracted RPMs to akmods directory
 mv /tmp/rpms/* /tmp/akmods/
@@ -103,11 +103,11 @@ dnf5 -y remove rpmfusion-free-release rpmfusion-nonfree-release
 if [[ -f "/tmp/nvidia" ]]; then
   # Exclude golang NVIDIA container toolkit to prevent conflicts
   dnf5 config-manager setopt excludepkgs=golang-github-nvidia-container-toolkit
-  # Download and execute NVIDIA installation script
-  curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh # Change when nvidia-install.sh updates
-  chmod +x /tmp/nvidia-install.sh
-  # Run NVIDIA installer with Silverblue configuration
-  IMAGE_NAME="silverblue" RPMFUSION_MIRROR="" /tmp/nvidia-install.sh
+#  # Download and make NVIDIA installation script executable
+#  curl -Lo /tmp/nvidia-install.sh https://raw.githubusercontent.com/ublue-os/hwe/main/nvidia-install.sh
+#  chmod +x /tmp/nvidia-install.sh
+#  # Run NVIDIA installer with Silverblue configuration
+#  IMAGE_NAME="silverblue" RPMFUSION_MIRROR="" /tmp/nvidia-install.sh
   # Remove conflicting nouveau (open-source NVIDIA) driver files
   rm -f /usr/share/vulkan/icd.d/nouveau_icd.*.json
   # Create symbolic link for NVIDIA ML library compatibility
