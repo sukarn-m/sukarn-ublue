@@ -121,8 +121,15 @@ if [[ "$KERNEL_PRE" != "$KERNEL_POST" ]]; then
     rm -rf "/usr/lib/modules/${KERNEL_PRE}"
     rm -rf "/usr/share/doc/kernel-keys/${KERNEL_PRE}"
     rm -rf "/usr/src/kernels/${KERNEL_PRE}"
+    # Install the correct kernel-tools version if kernel-tools is already installed
+    if rpm -q kernel-tools &>/dev/null; then
+      NEW_KERNEL_VERSION="$(rpm -q kernel | cut -d'-' -f2)"
+      dnf5 downgrade --assumeyes "kernel-tools-${NEW_KERNEL_VERSION}"
+    else
+      dnf5 install --assumeyes "kernel-tools-${NEW_KERNEL_VERSION}"
+    fi
 fi
 
 # Lock kernel packages to prevent automatic updates
 # This prevents kernel updates from breaking akmods compatibility
-dnf5 versionlock add kernel kernel-devel kernel-devel-matched kernel-core kernel-modules kernel-modules-core kernel-modules-extra
+dnf5 versionlock add kernel kernel-devel kernel-devel-matched kernel-core kernel-modules kernel-modules-core kernel-modules-extra kernel-tools
