@@ -84,9 +84,8 @@ dnf5 -y install /tmp/kernel-rpms/*.rpm
 # Install gaming controller support modules
 # xone: Xbox One controller USB/RF driver
 # xpadneo: Xbox One controller Bluetooth driver
-dnf5 -y install \
-    /tmp/akmods/kmods/*xone*.rpm \
-    /tmp/akmods/kmods/*xpadneo*.rpm
+dnf5 -y install /tmp/akmods/kmods/*xone*.rpm || true
+dnf5 -y install /tmp/akmods/kmods/*xpadneo*.rpm || true
 
 # Install RPMFusion-dependent kernel modules
 # First, add RPMFusion repositories (needed for v4l2loopback dependencies)
