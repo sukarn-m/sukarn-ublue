@@ -3,15 +3,11 @@ on:
   schedule:
     - cron: "30 6 1,15 * *" # Set in UTC: 6:30 AM on 1st and 15th day of each month.
 
-#  push:
-#    paths:
-#      - recipes/image-budgie.yml
+  push:
+    paths:
+      - recipes/image-budgie.yml
 #      - .github/workflows/build-budgie.yml
-#      - files/scripts/coreos_kernel.sh
-#      - files/scripts/fedora-atomic-repos.sh
 #      - files/scripts/image_name-v.sh
-#      - files/scripts/initramfs.sh
-#      - files/scripts/ublue-rpms.sh
 #      - files/theme-v/**
 #      - files/usr/**
 #      - files/laptop/**

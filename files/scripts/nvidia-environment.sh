@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Tell build process to exit if there are any errors.
-set -oue pipefail
+set -ouex pipefail
 
 # Nvidia specific Gnome fixes
 echo "## Required for use of OBS-VkCapture in X11 environments" >> /etc/environment

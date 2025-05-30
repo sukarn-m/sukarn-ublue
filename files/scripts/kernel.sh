@@ -3,7 +3,7 @@
 ## Reference: https://github.com/ublue-os/bluefin/blob/main/build_files/base/03-install-kernel-akmods.sh
 
 # Enable strict error handling: exit on any error, undefined variables, or pipe failures
-set -eou pipefail
+set -eoux pipefail
 
 # Extract current kernel version (remove "kernel-" prefix)
 KERNEL_PRE="$(rpm -q kernel | sed 's/^kernel-//')"
