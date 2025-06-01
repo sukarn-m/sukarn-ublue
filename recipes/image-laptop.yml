@@ -34,8 +34,6 @@ modules:
       - kernel-config-bazzite-gated.sh
       - kernel.sh
       - laptop-overrides.sh
-    snippets:
-      - "chmod 755 /usr/lib/systemd/system-sleep/wifi-reset"
 
   - type: kargs
     arch: x86_64
