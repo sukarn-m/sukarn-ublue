@@ -1,8 +1,8 @@
 modules:
   - from-file: base-flatpaks.yml
-  - from-file: base-fonts.yml
   - from-file: base-packages.yml
   - from-file: base-gnome.yml
+  - from-file: base-fonts.yml
   - from-file: base-files.yml
   - from-file: base-scripts.yml
   # - from-file: base-akmods.yml

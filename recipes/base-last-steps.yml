@@ -2,7 +2,7 @@ modules:
   - type: script
     scripts:
       - remove-base-os-reference.sh
-      - cleanup-tmp.sh
+      - gschemas-compile.sh
 
   - type: initramfs
   - type: signing # this sests up the proper policy & signing files for signed images to work fully

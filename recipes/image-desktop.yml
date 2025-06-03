@@ -10,13 +10,13 @@ image-version: gts # When the version changes, the COPY line below for nvidia-op
 
 modules:
 #  - from-file: base-bluefin-changes.yml
+
   - from-file: variant-gnome.yml
 
   - type: script
     scripts:
       - kernel-config-bazzite-gated-nvidia.sh
       - kernel.sh
-      - nvidia-install.sh
 
   - type: files
     files:
