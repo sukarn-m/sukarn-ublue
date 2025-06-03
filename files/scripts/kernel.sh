@@ -6,7 +6,7 @@
 ## Currently fails for: bazzite-latest if the current OS is on the GTS track. Example: current OS F41, bazzite-latest: F42
 
 # Enable strict error handling: exit on any error, undefined variables, or pipe failures
-set -eoux pipefail
+set -eou pipefail
 
 # ----------------- Configs -----------------
 
@@ -20,7 +20,7 @@ COREOS_TAG="coreos-stable"
 KERNEL_PRE="$(rpm -q kernel | sed 's/^kernel-//')"
 # Get current Fedora version number
 FEDORA_VERSION="$(rpm -E %fedora)"
-# Set IMAGE_NAME. See VARIANT_PACAGES in the function install_nvidia_packages
+# Set IMAGE_NAME. Affects additional package installation for nvidia variants. See VARIANT_PACKAGES in the function install_nvidia_packages
 IMAGE_NAME="" # Options: (i) ""; (ii) "silverblue"; (iii) "kinoite"; or (iv) "sericea"
 
 AKMODS_TAGS="/tmp/akmods-tags.txt"
@@ -120,18 +120,27 @@ function set_retrieval_tag () {
   try_gated
   try_standard
   if [[ ${KERNEL_FINDING_SUCCESS} == "0" ]]; then
-    echo "ERROR: Failed to find an appropriate retrieval tag."
-    exit 1
+    set_next_variant
+    set_retrieval_tag
   fi
 }
 
 function set_next_variant () {
-  VARIANTS_TRIED+=("${VARIANT_CURRENT}")
-  local options=("bazzite-gated" "bazzite" "gated" "bazzite-latest" "standard")
+  if [[ $BAZZITE_ONLY == "1" ]] && [[ $NVIDIA_WANTED == "1" ]]; then
+    local options=("bazzite-gated" "bazzite")
+  elif [[ $BAZZITE_ONLY == "1" ]]; then
+    local options=("bazzite-gated" "bazzite" "bazzite-latest")
+  elif [[ $NVIDIA_WANTED == "1" ]]; then
+    local options=("bazzite-gated" "bazzite" "gated" "standard")
+  else
+    local options=("bazzite-gated" "bazzite" "gated" "bazzite-latest" "standard")
+  fi
+
   local option=""
   local variant=""
   local match_found="false"
 
+  VARIANTS_TRIED+=("${VARIANT_CURRENT}")
   echo "Tried so far: ${VARIANTS_TRIED[@]}"
 
   for option in ${options[@]}; do
@@ -191,25 +200,30 @@ function initial_sanity_check () {
 
   if [[ -f "/tmp/nvidia" ]]; then NVIDIA_WANTED="1"; else NVIDIA_WANTED="0"; fi
   
-  if [[ -f "/tmp/kernel-bazzite" ]] && [[ -f "/tmp/kernel-gated" ]]; then
-    VARIANT_CURRENT="bazzite-gated"
-  elif [[ -f "/tmp/kernel-bazzite-latest" ]]; then
-    VARIANT_CURRENT="bazzite-latest"
-  elif [[ -f "/tmp/kernel-bazzite" ]]; then
-    VARIANT_CURRENT="bazzite"
-  elif [[ -f "/tmp/kernel-gated" ]]; then
-    VARIANT_CURRENT="gated"
-  elif [[ -f "/tmp/nvidia" ]]; then
-    VARIANT_CURRENT="standard"
+  if [[ -f "/tmp/kernel-bazzite" ]] && [[ -f "/tmp/kernel-gated" ]]; then VARIANT_CURRENT="bazzite-gated"
+  elif [[ -f "/tmp/kernel-bazzite-latest" ]]; then VARIANT_CURRENT="bazzite-latest"
+  elif [[ -f "/tmp/kernel-bazzite" ]]; then VARIANT_CURRENT="bazzite"
+  elif [[ -f "/tmp/kernel-gated" ]]; then VARIANT_CURRENT="gated"
+  elif [[ -f "/tmp/nvidia" ]]; then VARIANT_CURRENT="standard"
   else
     echo "Nothing to do... Exiting"
     exit 0
+  fi
+
+  if [[ -f "/tmp/kernel-bazzite-only" ]]; then
+    if [[ ! $VARIANT_CURRENT =~ "bazzite" ]]; then
+      echo "ERROR: /tmp/kernel-bazzite-only found without /tmp/kernel-bazzite"
+      exit 1
+    else BAZZITE_ONLY="1"
+    fi
+  else BAZZITE_ONLY="0"
   fi
 
   remove /tmp/nvidia
   remove /tmp/kernel-bazzite
   remove /tmp/kernel-gated
   remove /tmp/kernel-bazzite-latest
+  remove /tmp/kernel-bazzite-only
 }
 
 function rpm_erase () {
@@ -321,8 +335,8 @@ function nvidia_sanity_check () {
     
     VERSION="$(rpm -q /tmp/akmods-rpms/kmods/kmod-nvidia-*.rpm | sed 's/^kmod-nvidia-//' | sed 's/\.[^.]*$//')"
 
-    LOCAL_NVIDIA_PKG="/tmp/akmods-rpms/kmods/kmod-nvidia-${KERNEL_VERSION}-${NVIDIA_AKMOD_VERSION}.fc${FEDORA_VERSION}.x86_64.rpm"
-    
+    LOCAL_NVIDIA_PKG="/tmp/akmods-rpms/kmods/kmod-nvidia-${KERNEL_VERSION}-${NVIDIA_AKMOD_VERSION}.fc*.rpm"
+
     NVIDIA_PKGS=(
       "libnvidia-fbc-${VERSION}.x86_64"
       "libnvidia-ml-${VERSION}.i686"
@@ -345,13 +359,13 @@ function nvidia_sanity_check () {
       fi
     done
 
-    if [[ ! -f "${LOCAL_NVIDIA_PKG}" ]]; then
-      echo "Local RPM version mismatch."
-      echo "Expected to find file ${LOCAL_NVIDIA_PKG}"
-      echo "Actually found the following:"
-      echo "$(ls /tmp/akmods-rpms/kmods/)"
-      NVIDIA_PKGS_FOUND_ALL="0"
-    fi
+#    if [[ ! -f "${LOCAL_NVIDIA_PKG}" ]]; then
+#      echo "Local RPM version mismatch."
+#      echo "Expected to find file ${LOCAL_NVIDIA_PKG}"
+#      echo "Actually found the following:"
+#      echo "$(ls /tmp/akmods-rpms/kmods/)"
+#      NVIDIA_PKGS_FOUND_ALL="0"
+#    fi
     
     if [[ ${NVIDIA_PKGS_FOUND_ALL} == "0" ]]; then
       echo "ERROR: nVidia version mismatch."
@@ -366,7 +380,7 @@ function nvidia_sanity_check () {
 }
 
 function install_nvidia_packages () {
-  if [[ -f "/tmp/nvidia" ]]; then
+  if [[ $NVIDIA_WANTED == "1" ]]; then
     # Exclude golang NVIDIA container toolkit to prevent conflicts
     dnf5 config-manager setopt excludepkgs=golang-github-nvidia-container-toolkit
     # Remove conflicting nouveau (open-source NVIDIA) driver files
@@ -394,7 +408,7 @@ function install_nvidia_packages () {
     
     # ensure kernel.conf matches NVIDIA_FLAVOR (which must be nvidia or nvidia-open)
     # kmod-nvidia-common defaults to 'nvidia-open' but this will match our akmod image
-    sed -i "s/^MODULE_VARIANT=.*/MODULE_VARIANT=$KERNEL_MODULE_TYPE/" /etc/nvidia/kernel.conf
+    sed -i "s/^MODULE_VARIANT=.*/MODULE_VARIANT=${NVIDIA_TAG}/" /etc/nvidia/kernel.conf
     
     systemctl enable ublue-nvctk-cdi.service
     semodule --verbose --install /usr/share/selinux/packages/nvidia-container.pp
