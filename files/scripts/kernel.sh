@@ -6,7 +6,7 @@
 ## Currently fails for: bazzite-latest if the current OS is on the GTS track. Example: current OS F41, bazzite-latest: F42
 
 # Enable strict error handling: exit on any error, undefined variables, or pipe failures
-set -eou pipefail
+set -eoux pipefail
 
 # ----------------- Configs -----------------
 
@@ -85,7 +85,7 @@ function try_bazzite_gated () {
       RETRIEVAL_TAG="$(cat ${AKMODS_TAGS} | grep ${AKMODS_FLAVOUR}-${FEDORA_VERSION} | grep ${GATED_KERNEL_VERSION} | sort -r | head -n 1 | cut -d '"' -f 2)"
       confirm_nvidia
     else
-      echo "Error: Failed to match bazzite and gated tags."
+      echo "ERROR: Failed to match bazzite and gated tags."
       set_next_variant
     fi
   fi
@@ -150,7 +150,7 @@ function set_next_variant () {
     fi
   done
   if [[ "$match_found" == "false" ]]; then
-    echo "Error: We've tried all options. Nothing left to try. No working tag found."
+    echo "ERROR: We've tried all options. Nothing left to try. No working tag found."
     exit 1
   fi
 }
@@ -224,9 +224,6 @@ function list_packages () {
   tree /tmp/akmods/kmods
   tree /tmp/akmods/ublue-os
   tree /tmp/kernel-rpms
-}
-
-function list_nvidia_packages () {
   if [[ $NVIDIA_WANTED == "1" ]]; then
     tree /tmp/akmods-rpms/kmods
   fi
@@ -276,6 +273,26 @@ function nvidia_initial_setup () {
     sed -i '0,/enabled=0/{s/enabled=0/enabled=1/}' /etc/yum.repos.d/negativo17-fedora-nvidia.repo
     sed -i '0,/enabled=0/{s/enabled=0/enabled=1/}' /etc/yum.repos.d/nvidia-container-toolkit.repo
     
+    # Install MULTILIB packages from negativo17-multimedia prior to disabling repo
+    MULTILIB=(
+        mesa-dri-drivers.i686
+        mesa-filesystem.i686
+        mesa-libEGL.i686
+        mesa-libGL.i686
+        mesa-libgbm.i686
+        mesa-va-drivers.i686
+        mesa-vulkan-drivers.i686
+    )
+    
+    if [[ "$(rpm -E %fedora)" -lt 41 ]]; then
+        MULTILIB+=(
+            mesa-libglapi.i686
+            libvdpau.i686
+        )
+    fi
+    
+    dnf5 install -y "${MULTILIB[@]}"
+    
     # Disable Multimedia
     NEGATIVO17_MULT_PREV_ENABLED=N
     if [[ -f /etc/yum.repos.d/negativo17-fedora-multimedia.repo ]] && grep -q "enabled=1" /etc/yum.repos.d/negativo17-fedora-multimedia.repo; then
@@ -304,7 +321,7 @@ function nvidia_sanity_check () {
     
     VERSION="$(rpm -q /tmp/akmods-rpms/kmods/kmod-nvidia-*.rpm | sed 's/^kmod-nvidia-//' | sed 's/\.[^.]*$//')"
 
-    LOCAL_NVIDIA_PKG="/tmp/akmods-rpms/kmods/kmod-nvidia-${KERNEL_VERSION}-${NVIDIA_AKMOD_VERSION}.fc*.x86_64.rpm"
+    LOCAL_NVIDIA_PKG="/tmp/akmods-rpms/kmods/kmod-nvidia-${KERNEL_VERSION}-${NVIDIA_AKMOD_VERSION}.fc${FEDORA_VERSION}.x86_64.rpm"
     
     NVIDIA_PKGS=(
       "libnvidia-fbc-${VERSION}.x86_64"
@@ -322,22 +339,22 @@ function nvidia_sanity_check () {
 
     for pkg in "${NVIDIA_PKGS[@]}"; do
       if ! dnf5 info "$pkg" &>/dev/null; then
-        echo "Package not found: $pkg"
+        echo "ERROR: Package not found: $pkg"
         NVIDIA_PKGS_FOUND_ALL="0"
         break
       fi
     done
 
-#    if [[ ! -f "${LOCAL_NVIDIA_PKG}" ]]; then
-#      echo "Local RPM version mismatch."
-#      echo "Expected to find file ${LOCAL_NVIDIA_PKG}"
-#      echo "Actually found the following:"
-#      echo "$(ls /tmp/akmods-rpms/kmods/)"
-#      NVIDIA_PKGS_FOUND_ALL="0"
-#    fi
+    if [[ ! -f "${LOCAL_NVIDIA_PKG}" ]]; then
+      echo "Local RPM version mismatch."
+      echo "Expected to find file ${LOCAL_NVIDIA_PKG}"
+      echo "Actually found the following:"
+      echo "$(ls /tmp/akmods-rpms/kmods/)"
+      NVIDIA_PKGS_FOUND_ALL="0"
+    fi
     
     if [[ ${NVIDIA_PKGS_FOUND_ALL} == "0" ]]; then
-      echo "Error: nvidia mismatch."
+      echo "ERROR: nVidia version mismatch."
       echo "The version of kmod available locally: ${VERSION}"
       echo "The version of packages available on the repository:"
       echo "$(dnf5 list --showduplicates nvidia-driver)"
@@ -357,26 +374,6 @@ function install_nvidia_packages () {
     # Create symbolic link for NVIDIA ML library compatibility
     ln -sf libnvidia-ml.so.1 /usr/lib64/libnvidia-ml.so
     
-    # Install MULTILIB packages from negativo17-multimedia prior to disabling repo
-    MULTILIB=(
-        mesa-dri-drivers.i686
-        mesa-filesystem.i686
-        mesa-libEGL.i686
-        mesa-libGL.i686
-        mesa-libgbm.i686
-        mesa-va-drivers.i686
-        mesa-vulkan-drivers.i686
-    )
-    
-    if [[ "$(rpm -E %fedora)" -lt 41 ]]; then
-        MULTILIB+=(
-            mesa-libglapi.i686
-            libvdpau.i686
-        )
-    fi
-    
-#    dnf5 install -y "${MULTILIB[@]}"
-    
     if [[ "${IMAGE_NAME}" == "kinoite" ]]; then
         VARIANT_PKGS="supergfxctl-plasmoid supergfxctl"
     elif [[ "${IMAGE_NAME}" == "silverblue" ]]; then
@@ -385,7 +382,7 @@ function install_nvidia_packages () {
         VARIANT_PKGS=""
     fi
     
-    dnf5 install -y ${NVIDIA_PKGS[@]} ${VARIANT_PKGS} ${MULTILIB[@]} ${LOCAL_NVIDIA_PKG}
+    dnf5 install -y ${NVIDIA_PKGS[@]} ${VARIANT_PKGS} ${LOCAL_NVIDIA_PKG}
     
     ## nvidia post-install steps
     # disable repos provided by ublue-os-nvidia-addons
@@ -440,10 +437,7 @@ function final_cleanup () {
     remove "/usr/share/doc/kernel-keys/${KERNEL_PRE}"
     remove "/usr/src/kernels/${KERNEL_PRE}"
   fi
-  remove /tmp/nvidia
   remove /tmp/kernel
-  remove /tmp/kernel-bazzite
-  remove /tmp/kernel-gated
   remove /tmp/akmods
   remove /tmp/kernel-rpms
   remove /tmp/akmods-rpms
@@ -473,7 +467,6 @@ function main () {
   rpm_erase
   list_packages
   install_packages
-  list_nvidia_packages
   install_nvidia_packages
   final_cleanup
   lock_version
