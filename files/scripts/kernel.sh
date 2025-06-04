@@ -435,7 +435,15 @@ function install_nvidia_packages () {
     
     # ensure kernel.conf matches NVIDIA_FLAVOR (which must be nvidia or nvidia-open)
     # kmod-nvidia-common defaults to 'nvidia-open' but this will match our akmod image
-    sed -i "s/^MODULE_VARIANT=.*/MODULE_VARIANT=${NVIDIA_TAG}/" /etc/nvidia/kernel.conf
+    if [[ ${NVIDIA_TAG} == "nvidia-open" ]]; then
+      sed -i "s/^MODULE_VARIANT=.*/MODULE_VARIANT=kernel-open/" /etc/nvidia/kernel.conf
+    elif [[ ${NVIDIA_TAG} == "nvidia" ]]; then
+      sed -i "s/^MODULE_VARIANT=.*/MODULE_VARIANT=kernel/" /etc/nvidia/kernel.conf
+    else
+      echo "ERROR: Unknown nvidia tag set."
+      exit 1
+    fi
+    
     
     systemctl enable ublue-nvctk-cdi.service
     semodule --verbose --install /usr/share/selinux/packages/nvidia-container.pp
