@@ -11,3 +11,5 @@ modules:
         destination: /
       - source: theme-s
         destination: /
+      - source: trilium-notes
+        destination: /
