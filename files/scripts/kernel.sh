@@ -77,7 +77,7 @@ function reset_vars () {
 # ----------------- Retrieval -----------------
 
 function get_tags () {
-  local akmods_repo = "ghcr.io/ublue-os/akmods"
+  local akmods_repo="ghcr.io/ublue-os/akmods"
   skopeo list-tags --retry-times 3 docker://${akmods_repo} > ${AKMODS_TAGS}
   if [[ $NVIDIA_WANTED == "1" ]]; then
     skopeo list-tags --retry-times 3 docker://${akmods_repo}-${NVIDIA_TAG} > ${AKMODS_NVIDIA_TAGS}
