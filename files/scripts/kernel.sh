@@ -13,9 +13,9 @@ set -eou pipefail
 
 # ----------------- Configs -----------------
 
-PREFERENCE_ORDER=("bazzite-gated" "bazzite" "gated" "bazzite-latest" "standard") # The script will try to get akmods, kernel and nvidia drivers in this decreasing order of preference
+PREFERENCE_ORDER=("bazzite-gated" "bazzite" "gated" "bazzite-latest" "standard") # Options: Whatever tags are available on the repositories used. See the variables COREOS_TAG, NVIDIA_TAG, AKMODS_REPO, AKMODS_FLAVOUR and the function get_tags. The script will try to get akmods, kernel and nvidia drivers in this decreasing order of preference. If you're on the latest fedora release, then "bazzite" and "bazzite-latest" do the same thing. If you're on an older fedora release, such as Universal Blue's GTS track, then "bazzite-latest" is likely to fail.
 BAZZITE_ONLY="0"
-#NVIDIA_HOSTNAMES=("") # Hostnames defined here will get nvidia drivers. Read from /etc/hostname . Current logic instead checks for presence of the file /tmp/nvidia which must be created by another script first.
+NVIDIA_HOSTNAMES=("") # Hostnames defined here will get nvidia drivers. Set the hostname in /etc/hostname or create /tmp/nvidia before running this script if you want nvidia drivers. The script first checks for presence of the file /tmp/nvidia. If /tmp/nvidia is found, it will use nvidia drivers. If that file is not found, it will check for a match of hostnames listed here.
 
 NVIDIA_TAG="nvidia" # Options: (i) "nvidia"; and (ii) "nvidia-open". The option for "nvidia-open" hasn't been tested yet. Currently has incomplete nvidia handling. "nvidia-open" is untested.
 COREOS_TAG="coreos-stable" # Set CoreOS tag for gated kernel systems
@@ -53,7 +53,7 @@ function reset_vars () {
 function get_tags () {
   skopeo list-tags --retry-times 3 docker://ghcr.io/ublue-os/akmods > ${AKMODS_TAGS}
   if [[ $NVIDIA_WANTED == "1" ]]; then
-    skopeo list-tags --retry-times 3 docker://ghcr.io/ublue-os/akmods-nvidia > ${AKMODS_NVIDIA_TAGS}
+    skopeo list-tags --retry-times 3 docker://ghcr.io/ublue-os/${AKMODS_REPO} > ${AKMODS_NVIDIA_TAGS}
   fi
 }
 
@@ -132,7 +132,7 @@ function set_next_variant () {
   VARIANTS_TRIED+=("${VARIANT_CURRENT}")
   echo "Tried so far: ${VARIANTS_TRIED[@]}"
 
-  for option in ${options[@]}; do
+  for option in ${PREFERENCE_ORDER[@]}; do
     local already_tried="false"
     for variant in ${VARIANTS_TRIED[@]}; do
       if [[ "${option}" == "${variant}" ]]; then
@@ -190,21 +190,20 @@ function initial_sanity_check_and_config () {
     exit 1
   fi
   
-#  NVIDIA_WANTED="0"
-#  local current_hostname=""
-#  local actual_hostname="$(cat /etc/hostname)"
-#  for current_hostname in ${NVIDIA_HOSTNAMES[@]}; do
-#    if [[ "$actual_hostname" == "$current_hostname" ]]; then
-#      NVIDIA_WANTED="1"
-#    fi
-#  done
-  
   if [[ -f "/tmp/nvidia" ]]; then
     NVIDIA_WANTED="1"
     remove /tmp/nvidia
   else
     NVIDIA_WANTED="0"
   fi
+  
+  local current_hostname=""
+  local actual_hostname="$(hostnamectl hostname)"
+  for current_hostname in ${NVIDIA_HOSTNAMES[@]}; do
+    if [[ "$actual_hostname" == "$current_hostname" ]]; then
+      NVIDIA_WANTED="1"
+    fi
+  done
   
   local option=""
   if [[ $BAZZITE_ONLY == "0" ]]; then
