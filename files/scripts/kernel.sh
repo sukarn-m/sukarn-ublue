@@ -13,15 +13,15 @@ set -eou pipefail
 
 function user_config () {
   PREFERENCE_ORDER=("bazzite-gated" "bazzite" "gated" "bazzite-latest" "standard") # Options: Whatever tags are available on the repositories used. See the variables COREOS_TAG, NVIDIA_TAG, AKMODS_FLAVOUR and the function get_tags. The script will try to get akmods, kernel and nvidia drivers in this decreasing order of preference. If you're on the latest fedora release, then "bazzite" and "bazzite-latest" do the same thing. If you're on an older fedora release, such as Universal Blue's GTS track, then "bazzite-latest" is likely to fail.
-  BAZZITE_ONLY="0"
+  BAZZITE_ONLY="0" # Options: "0"; "1"
   NVIDIA_HOSTNAMES=("") # Hostnames defined here will get nvidia drivers. Set the hostname in /etc/hostname or create /tmp/nvidia before running this script if you want nvidia drivers. The script first checks for presence of the file /tmp/nvidia. If /tmp/nvidia is found, it will use nvidia drivers. If that file is not found, it will check for a match of hostnames listed here.
   AKMODS_WANTED=("xone" "v4l2loopback")
   NVIDIA_TAG="nvidia-open" # Options: (i) "nvidia"; and (ii) "nvidia-open".
+  IMAGE_NAME="" # Options: (i) ""; (ii) "silverblue"; (iii) "kinoite"; and (iv) "sericea". Affects additional package installation for nvidia variants. See VARIANT_PACKAGES in the function install_nvidia_packages
+  COREOS_TAG="coreos-stable" # Set CoreOS tag for gated kernel systems
 }
 
 function initial_config () {
-  IMAGE_NAME="" # Options: (i) ""; (ii) "silverblue"; (iii) "kinoite"; and (iv) "sericea". Affects additional package installation for nvidia variants. See VARIANT_PACKAGES in the function install_nvidia_packages
-  COREOS_TAG="coreos-stable" # Set CoreOS tag for gated kernel systems
   KERNEL_PRE="$(rpm -q kernel | sed 's/^kernel-//')" # Extract current kernel version (remove "kernel-" prefix)
   FEDORA_VERSION="$(rpm -E %fedora)" # Get current Fedora version number
   AKMODS_TAGS="/tmp/akmods-tags.txt"
@@ -59,10 +59,8 @@ function initial_config () {
 }
 
 function reset_vars () {
-  # In case of gated+bazzite, if there's no matching bazzite kernel for the latest coreos kernel version, should we fall back to using the latest bazzite for the current os, or use the gated kernel?
   KERNEL_FINDING_SUCCESS="0"
 
-  # Determine akmods flavor based on kernel type markers
   if [[ $VARIANT_CURRENT =~ "bazzite" ]]; then
     AKMODS_FLAVOUR="bazzite"
   elif [[ $VARIANT_CURRENT =~ "gated" ]]; then
@@ -99,8 +97,6 @@ function try_bazzite_latest () {
 }
 
 function try_bazzite_gated () {
-  # Handle special case: both gated and bazzite kernel markers present
-  # This requires matching kernel versions between repositories
   if [[ $KERNEL_FINDING_SUCCESS == "0" ]] && [[ $VARIANT_CURRENT == "bazzite-gated" ]]; then
     # Get the latest CoreOS kernel version from the repository
     GATED_KERNEL_VERSION="$(cat ${AKMODS_TAGS} | grep ${COREOS_TAG}-${FEDORA_VERSION} | sort -r | head -n 1 | cut -d '-' -f 4)"
@@ -130,7 +126,6 @@ function try_gated () {
 }
 
 function try_standard () {
-  # Handle standard/main kernel
   if [[ ${KERNEL_FINDING_SUCCESS} == "0" ]] && [[ $VARIANT_CURRENT == "standard" ]]; then
     RETRIEVAL_TAG="${AKMODS_FLAVOUR}-${FEDORA_VERSION}"
     confirm_nvidia
