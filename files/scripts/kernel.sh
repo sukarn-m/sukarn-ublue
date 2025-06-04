@@ -13,31 +13,57 @@ set -eou pipefail
 
 # ----------------- Configs -----------------
 
-PREFERENCE_ORDER=("bazzite-gated" "bazzite" "gated" "bazzite-latest" "standard") # Options: Whatever tags are available on the repositories used. See the variables COREOS_TAG, NVIDIA_TAG, AKMODS_REPO, AKMODS_FLAVOUR and the function get_tags. The script will try to get akmods, kernel and nvidia drivers in this decreasing order of preference. If you're on the latest fedora release, then "bazzite" and "bazzite-latest" do the same thing. If you're on an older fedora release, such as Universal Blue's GTS track, then "bazzite-latest" is likely to fail.
-BAZZITE_ONLY="0"
-NVIDIA_HOSTNAMES=("") # Hostnames defined here will get nvidia drivers. Set the hostname in /etc/hostname or create /tmp/nvidia before running this script if you want nvidia drivers. The script first checks for presence of the file /tmp/nvidia. If /tmp/nvidia is found, it will use nvidia drivers. If that file is not found, it will check for a match of hostnames listed here.
+function user_config () {
+  PREFERENCE_ORDER=("bazzite-gated" "bazzite" "gated" "bazzite-latest" "standard") # Options: Whatever tags are available on the repositories used. See the variables COREOS_TAG, NVIDIA_TAG, AKMODS_FLAVOUR and the function get_tags. The script will try to get akmods, kernel and nvidia drivers in this decreasing order of preference. If you're on the latest fedora release, then "bazzite" and "bazzite-latest" do the same thing. If you're on an older fedora release, such as Universal Blue's GTS track, then "bazzite-latest" is likely to fail.
+  BAZZITE_ONLY="0"
+  NVIDIA_HOSTNAMES=("") # Hostnames defined here will get nvidia drivers. Set the hostname in /etc/hostname or create /tmp/nvidia before running this script if you want nvidia drivers. The script first checks for presence of the file /tmp/nvidia. If /tmp/nvidia is found, it will use nvidia drivers. If that file is not found, it will check for a match of hostnames listed here.
+  
+  NVIDIA_TAG="nvidia" # Options: (i) "nvidia"; and (ii) "nvidia-open". The option for "nvidia-open" hasn't been tested yet. Currently has incomplete nvidia handling. "nvidia-open" is untested.
+  COREOS_TAG="coreos-stable" # Set CoreOS tag for gated kernel systems
+  KERNEL_PRE="$(rpm -q kernel | sed 's/^kernel-//')" # Extract current kernel version (remove "kernel-" prefix)
+  FEDORA_VERSION="$(rpm -E %fedora)" # Get current Fedora version number
+  IMAGE_NAME="" # Options: (i) ""; (ii) "silverblue"; (iii) "kinoite"; and (iv) "sericea". Affects additional package installation for nvidia variants. See VARIANT_PACKAGES in the function install_nvidia_packages
+  AKMODS_TAGS="/tmp/akmods-tags.txt"
+  AKMODS_NVIDIA_TAGS="/tmp/akmods-nvidia-tags.txt"
+  
+  VARIANTS_TRIED=()
+}
 
-NVIDIA_TAG="nvidia" # Options: (i) "nvidia"; and (ii) "nvidia-open". The option for "nvidia-open" hasn't been tested yet. Currently has incomplete nvidia handling. "nvidia-open" is untested.
-COREOS_TAG="coreos-stable" # Set CoreOS tag for gated kernel systems
-KERNEL_PRE="$(rpm -q kernel | sed 's/^kernel-//')" # Extract current kernel version (remove "kernel-" prefix)
-FEDORA_VERSION="$(rpm -E %fedora)" # Get current Fedora version number
-IMAGE_NAME="" # Options: (i) ""; (ii) "silverblue"; (iii) "kinoite"; and (iv) "sericea". Affects additional package installation for nvidia variants. See VARIANT_PACKAGES in the function install_nvidia_packages
-AKMODS_TAGS="/tmp/akmods-tags.txt"
-AKMODS_NVIDIA_TAGS="/tmp/akmods-nvidia-tags.txt"
-
-VARIANTS_TRIED=()
+function initial_config () {
+  if [[ -f "/tmp/nvidia" ]]; then
+    NVIDIA_WANTED="1"
+    remove /tmp/nvidia
+  else
+    NVIDIA_WANTED="0"
+  fi
+  
+  local current_hostname=""
+  local actual_hostname="$(hostnamectl hostname)"
+  for current_hostname in ${NVIDIA_HOSTNAMES[@]}; do
+    if [[ "$actual_hostname" == "$current_hostname" ]]; then
+      NVIDIA_WANTED="1"
+    fi
+  done
+  
+  local option=""
+  if [[ $BAZZITE_ONLY == "0" ]]; then
+    VARIANT_CURRENT="${PREFERENCE_ORDER[0]}"
+  elif [[ $BAZZITE_ONLY == "1" ]]; then
+    for option in ${PREFERENCE_ORDER[@]}; do
+      if [[ $option =~ "bazzite" ]]; then
+        VARIANT_CURRENT="$option"
+        break
+      fi
+    done
+  else
+    echo "ERROR: Variable BAZZITE_ONLY does not match 0 or 1"
+  fi
+}
 
 function reset_vars () {
   # In case of gated+bazzite, if there's no matching bazzite kernel for the latest coreos kernel version, should we fall back to using the latest bazzite for the current os, or use the gated kernel?
   KERNEL_FINDING_SUCCESS="0"
 
-  # Determine which akmods repository to use based on NVIDIA presence
-  if [[ $NVIDIA_WANTED == "1" ]]; then
-    AKMODS_REPO="akmods-${NVIDIA_TAG}"
-  else
-    AKMODS_REPO="akmods"
-  fi
-  
   # Determine akmods flavor based on kernel type markers
   if [[ $VARIANT_CURRENT =~ "bazzite" ]]; then
     AKMODS_FLAVOUR="bazzite"
@@ -51,9 +77,10 @@ function reset_vars () {
 # ----------------- Retrieval -----------------
 
 function get_tags () {
-  skopeo list-tags --retry-times 3 docker://ghcr.io/ublue-os/akmods > ${AKMODS_TAGS}
+  local akmods_repo = "ghcr.io/ublue-os/akmods"
+  skopeo list-tags --retry-times 3 docker://${akmods_repo} > ${AKMODS_TAGS}
   if [[ $NVIDIA_WANTED == "1" ]]; then
-    skopeo list-tags --retry-times 3 docker://ghcr.io/ublue-os/${AKMODS_REPO} > ${AKMODS_NVIDIA_TAGS}
+    skopeo list-tags --retry-times 3 docker://${akmods_repo}-${NVIDIA_TAG} > ${AKMODS_NVIDIA_TAGS}
   fi
 }
 
@@ -182,43 +209,70 @@ function download_nvidia_packages () {
   fi
 }
 
-# ----------------- Installation & Cleanup -----------------
+# ----------------- Sanity Checks -----------------
 
-function initial_sanity_check_and_config () {
+function initial_sanity_check () {
   if [[ ! $(command -v dnf5) ]]; then
     echo "Requires dnf5... Exiting"
     exit 1
   fi
-  
-  if [[ -f "/tmp/nvidia" ]]; then
-    NVIDIA_WANTED="1"
-    remove /tmp/nvidia
-  else
-    NVIDIA_WANTED="0"
-  fi
-  
-  local current_hostname=""
-  local actual_hostname="$(hostnamectl hostname)"
-  for current_hostname in ${NVIDIA_HOSTNAMES[@]}; do
-    if [[ "$actual_hostname" == "$current_hostname" ]]; then
-      NVIDIA_WANTED="1"
+}
+
+function nvidia_sanity_check () {
+  if [[ $NVIDIA_WANTED == "1" ]]; then
+    if ! dnf5 list installed ublue-os-nvidia-addons &>/dev/null; then
+      nvidia_initial_setup
     fi
-  done
-  
-  local option=""
-  if [[ $BAZZITE_ONLY == "0" ]]; then
-    VARIANT_CURRENT="${PREFERENCE_ORDER[0]}"
-  elif [[ $BAZZITE_ONLY == "1" ]]; then
-    for option in ${PREFERENCE_ORDER[@]}; do
-      if [[ $option =~ "bazzite" ]]; then
-        VARIANT_CURRENT="$option"
+
+    source /tmp/akmods-rpms/kmods/nvidia-vars
+    
+    VERSION="$(rpm -q /tmp/akmods-rpms/kmods/kmod-nvidia-*.rpm | sed 's/^kmod-nvidia-//' | sed 's/\.[^.]*$//')"
+
+    LOCAL_NVIDIA_PKG="/tmp/akmods-rpms/kmods/kmod-nvidia-${KERNEL_VERSION}-${NVIDIA_AKMOD_VERSION}.fc*.rpm"
+
+    NVIDIA_PKGS=(
+      "libnvidia-fbc-${VERSION}.x86_64"
+      "libnvidia-ml-${VERSION}.i686"
+      "libva-nvidia-driver"
+      "nvidia-driver-${VERSION}.x86_64"
+      "nvidia-driver-cuda-${VERSION}.x86_64"
+      "nvidia-driver-cuda-libs-${VERSION}.i686"
+      "nvidia-driver-libs-${VERSION}.i686"
+      "nvidia-settings-${VERSION}.x86_64"
+      "nvidia-container-toolkit"
+    )
+
+    NVIDIA_PKGS_FOUND_ALL="1"
+
+    for pkg in "${NVIDIA_PKGS[@]}"; do
+      if ! dnf5 info "$pkg" &>/dev/null; then
+        echo "ERROR: Package not found: $pkg"
+        NVIDIA_PKGS_FOUND_ALL="0"
         break
       fi
     done
-  else
-    echo "ERROR: Variable BAZZITE_ONLY does not match 0 or 1"
+
+#    if [[ ! -f "${LOCAL_NVIDIA_PKG}" ]]; then
+#      echo "Local RPM version mismatch."
+#      echo "Expected to find file ${LOCAL_NVIDIA_PKG}"
+#      echo "Actually found the following:"
+#      echo "$(ls /tmp/akmods-rpms/kmods/)"
+#      NVIDIA_PKGS_FOUND_ALL="0"
+#    fi
+    
+    if [[ ${NVIDIA_PKGS_FOUND_ALL} == "0" ]]; then
+      echo "ERROR: nVidia version mismatch."
+      echo "The version of kmod available locally: ${VERSION}"
+      echo "The version of packages available on the repository:"
+      echo "$(dnf5 list --showduplicates nvidia-driver)"
+      echo "We had tried ${VARIANT_USED}."
+      set_next_variant
+      get_and_check
+    fi
   fi
 }
+
+# ----------------- Installation & Cleanup -----------------
 
 function rpm_erase () {
   # Remove all existing kernel packages without dependency checks
@@ -319,60 +373,6 @@ function nvidia_initial_setup () {
   fi
 }
 
-function nvidia_sanity_check () {
-  if [[ $NVIDIA_WANTED == "1" ]]; then
-    if ! dnf5 list installed ublue-os-nvidia-addons &>/dev/null; then
-      nvidia_initial_setup
-    fi
-
-    source /tmp/akmods-rpms/kmods/nvidia-vars
-    
-    VERSION="$(rpm -q /tmp/akmods-rpms/kmods/kmod-nvidia-*.rpm | sed 's/^kmod-nvidia-//' | sed 's/\.[^.]*$//')"
-
-    LOCAL_NVIDIA_PKG="/tmp/akmods-rpms/kmods/kmod-nvidia-${KERNEL_VERSION}-${NVIDIA_AKMOD_VERSION}.fc*.rpm"
-
-    NVIDIA_PKGS=(
-      "libnvidia-fbc-${VERSION}.x86_64"
-      "libnvidia-ml-${VERSION}.i686"
-      "libva-nvidia-driver"
-      "nvidia-driver-${VERSION}.x86_64"
-      "nvidia-driver-cuda-${VERSION}.x86_64"
-      "nvidia-driver-cuda-libs-${VERSION}.i686"
-      "nvidia-driver-libs-${VERSION}.i686"
-      "nvidia-settings-${VERSION}.x86_64"
-      "nvidia-container-toolkit"
-    )
-
-    NVIDIA_PKGS_FOUND_ALL="1"
-
-    for pkg in "${NVIDIA_PKGS[@]}"; do
-      if ! dnf5 info "$pkg" &>/dev/null; then
-        echo "ERROR: Package not found: $pkg"
-        NVIDIA_PKGS_FOUND_ALL="0"
-        break
-      fi
-    done
-
-#    if [[ ! -f "${LOCAL_NVIDIA_PKG}" ]]; then
-#      echo "Local RPM version mismatch."
-#      echo "Expected to find file ${LOCAL_NVIDIA_PKG}"
-#      echo "Actually found the following:"
-#      echo "$(ls /tmp/akmods-rpms/kmods/)"
-#      NVIDIA_PKGS_FOUND_ALL="0"
-#    fi
-    
-    if [[ ${NVIDIA_PKGS_FOUND_ALL} == "0" ]]; then
-      echo "ERROR: nVidia version mismatch."
-      echo "The version of kmod available locally: ${VERSION}"
-      echo "The version of packages available on the repository:"
-      echo "$(dnf5 list --showduplicates nvidia-driver)"
-      echo "We had tried ${VARIANT_USED}."
-      set_next_variant
-      get_and_check
-    fi
-  fi
-}
-
 function install_nvidia_packages () {
   if [[ $NVIDIA_WANTED == "1" ]]; then
     # Exclude golang NVIDIA container toolkit to prevent conflicts
@@ -439,14 +439,13 @@ function initial_cleanup () {
 }
 
 function final_cleanup () {
+  initial_cleanup
   if [[ "$KERNEL_PRE" != "$KERNEL_POST" ]]; then
     # Clean up old kernel files to save space
     remove "/usr/lib/modules/${KERNEL_PRE}"
     remove "/usr/share/doc/kernel-keys/${KERNEL_PRE}"
     remove "/usr/src/kernels/${KERNEL_PRE}"
   fi
-
-  initial_cleanup
 }
 
 function lock_version () {
@@ -467,7 +466,10 @@ function get_and_check () {
 }
 
 function main () {
-  initial_sanity_check_and_config
+  user_config
+  initial_config
+  initial_sanity_check
+  reset_vars
   get_tags
   get_and_check
   rpm_erase
