@@ -15,8 +15,7 @@ modules:
 
   - type: script
     scripts:
-      - kernel-config-bazzite-gated-nvidia.sh
-      - kernel.sh
+      - nvidia.sh
 
   - type: files
     files:

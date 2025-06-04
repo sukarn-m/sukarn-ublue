@@ -3,32 +3,31 @@
 ## Initial reference: https://github.com/ublue-os/bluefin/blob/main/build_files/base/03-install-kernel-akmods.sh
 ## Heavily modified from that starting point.
 
-## Currently fails for: bazzite-latest if the current OS is on the GTS track. Example: current OS F41, bazzite-latest: F42
+## Untested:
+## - "nvidia-open"
+## Currently fails for:
+## - bazzite-latest if the current OS is on the GTS track. Example: current OS F41, bazzite-latest: F42
 
 # Enable strict error handling: exit on any error, undefined variables, or pipe failures
 set -eou pipefail
 
 # ----------------- Configs -----------------
 
-GATED_BAZZITE_FALLBACK="bazzite-matching-fedora" # Options: (i) "bazzite-matching-fedora"; (ii) "bazzite-latest"; and (iii) "gated"
+PREFERENCE_ORDER=("bazzite-gated" "bazzite" "gated" "bazzite-latest" "standard") # The script will try to get akmods, kernel and nvidia drivers in this decreasing order of preference
+BAZZITE_ONLY="0"
+#NVIDIA_HOSTNAMES=("") # Hostnames defined here will get nvidia drivers. Read from /etc/hostname . Current logic instead checks for presence of the file /tmp/nvidia which must be created by another script first.
 
-# Set NVIDIA tag. Currently has incomplete nvidia handling. "nvidia-open" is entirely untested. "nvidia" may lead to non-matching tags, erroring out in the script instead of being gracefully handled.
-NVIDIA_TAG="nvidia" # Options: (i) "nvidia"; and (ii) "nvidia-open". The option for "nvidia-open" hasn't been tested yet.
-# Set CoreOS tag for gated kernel systems
-COREOS_TAG="coreos-stable"
-# Extract current kernel version (remove "kernel-" prefix)
-KERNEL_PRE="$(rpm -q kernel | sed 's/^kernel-//')"
-# Get current Fedora version number
-FEDORA_VERSION="$(rpm -E %fedora)"
-# Set IMAGE_NAME. Affects additional package installation for nvidia variants. See VARIANT_PACKAGES in the function install_nvidia_packages
-IMAGE_NAME="" # Options: (i) ""; (ii) "silverblue"; (iii) "kinoite"; or (iv) "sericea"
-
+NVIDIA_TAG="nvidia" # Options: (i) "nvidia"; and (ii) "nvidia-open". The option for "nvidia-open" hasn't been tested yet. Currently has incomplete nvidia handling. "nvidia-open" is untested.
+COREOS_TAG="coreos-stable" # Set CoreOS tag for gated kernel systems
+KERNEL_PRE="$(rpm -q kernel | sed 's/^kernel-//')" # Extract current kernel version (remove "kernel-" prefix)
+FEDORA_VERSION="$(rpm -E %fedora)" # Get current Fedora version number
+IMAGE_NAME="" # Options: (i) ""; (ii) "silverblue"; (iii) "kinoite"; and (iv) "sericea". Affects additional package installation for nvidia variants. See VARIANT_PACKAGES in the function install_nvidia_packages
 AKMODS_TAGS="/tmp/akmods-tags.txt"
 AKMODS_NVIDIA_TAGS="/tmp/akmods-nvidia-tags.txt"
 
 VARIANTS_TRIED=()
 
-function set_vars () {
+function reset_vars () {
   # In case of gated+bazzite, if there's no matching bazzite kernel for the latest coreos kernel version, should we fall back to using the latest bazzite for the current os, or use the gated kernel?
   KERNEL_FINDING_SUCCESS="0"
 
@@ -126,16 +125,6 @@ function set_retrieval_tag () {
 }
 
 function set_next_variant () {
-  if [[ $BAZZITE_ONLY == "1" ]] && [[ $NVIDIA_WANTED == "1" ]]; then
-    local options=("bazzite-gated" "bazzite")
-  elif [[ $BAZZITE_ONLY == "1" ]]; then
-    local options=("bazzite-gated" "bazzite" "bazzite-latest")
-  elif [[ $NVIDIA_WANTED == "1" ]]; then
-    local options=("bazzite-gated" "bazzite" "gated" "standard")
-  else
-    local options=("bazzite-gated" "bazzite" "gated" "bazzite-latest" "standard")
-  fi
-
   local option=""
   local variant=""
   local match_found="false"
@@ -152,10 +141,13 @@ function set_next_variant () {
       fi
     done
     if [[ "$already_tried" == "false" ]]; then
-      VARIANT_CURRENT="${option}"
-      echo "Trying next: ${VARIANT_CURRENT}"
-      match_found="true"
-      break
+      if [[ $BAZZITE_ONLY == "0" ]]; then
+        VARIANT_CURRENT="${option}"
+        echo "Trying next: ${VARIANT_CURRENT}"
+        match_found="true"
+        break
+      else break
+      fi
     fi
   done
   if [[ "$match_found" == "false" ]]; then
@@ -192,38 +184,41 @@ function download_nvidia_packages () {
 
 # ----------------- Installation & Cleanup -----------------
 
-function initial_sanity_check () {
+function initial_sanity_check_and_config () {
   if [[ ! $(command -v dnf5) ]]; then
     echo "Requires dnf5... Exiting"
     exit 1
   fi
-
-  if [[ -f "/tmp/nvidia" ]]; then NVIDIA_WANTED="1"; else NVIDIA_WANTED="0"; fi
   
-  if [[ -f "/tmp/kernel-bazzite" ]] && [[ -f "/tmp/kernel-gated" ]]; then VARIANT_CURRENT="bazzite-gated"
-  elif [[ -f "/tmp/kernel-bazzite-latest" ]]; then VARIANT_CURRENT="bazzite-latest"
-  elif [[ -f "/tmp/kernel-bazzite" ]]; then VARIANT_CURRENT="bazzite"
-  elif [[ -f "/tmp/kernel-gated" ]]; then VARIANT_CURRENT="gated"
-  elif [[ -f "/tmp/nvidia" ]]; then VARIANT_CURRENT="standard"
+#  NVIDIA_WANTED="0"
+#  local current_hostname=""
+#  local actual_hostname="$(cat /etc/hostname)"
+#  for current_hostname in ${NVIDIA_HOSTNAMES[@]}; do
+#    if [[ "$actual_hostname" == "$current_hostname" ]]; then
+#      NVIDIA_WANTED="1"
+#    fi
+#  done
+  
+  if [[ -f "/tmp/nvidia" ]]; then
+    NVIDIA_WANTED="1"
+    remove /tmp/nvidia
   else
-    echo "Nothing to do... Exiting"
-    exit 0
+    NVIDIA_WANTED="0"
   fi
-
-  if [[ -f "/tmp/kernel-bazzite-only" ]]; then
-    if [[ ! $VARIANT_CURRENT =~ "bazzite" ]]; then
-      echo "ERROR: /tmp/kernel-bazzite-only found without /tmp/kernel-bazzite"
-      exit 1
-    else BAZZITE_ONLY="1"
-    fi
-  else BAZZITE_ONLY="0"
+  
+  local option=""
+  if [[ $BAZZITE_ONLY == "0" ]]; then
+    VARIANT_CURRENT="${PREFERENCE_ORDER[0]}"
+  elif [[ $BAZZITE_ONLY == "1" ]]; then
+    for option in ${PREFERENCE_ORDER[@]}; do
+      if [[ $option =~ "bazzite" ]]; then
+        VARIANT_CURRENT="$option"
+        break
+      fi
+    done
+  else
+    echo "ERROR: Variable BAZZITE_ONLY does not match 0 or 1"
   fi
-
-  remove /tmp/nvidia
-  remove /tmp/kernel-bazzite
-  remove /tmp/kernel-gated
-  remove /tmp/kernel-bazzite-latest
-  remove /tmp/kernel-bazzite-only
 }
 
 function rpm_erase () {
@@ -451,10 +446,8 @@ function final_cleanup () {
     remove "/usr/share/doc/kernel-keys/${KERNEL_PRE}"
     remove "/usr/src/kernels/${KERNEL_PRE}"
   fi
-  remove /tmp/kernel
-  remove /tmp/akmods
-  remove /tmp/kernel-rpms
-  remove /tmp/akmods-rpms
+
+  initial_cleanup
 }
 
 function lock_version () {
@@ -463,10 +456,10 @@ function lock_version () {
   dnf5 versionlock add kernel kernel-devel kernel-devel-matched kernel-core kernel-modules kernel-modules-core kernel-modules-extra kernel-tools
 }
 
-# ----------------- Script logic -----------------
+# ----------------- Main script logic -----------------
 
 function get_and_check () {
-  set_vars
+  reset_vars
   initial_cleanup
   set_retrieval_tag
   download_normal_packages
@@ -475,7 +468,7 @@ function get_and_check () {
 }
 
 function main () {
-  initial_sanity_check
+  initial_sanity_check_and_config
   get_tags
   get_and_check
   rpm_erase
