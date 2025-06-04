@@ -18,19 +18,18 @@ function user_config () {
   BAZZITE_ONLY="0"
   NVIDIA_HOSTNAMES=("") # Hostnames defined here will get nvidia drivers. Set the hostname in /etc/hostname or create /tmp/nvidia before running this script if you want nvidia drivers. The script first checks for presence of the file /tmp/nvidia. If /tmp/nvidia is found, it will use nvidia drivers. If that file is not found, it will check for a match of hostnames listed here.
   AKMODS_WANTED=("xone" "v4l2loopback")
-  
-  NVIDIA_TAG="nvidia" # Options: (i) "nvidia"; and (ii) "nvidia-open". The option for "nvidia-open" hasn't been tested yet. Currently has incomplete nvidia handling. "nvidia-open" is untested.
-  COREOS_TAG="coreos-stable" # Set CoreOS tag for gated kernel systems
-  KERNEL_PRE="$(rpm -q kernel | sed 's/^kernel-//')" # Extract current kernel version (remove "kernel-" prefix)
-  FEDORA_VERSION="$(rpm -E %fedora)" # Get current Fedora version number
-  IMAGE_NAME="" # Options: (i) ""; (ii) "silverblue"; (iii) "kinoite"; and (iv) "sericea". Affects additional package installation for nvidia variants. See VARIANT_PACKAGES in the function install_nvidia_packages
-  AKMODS_TAGS="/tmp/akmods-tags.txt"
-  AKMODS_NVIDIA_TAGS="/tmp/akmods-nvidia-tags.txt"
-  
-  VARIANTS_TRIED=()
+  NVIDIA_TAG="nvidia-open" # Options: (i) "nvidia"; and (ii) "nvidia-open". The option for "nvidia-open" hasn't been tested yet.
 }
 
 function initial_config () {
+  IMAGE_NAME="" # Options: (i) ""; (ii) "silverblue"; (iii) "kinoite"; and (iv) "sericea". Affects additional package installation for nvidia variants. See VARIANT_PACKAGES in the function install_nvidia_packages
+  COREOS_TAG="coreos-stable" # Set CoreOS tag for gated kernel systems
+  KERNEL_PRE="$(rpm -q kernel | sed 's/^kernel-//')" # Extract current kernel version (remove "kernel-" prefix)
+  FEDORA_VERSION="$(rpm -E %fedora)" # Get current Fedora version number
+  AKMODS_TAGS="/tmp/akmods-tags.txt"
+  AKMODS_NVIDIA_TAGS="/tmp/akmods-nvidia-tags.txt"
+  VARIANTS_TRIED=()
+
   if [[ -f "/tmp/nvidia" ]]; then
     NVIDIA_WANTED="1"
     remove /tmp/nvidia

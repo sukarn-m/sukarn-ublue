@@ -10,7 +10,6 @@ image-version: gts # When the version changes, the COPY line below for nvidia-op
 
 modules:
 #  - from-file: base-bluefin-changes.yml
-
   - from-file: variant-gnome.yml
 
   - type: script
