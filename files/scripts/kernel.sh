@@ -17,6 +17,7 @@ function user_config () {
   PREFERENCE_ORDER=("bazzite-gated" "bazzite" "gated" "bazzite-latest" "standard") # Options: Whatever tags are available on the repositories used. See the variables COREOS_TAG, NVIDIA_TAG, AKMODS_FLAVOUR and the function get_tags. The script will try to get akmods, kernel and nvidia drivers in this decreasing order of preference. If you're on the latest fedora release, then "bazzite" and "bazzite-latest" do the same thing. If you're on an older fedora release, such as Universal Blue's GTS track, then "bazzite-latest" is likely to fail.
   BAZZITE_ONLY="0"
   NVIDIA_HOSTNAMES=("") # Hostnames defined here will get nvidia drivers. Set the hostname in /etc/hostname or create /tmp/nvidia before running this script if you want nvidia drivers. The script first checks for presence of the file /tmp/nvidia. If /tmp/nvidia is found, it will use nvidia drivers. If that file is not found, it will check for a match of hostnames listed here.
+  AKMODS_WANTED=("xone" "v4l2loopback")
   
   NVIDIA_TAG="nvidia" # Options: (i) "nvidia"; and (ii) "nvidia-open". The option for "nvidia-open" hasn't been tested yet. Currently has incomplete nvidia handling. "nvidia-open" is untested.
   COREOS_TAG="coreos-stable" # Set CoreOS tag for gated kernel systems
@@ -198,7 +199,8 @@ function download_nvidia_packages () {
   # Handle NVIDIA-specific package extraction
   if [[ $NVIDIA_WANTED == "1" ]]; then
     # Clean up existing kernel RPMs from the akmods download above
-    rm -rfv /tmp/kernel-rpms
+    echo "Replacing the kernel RPMs from akmods with the RPMs from the nvidia build."
+    remove /tmp/kernel-rpms
     # Download NVIDIA akmods + kernel build
     skopeo copy --retry-times 3 docker://ghcr.io/ublue-os/akmods-nvidia:"${RETRIEVAL_TAG}" dir:/tmp/akmods-rpms
     # Extract NVIDIA akmods layer
@@ -272,6 +274,32 @@ function nvidia_sanity_check () {
   fi
 }
 
+function akmod_sanity_check () {
+  local akmod=""
+  local akmod_dir="/tmp/akmods/kmods"
+
+  if [[ ! -d "$akmod_dir" ]]; then
+    echo "ERROR: akmods directory not found."
+    exit 1
+  fi
+
+  for akmod in ${AKMODS_WANTED[@]}; do
+    local matching_files=()
+    mapfile -t matching_files < <(find "${akmod_dir}" -maxdepth 1 -type f -name "*${akmod}*" -printf '%f\n') || true
+    local count=${#matching_files[@]}
+    if [[ $count -eq 0 ]]; then
+        echo "Error: No files found containing '${akmod}' in ${akmod_dir}"
+        exit 1
+    elif [[ $count -eq 1 ]]; then
+        echo "Found akmod file: ${matching_files[0]}"
+    else
+        echo "Error: Multiple files found containing '${akmod}' in ${akmod_dir}:"
+        printf '  %s\n' "${matching_files[@]}"
+        exit 1
+    fi
+  done
+}
+
 # ----------------- Installation & Cleanup -----------------
 
 function rpm_erase () {
@@ -292,24 +320,32 @@ function list_packages () {
 }
 
 function install_packages () {
-  # Install new kernel packages
+  # Install kernel packages
   dnf5 -y install /tmp/kernel-rpms/*.rpm
   
-  # Install gaming controller support modules
-  # xone: Xbox One controller USB/RF driver
-  dnf5 -y install /tmp/akmods/kmods/*xone*.rpm
-  
-  # Install RPMFusion-dependent kernel modules
-  # First, add RPMFusion repositories (needed for v4l2loopback dependencies)
-  dnf5 -y install \
-      https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-"${FEDORA_VERSION}".noarch.rpm \
-      https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-"${FEDORA_VERSION}".noarch.rpm
-  # Install v4l2loopback: creates virtual video devices for applications like OBS
-  dnf5 -y install \
-      v4l2loopback /tmp/akmods/kmods/*v4l2loopback*.rpm
-  # Remove RPMFusion repositories after installation to avoid conflicts
-  dnf5 -y remove rpmfusion-free-release rpmfusion-nonfree-release
-  
+  local akmod=""
+  local akmods=()
+  local akmod_dir="/tmp/akmods/kmods"
+
+  # Install akmods
+  for akmod in ${AKMODS_WANTED[@]}; do
+    if [[ ! ${akmod} =~ "v4l2loopback" ]]; then
+      akmods+="${akmod_dir}/*${akmod}*.rpm"
+      dnf5 -y install /tmp/akmods/kmods/*${akmod}*.rpm
+    else
+      dnf5 -y install \
+          https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-"${FEDORA_VERSION}".noarch.rpm \
+          https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-"${FEDORA_VERSION}".noarch.rpm
+      dnf5 -y install \
+          v4l2loopback /tmp/akmods/kmods/*v4l2loopback*.rpm
+      dnf5 -y remove rpmfusion-free-release rpmfusion-nonfree-release
+    fi
+  done
+
+  if [[ ! ${#akmods[@]} -eq 0 ]]; then
+    dnf5 -y install ${akmods[@]}
+  fi
+
   # Check if kernel version changed during installation
   KERNEL_POST="$(rpm -q kernel | sed 's/^kernel-//')"
   if [[ "$KERNEL_PRE" != "$KERNEL_POST" ]]; then
@@ -378,7 +414,7 @@ function install_nvidia_packages () {
     # Exclude golang NVIDIA container toolkit to prevent conflicts
     dnf5 config-manager setopt excludepkgs=golang-github-nvidia-container-toolkit
     # Remove conflicting nouveau (open-source NVIDIA) driver files
-    rm -f /usr/share/vulkan/icd.d/nouveau_icd.*.json
+    remove /usr/share/vulkan/icd.d/nouveau_icd.*.json
     # Create symbolic link for NVIDIA ML library compatibility
     ln -sf libnvidia-ml.so.1 /usr/lib64/libnvidia-ml.so
     
@@ -474,6 +510,7 @@ function main () {
   get_and_check
   rpm_erase
   list_packages
+  akmod_sanity_check
   install_packages
   install_nvidia_packages
   final_cleanup
