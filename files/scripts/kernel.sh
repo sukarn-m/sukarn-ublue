@@ -3,8 +3,6 @@
 ## Initial reference: https://github.com/ublue-os/bluefin/blob/main/build_files/base/03-install-kernel-akmods.sh
 ## Heavily modified from that starting point.
 
-## Untested:
-## - "nvidia-open"
 ## Currently fails for:
 ## - bazzite-latest if the current OS is on the GTS track. Example: current OS F41, bazzite-latest: F42
 
@@ -18,7 +16,7 @@ function user_config () {
   BAZZITE_ONLY="0"
   NVIDIA_HOSTNAMES=("") # Hostnames defined here will get nvidia drivers. Set the hostname in /etc/hostname or create /tmp/nvidia before running this script if you want nvidia drivers. The script first checks for presence of the file /tmp/nvidia. If /tmp/nvidia is found, it will use nvidia drivers. If that file is not found, it will check for a match of hostnames listed here.
   AKMODS_WANTED=("xone" "v4l2loopback")
-  NVIDIA_TAG="nvidia-open" # Options: (i) "nvidia"; and (ii) "nvidia-open". The option for "nvidia-open" hasn't been tested yet.
+  NVIDIA_TAG="nvidia-open" # Options: (i) "nvidia"; and (ii) "nvidia-open".
 }
 
 function initial_config () {
