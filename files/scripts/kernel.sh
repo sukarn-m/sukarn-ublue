@@ -146,7 +146,16 @@ function set_next_variant () {
         echo "Trying next: ${VARIANT_CURRENT}"
         match_found="true"
         break
-      else break
+      elif [[ $BAZZITE_ONLY == "1" ]]; then
+        if [[ "${option}" =~ "bazzite" ]]; then
+          VARIANT_CURRENT="${option}"
+          echo "Trying next: ${VARIANT_CURRENT}"
+          match_found="true"
+          break
+        fi
+      else
+        echo "ERROR: How did the script even get to this stage with BAZZITE_ONLY not set properly?"
+        exit 1
       fi
     fi
   done
