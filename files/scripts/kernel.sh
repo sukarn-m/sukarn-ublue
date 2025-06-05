@@ -3,19 +3,16 @@
 ## Initial reference: https://github.com/ublue-os/bluefin/blob/main/build_files/base/03-install-kernel-akmods.sh
 ## Heavily modified from that starting point.
 
-## Currently fails for:
-## - bazzite-latest if the current OS is on the GTS track. Example: current OS F41, bazzite-latest: F42
-
 # Enable strict error handling: exit on any error, undefined variables, or pipe failures
 set -eou pipefail
 
 # ----------------- Configs -----------------
 
 function user_config () {
-  PREFERENCE_ORDER=("bazzite-gated" "bazzite" "gated" "bazzite-latest" "standard") # Options: Whatever tags are available on the repositories used. See the variables COREOS_TAG, NVIDIA_TAG, AKMODS_FLAVOUR and the function get_tags. The script will try to get akmods, kernel and nvidia drivers in this decreasing order of preference. If you're on the latest fedora release, then "bazzite" and "bazzite-latest" do the same thing. If you're on an older fedora release, such as Universal Blue's GTS track, then "bazzite-latest" is likely to fail.
-  BAZZITE_ONLY="0" # Options: "0"; "1"
-  NVIDIA_HOSTNAMES=("") # Hostnames defined here will get nvidia drivers. Set the hostname in /etc/hostname or create /tmp/nvidia before running this script if you want nvidia drivers. The script first checks for presence of the file /tmp/nvidia. If /tmp/nvidia is found, it will use nvidia drivers. If that file is not found, it will check for a match of hostnames listed here.
-  AKMODS_WANTED=("xone" "v4l2loopback")
+  PREFERENCE_ORDER=("bazzite-gated" "bazzite" "gated" "standard") # Options: Whatever tags are available on the repositories used. Special cases: (i) "bazzite-gated" fetches the tag from "coreos-stable" and then tries to get a matching tag of "bazzite"; (ii) "gated" is mapped to "coreos-stable". See the variables COREOS_TAG, NVIDIA_TAG, AKMODS_FLAVOUR and the function get_tags. The script will try to get akmods, kernel and nvidia drivers in this decreasing order of preference.
+  BAZZITE_ONLY_HOSTNAMES=() # Hostnames defined here will get only the bazzite kernel, and the script will filter out any tags from the PREFERENCE_ORDER that do not contain "bazzite". Set the hostname in /etc/hostname or create /tmp/bazzite-only before running this script if you want to filter out non-bazzite tags. The script first checks for the presence of the file /tmp/bazzite-only.
+  NVIDIA_HOSTNAMES=() # Hostnames defined here will get nvidia drivers. Set the hostname in /etc/hostname or create /tmp/nvidia before running this script if you want nvidia drivers. The script first checks for presence of the file /tmp/nvidia. If /tmp/nvidia is found, it will use nvidia drivers. If that file is not found, it will check for a match of hostnames listed here.
+  AKMODS_WANTED=("xone" "v4l2loopback") # Options: Only the akmods provided in the ublue akmods releases. If unsure, run this script once. It outputs a list of all the akmods packages that are found.
   NVIDIA_TAG="nvidia-open" # Options: (i) "nvidia"; and (ii) "nvidia-open".
   IMAGE_NAME="" # Options: (i) ""; (ii) "silverblue"; (iii) "kinoite"; and (iv) "sericea". Affects additional package installation for nvidia variants. See VARIANT_PACKAGES in the function install_nvidia_packages
   COREOS_TAG="coreos-stable" # Set CoreOS tag for gated kernel systems
@@ -24,25 +21,36 @@ function user_config () {
 function initial_config () {
   KERNEL_PRE="$(rpm -q kernel | sed 's/^kernel-//')" # Extract current kernel version (remove "kernel-" prefix)
   FEDORA_VERSION="$(rpm -E %fedora)" # Get current Fedora version number
-  AKMODS_TAGS="/tmp/akmods-tags.txt"
-  AKMODS_NVIDIA_TAGS="/tmp/akmods-nvidia-tags.txt"
+  AKMODS_TAGS="/tmp/akmods-tags.txt" # Stores the tags list so that they aren't repeatedly checked on the repository
+  AKMODS_NVIDIA_TAGS="/tmp/akmods-nvidia-tags.txt" # Stores the tags list so that they aren't repeatedly checked on the repository
   VARIANTS_TRIED=()
 
+  # Logic for NVIDIA_WANTED
   if [[ -f "/tmp/nvidia" ]]; then
     NVIDIA_WANTED="1"
     remove /tmp/nvidia
+  elif [[ ${#NVIDIA_HOSTNAMES[@]} -gt 0 ]]; then
+    local current_hostname=""
+    local actual_hostname="$(hostnamectl hostname)"
+    for current_hostname in ${NVIDIA_HOSTNAMES[@]}; do
+      if [[ "$actual_hostname" == "$current_hostname" ]]; then
+        NVIDIA_WANTED="1"
+      fi
+    done
   else
     NVIDIA_WANTED="0"
   fi
   
-  local current_hostname=""
-  local actual_hostname="$(hostnamectl hostname)"
-  for current_hostname in ${NVIDIA_HOSTNAMES[@]}; do
-    if [[ "$actual_hostname" == "$current_hostname" ]]; then
-      NVIDIA_WANTED="1"
-    fi
-  done
-  
+  # Logic for BAZZITE_ONLY
+  if [[ -f "/tmp/bazzite-only" ]]; then
+    BAZZITE_ONLY="1"
+    remove /tmp/bazzite-only
+  elif [[ ${#BAZZITE_ONLY_HOSTNAMES[@]} -gt 0 ]]; then
+    BAZZITE_ONLY="1"
+  else
+    BAZZITE_ONLY="0"
+  fi
+
   local option=""
   if [[ $BAZZITE_ONLY == "0" ]]; then
     VARIANT_CURRENT="${PREFERENCE_ORDER[0]}"
@@ -80,64 +88,36 @@ function get_tags () {
   fi
 }
 
-function confirm_nvidia () {
+function confirm_tag () {
   if [[ $NVIDIA_WANTED == "0" ]] || $(cat ${AKMODS_NVIDIA_TAGS} | grep -q ${RETRIEVAL_TAG}); then
     KERNEL_FINDING_SUCCESS="1"
     VARIANT_USED="${VARIANT_CURRENT}"
-  else
-    set_next_variant
-  fi
-}
-
-function try_bazzite_latest () {
-  if [[ $KERNEL_FINDING_SUCCESS == "0" ]] && [[ $VARIANT_CURRENT == "bazzite-latest" ]]; then
-    RETRIEVAL_TAG="$(cat ${AKMODS_TAGS} | grep ${AKMODS_FLAVOUR} | sort -r | head -n 1 | cut -d '"' -f 2)"
-    confirm_nvidia
   fi
 }
 
 function try_bazzite_gated () {
-  if [[ $KERNEL_FINDING_SUCCESS == "0" ]] && [[ $VARIANT_CURRENT == "bazzite-gated" ]]; then
-    # Get the latest CoreOS kernel version from the repository
-    GATED_KERNEL_VERSION="$(cat ${AKMODS_TAGS} | grep ${COREOS_TAG}-${FEDORA_VERSION} | sort -r | head -n 1 | cut -d '-' -f 4)"
-    # Find matching Bazzite tag with the same kernel version
-    if $(cat ${AKMODS_TAGS} | grep ${AKMODS-FLAVOUR}-${FEDORA_VERSION} | grep -q ${GATED_KERNEL_VERSION}); then
-      RETRIEVAL_TAG="$(cat ${AKMODS_TAGS} | grep ${AKMODS_FLAVOUR}-${FEDORA_VERSION} | grep ${GATED_KERNEL_VERSION} | sort -r | head -n 1 | cut -d '"' -f 2)"
-      confirm_nvidia
-    else
-      echo "ERROR: Failed to match bazzite and gated tags."
-      set_next_variant
-    fi
-  fi
-}
-
-function try_bazzite () {
-  if [[ ${KERNEL_FINDING_SUCCESS} == "0" ]] && [[ $VARIANT_CURRENT == "bazzite" ]]; then
-    RETRIEVAL_TAG="$(cat ${AKMODS_TAGS} | grep ${AKMODS_FLAVOUR}-${FEDORA_VERSION} | sort -r | head -n 1 | cut -d '"' -f 2)"
-    confirm_nvidia
-  fi
-}
-
-function try_gated () {
-  if [[ ${KERNEL_FINDING_SUCCESS} == "0" ]] && [[ $VARIANT_CURRENT == "gated" ]]; then
-    RETRIEVAL_TAG="$(cat ${AKMODS_TAGS} | grep ${AKMODS_FLAVOUR}-${FEDORA_VERSION} | sort -r | head -n 1 | cut -d '"' -f 2)"
-    confirm_nvidia
+  # Get the latest CoreOS kernel version from the repository
+  GATED_KERNEL_VERSION="$(cat ${AKMODS_TAGS} | grep ${COREOS_TAG}-${FEDORA_VERSION} | sort -r | head -n 1 | cut -d '-' -f 4)"
+  # Find matching Bazzite tag with the same kernel version
+  if $(cat ${AKMODS_TAGS} | grep ${AKMODS-FLAVOUR}-${FEDORA_VERSION} | grep -q ${GATED_KERNEL_VERSION}); then
+    RETRIEVAL_TAG="$(cat ${AKMODS_TAGS} | grep ${AKMODS_FLAVOUR}-${FEDORA_VERSION} | grep ${GATED_KERNEL_VERSION} | sort -r | head -n 1 | cut -d '"' -f 2)"
+    confirm_tag
+  else
+    echo "ERROR: Failed to match bazzite and gated tags."
   fi
 }
 
 function try_standard () {
-  if [[ ${KERNEL_FINDING_SUCCESS} == "0" ]] && [[ $VARIANT_CURRENT == "standard" ]]; then
-    RETRIEVAL_TAG="${AKMODS_FLAVOUR}-${FEDORA_VERSION}"
-    confirm_nvidia
-  fi
+  RETRIEVAL_TAG="$(cat ${AKMODS_TAGS} | grep ${AKMODS_FLAVOUR}-${FEDORA_VERSION} | sort -r | head -n 1 | cut -d '"' -f 2)"
+  confirm_tag
 }
 
 function set_retrieval_tag () {
-  try_bazzite_gated
-  try_bazzite_latest
-  try_bazzite
-  try_gated
-  try_standard
+  if [[ $VARIANT_CURRENT == "bazzite-gated" ]]; then
+    try_bazzite_gated
+  else
+    try_standard
+  fi
   if [[ ${KERNEL_FINDING_SUCCESS} == "0" ]]; then
     set_next_variant
     set_retrieval_tag
@@ -188,7 +168,6 @@ function download_normal_packages () {
 }
 
 function download_nvidia_packages () {
-  # Handle NVIDIA-specific package extraction
   if [[ $NVIDIA_WANTED == "1" ]]; then
     # Clean up existing kernel RPMs from the akmods download above
     echo "Replacing the kernel RPMs from akmods with the RPMs from the nvidia build."
@@ -208,6 +187,11 @@ function download_nvidia_packages () {
 function initial_sanity_check () {
   if [[ ! $(command -v dnf5) ]]; then
     echo "Requires dnf5... Exiting"
+    exit 1
+  fi
+
+  if [[ ${#PREFERENCE_ORDER[@]} -eq 0 ]]; then
+    echo "ERROR: PREFERENCE_ORDER not set."
     exit 1
   fi
 }
@@ -275,21 +259,23 @@ function akmod_sanity_check () {
     exit 1
   fi
 
-  for akmod in ${AKMODS_WANTED[@]}; do
-    local matching_files=()
-    mapfile -t matching_files < <(find "${akmod_dir}" -maxdepth 1 -type f -name "*${akmod}*" -printf '%f\n') || true
-    local count=${#matching_files[@]}
-    if [[ $count -eq 0 ]]; then
-        echo "Error: No files found containing '${akmod}' in ${akmod_dir}"
-        exit 1
-    elif [[ $count -eq 1 ]]; then
-        echo "Found akmod file: ${matching_files[0]}"
-    else
-        echo "Error: Multiple files found containing '${akmod}' in ${akmod_dir}:"
-        printf '  %s\n' "${matching_files[@]}"
-        exit 1
-    fi
-  done
+  if [[ ${#AKMODS_WANTED[@]} -gt 0 ]]; then
+    for akmod in ${AKMODS_WANTED[@]}; do
+      local matching_files=()
+      mapfile -t matching_files < <(find "${akmod_dir}" -maxdepth 1 -type f -name "*${akmod}*" -printf '%f\n') || true
+      local count=${#matching_files[@]}
+      if [[ $count -eq 0 ]]; then
+          echo "Error: No files found containing '${akmod}' in ${akmod_dir}"
+          exit 1
+      elif [[ $count -eq 1 ]]; then
+          echo "Found akmod file: ${matching_files[0]}"
+      else
+          echo "Error: Multiple files found containing '${akmod}' in ${akmod_dir}:"
+          printf '  %s\n' "${matching_files[@]}"
+          exit 1
+      fi
+    done
+  fi
 }
 
 # ----------------- Installation & Cleanup -----------------
