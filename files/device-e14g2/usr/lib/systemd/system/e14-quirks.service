@@ -5,8 +5,7 @@ Before=multi-user.target
 
 [Service]
 Type=oneshot
-#ExecStart=/usr/sbin/rtcwake -m mem -s 1
-ExecStart=/usr/bin/bash -c 'modprobe -r i2c_hid_acpi i2c_hid && sleep 1 && modprobe i2c_hid_acpi i2c_hid'
+ExecStart=/usr/sbin/rtcwake -m mem -s 1
 
 [Install]
 WantedBy=multi-user.target
