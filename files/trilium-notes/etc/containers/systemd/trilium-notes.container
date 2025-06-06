@@ -1,7 +1,6 @@
 [Unit]
 Description=trilium-notes
-After=network-online.target
-After=local-fs.target
+After=multi-user.target
 
 [Container]
 ContainerName=trilium-notes

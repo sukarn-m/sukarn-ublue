@@ -2,7 +2,6 @@ modules:
   - type: script
     scripts:
       - remove-base-os-reference.sh
-      - gschemas-compile.sh
       - kernel.sh
 
   - type: initramfs
