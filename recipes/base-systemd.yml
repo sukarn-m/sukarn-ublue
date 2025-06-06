@@ -6,6 +6,7 @@ modules:
         - var-mnt-nas.automount
         - var-mnt-roms.automount
         - generate-ssh-certificate.service
+        - bootc-fetch-apply-updates.timer
       disabled:
         - tailscaled.service
         - var-mnt-nas.mount
