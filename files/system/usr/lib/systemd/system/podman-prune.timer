@@ -1,0 +1,7 @@
+[Unit]
+Description=Run podman-prune.service daily and after bootup with a delay
+[Timer]
+OnBootSec=30min
+OnUnitInactiveSec=72h
+[Install]
+WantedBy=timers.target

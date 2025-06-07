@@ -8,6 +8,7 @@ modules:
         - generate-ssh-certificate.service
         - bootc-fetch-apply-updates.timer
         - podman-auto-update.timer
+        - podman-prune.timer
       disabled:
         - tailscaled.service
         - var-mnt-nas.mount
