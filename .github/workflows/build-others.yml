@@ -1,4 +1,4 @@
-name: build-budgie
+name: build-others
 on:
   schedule:
     - cron: "30 6 1,15 * *" # Set in UTC: 6:30 AM on 1st and 15th day of each month.
@@ -6,10 +6,13 @@ on:
   push:
     paths:
       - recipes/image-budgie.yml
-#      - .github/workflows/build-budgie.yml
+      - recipes/image-cosmic.yml
+#      - .github/workflows/build-others.yml
 #      - files/scripts/image_name-v.sh
+#      - files/scripts/image_name-s.sh
 #      - files/theme-v/**
-#      - files/usr/**
+#      - files/theme-s/**
+#      - files/system/**
 #      - files/laptop/**
 
   workflow_dispatch: # allow manually triggering builds
@@ -27,6 +30,7 @@ jobs:
       matrix:
         recipe:
           - image-budgie.yml
+          - image-cosmic.yml
     steps:
        # the build is fully handled by the reusable github action
       - name: Build Custom Image

@@ -7,8 +7,10 @@ on:
     paths-ignore: # don't rebuild if only documentation has changed
       - "**.md"
       - "recipes/image-budgie.yml"
+      - "recipes/image-cosmic.yml"
       - "make-*-iso.sh"
       - ".github/workflows/build-budgie.yml"
+      - ".github/workflows/build-others.yml"
       - ".github/workflows/*.yml"
       - "boot_menu.yml"
       - "files/theme-v/**"

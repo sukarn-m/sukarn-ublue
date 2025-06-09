@@ -1,0 +1,55 @@
+name: sukarn-ublue-cosmic
+description: Customized cosmic image.
+#base-image: quay.io/fedora-ostree-desktops/onyx
+base-image: ghcr.io/ublue-os/base-main
+image-version: gts
+
+modules:
+  - type: default-flatpaks
+    notify: false
+    user:
+      repo-url: https://dl.flathub.org/repo/flathub.flatpakrepo
+      repo-name: flathub
+      repo-title: "Flathub (user)"
+## INSTALL
+      install:
+        - org.mozilla.firefox # Mozilla Firefox
+        - io.github.ungoogled_software.ungoogled_chromium # Ungoogled Chromium
+        - org.videolan.VLC # VLC
+        - org.libreoffice.LibreOffice # LibreOffice
+
+  - type: dnf
+    group-install:
+      with-optional: false
+      packages:
+        - cosmic-desktop
+        - cosmic-desktop-apps
+    remove:
+      packages:
+        - firefox
+        - firefox-langpacks
+
+  - type: files
+    files:
+      - source: system
+        destination: /
+      - source: laptop
+        destination: /
+      - source: theme-s
+        destination: /
+
+  - type: systemd
+    system:
+      enabled:
+        - rpm-ostreed-automatic.timer
+        - flatpak-system-update.timer
+    user:
+      enabled:
+        - flatpak-user-update.timer
+
+  - type: script
+    scripts:
+      - laptop-overrides.sh
+      - image_name-s.sh
+
+  - from-file: base-last-steps.yml
