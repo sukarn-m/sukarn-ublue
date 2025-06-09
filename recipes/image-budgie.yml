@@ -1,7 +1,7 @@
 name: sukarn-ublue-budgie
 description: Customized budgie image.
 #base-image: quay.io/fedora-ostree-desktops/onyx
-base-image: ghcr.io/ublue-os/onyx-main
+base-image: ghcr.io/ublue-os/base-main
 image-version: gts
 
 modules:
@@ -20,6 +20,8 @@ modules:
 
   - type: dnf
     remove:
+      install:
+        - @budgie-desktop
       packages:
         - firefox
         - firefox-langpacks
