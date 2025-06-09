@@ -1,6 +1,6 @@
 # sukarn-ublue
 
-[![build-gnome](https://github.com/sukarn-m/sukarn-ublue/actions/workflows/build-gnome.yml/badge.svg)](https://github.com/sukarn-m/sukarn-ublue/actions/workflows/build-gnome.yml) [![build-budgie](https://github.com/sukarn-m/sukarn-ublue/actions/workflows/build-budgie.yml/badge.svg)](https://github.com/sukarn-m/sukarn-ublue/actions/workflows/build-budgie.yml)
+[![build-gnome](https://github.com/sukarn-m/sukarn-ublue/actions/workflows/build-gnome.yml/badge.svg)](https://github.com/sukarn-m/sukarn-ublue/actions/workflows/build-gnome.yml) [![build-others](https://github.com/sukarn-m/sukarn-ublue/actions/workflows/build-others.yml/badge.svg)](https://github.com/sukarn-m/sukarn-ublue/actions/workflows/build-others.yml)
 
 This is a constantly updating repository for creating [a native container image](https://fedoraproject.org/wiki/Changes/OstreeNativeContainerStable) designed to be customized.
 
