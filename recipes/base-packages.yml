@@ -7,7 +7,7 @@ modules:
       packages:
 # Terminal
         - byobu
-        - ptyxis
+#        - ptyxis # Included by default now
         - wl-clipboard
 # Nextcloud. Also requires the script nextcloud-vfs.sh
         - nextcloud-client-devel # Required on Fedora for virtual files.
