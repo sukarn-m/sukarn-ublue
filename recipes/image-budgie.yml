@@ -19,9 +19,11 @@ modules:
         - org.libreoffice.LibreOffice # LibreOffice
 
   - type: dnf
+    group-install:
+      with-optional: false
+      packages:
+        - budgie-desktop
     remove:
-      install:
-        - @budgie-desktop
       packages:
         - firefox
         - firefox-langpacks
