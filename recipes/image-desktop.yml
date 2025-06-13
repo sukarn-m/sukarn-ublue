@@ -1,12 +1,8 @@
 name: sukarn-ublue-desktop
 description: Customized for desktops with nvidia graphics card.
-#base-image: ghcr.io/ublue-os/silverblue-nvidia # Cannot use kernel replacement scripts.
+#base-image: ghcr.io/ublue-os/silverblue-nvidia # Probably cannot use kernel.sh (from base-last-steps)
 base-image: ghcr.io/ublue-os/silverblue-main
-#base-image: ghcr.io/ublue-os/bluefin-nvidia # Cannot use kernel replacement scripts.
-image-version: gts # When the version changes, the COPY line below for nvidia-open will need an accompanying version change.
-# Possible options for `image-version`:
-# Numbered fedora release (`40`, `41`); `latest`; `gts`.
-# Some images also support `stable`. Check the available tags of the image being used.
+image-version: gts # Options: Numbered fedora release (`41`, `42`); `latest`; `gts`. Some images also support `stable`. Check the available tags of the image being used.
 
 modules:
 #  - from-file: base-bluefin-changes.yml
@@ -28,7 +24,7 @@ modules:
   - type: kargs
     arch: x86_64
     kargs:
-      - nvme_core.default_ps_max_latency_us=0
+      - nvme_core.default_ps_max_latency_us=5500
       - amd_iommu=off
       - rd.driver.blacklist=nouveau
       - modprobe.blacklist=nouveau
