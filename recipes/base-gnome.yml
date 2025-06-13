@@ -22,7 +22,7 @@ modules:
   - type: gnome-extensions # https://github.com/blue-build/modules/blob/main/modules/gnome-extensions/module.yml
     install:
       - 6670 # Bluetooth Battery Meter
-      - 517 # Caffeine
+#      - 517 # Caffeine
       - 7074 # GameMode Shell Extension
       - 4158 # Gnome 4x UI Improvements
       - 755 # Hibernate Status Button
