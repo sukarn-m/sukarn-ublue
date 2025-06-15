@@ -35,9 +35,9 @@ modules:
     kargs:
       - nvme_core.default_ps_max_latency_us=5500
       - amd_iommu=off
-      - i8042.reset
-      - i8042.nomux
-      - i8042.nopnp
+#      - i8042.reset
+#      - i8042.nomux
+#      - i8042.nopnp
       - pci=nocrs
 
   - from-file: base-last-steps.yml
