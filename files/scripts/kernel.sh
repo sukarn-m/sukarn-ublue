@@ -349,24 +349,24 @@ function install_packages () {
 function nvidia_initial_setup () {
   if [[ $NVIDIA_WANTED == "1" ]]; then
     # disable any remaining rpmfusion repos
-    sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/rpmfusion*.repo
-    sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/fedora-cisco-openh264.repo
-    
+    dnf5 config-manager setopt "rpmfusion*".enabled=0 fedora-cisco-openh264.enabled=0
+    # Exclude golang NVIDIA container toolkit to prevent conflicts
+    dnf5 config-manager setopt excludepkgs=golang-github-nvidia-container-toolkit
+
     dnf5 install -y /tmp/akmods-rpms/ublue-os/ublue-os-nvidia-addons-*.rpm
     
     # enable repos provided by ublue-os-nvidia-addons
-    sed -i '0,/enabled=0/{s/enabled=0/enabled=1/}' /etc/yum.repos.d/negativo17-fedora-nvidia.repo
-    sed -i '0,/enabled=0/{s/enabled=0/enabled=1/}' /etc/yum.repos.d/nvidia-container-toolkit.repo
+    dnf5 config-manager setopt fedora-nvidia.enabled=1 nvidia-container-toolkit.enabled=1
     
     # Install MULTILIB packages from negativo17-multimedia prior to disabling repo
     MULTILIB=(
-        mesa-dri-drivers.i686
+#        mesa-dri-drivers.i686
         mesa-filesystem.i686
         mesa-libEGL.i686
         mesa-libGL.i686
         mesa-libgbm.i686
         mesa-va-drivers.i686
-        mesa-vulkan-drivers.i686
+#        mesa-vulkan-drivers.i686
     )
     
     if [[ "$(rpm -E %fedora)" -lt 41 ]]; then
@@ -380,10 +380,10 @@ function nvidia_initial_setup () {
     
     # Disable Multimedia
     NEGATIVO17_MULT_PREV_ENABLED=N
-    if [[ -f /etc/yum.repos.d/negativo17-fedora-multimedia.repo ]] && grep -q "enabled=1" /etc/yum.repos.d/negativo17-fedora-multimedia.repo; then
+    if dnf5 repolist --enabled | grep -q "fedora-multimedia"; then
       NEGATIVO17_MULT_PREV_ENABLED=Y
       echo "disabling negativo17-fedora-multimedia to ensure negativo17-fedora-nvidia is used"
-      sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-multimedia.repo
+      dnf5 config-manager setopt fedora-multimedia.enabled=0
     fi
     
     # Enable staging for supergfxctl if repo file exists
@@ -398,8 +398,6 @@ function nvidia_initial_setup () {
 
 function install_nvidia_packages () {
   if [[ $NVIDIA_WANTED == "1" ]]; then
-    # Exclude golang NVIDIA container toolkit to prevent conflicts
-    dnf5 config-manager setopt excludepkgs=golang-github-nvidia-container-toolkit
     # Remove conflicting nouveau (open-source NVIDIA) driver files
     remove /usr/share/vulkan/icd.d/nouveau_icd.*.json
     # Create symbolic link for NVIDIA ML library compatibility
@@ -417,23 +415,22 @@ function install_nvidia_packages () {
     
     ## nvidia post-install steps
     # disable repos provided by ublue-os-nvidia-addons
-    sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/negativo17-fedora-nvidia.repo
-    sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/nvidia-container-toolkit.repo
+    dnf5 config-manager setopt fedora-nvidia.enabled=0 nvidia-container-toolkit.enabled=0
     
     # Disable staging
     sed -i 's@enabled=1@enabled=0@g' /etc/yum.repos.d/_copr_ublue-os-staging.repo
     
     # ensure kernel.conf matches NVIDIA_FLAVOR (which must be nvidia or nvidia-open)
     # kmod-nvidia-common defaults to 'nvidia-open' but this will match our akmod image
-    if [[ ${NVIDIA_TAG} == "nvidia-open" ]]; then
-      sed -i "s/^MODULE_VARIANT=.*/MODULE_VARIANT=kernel-open/" /etc/nvidia/kernel.conf
-    elif [[ ${NVIDIA_TAG} == "nvidia" ]]; then
-      sed -i "s/^MODULE_VARIANT=.*/MODULE_VARIANT=kernel/" /etc/nvidia/kernel.conf
-    else
-      echo "ERROR: Unknown nvidia tag set."
-      exit 1
-    fi
-    
+    sed -i "s/^MODULE_VARIANT=.*/MODULE_VARIANT=$NVIDIA_TAG/" /etc/nvidia/kernel.conf
+#    if [[ ${NVIDIA_TAG} == "nvidia-open" ]]; then
+#      sed -i "s/^MODULE_VARIANT=.*/MODULE_VARIANT=kernel-open/" /etc/nvidia/kernel.conf
+#    elif [[ ${NVIDIA_TAG} == "nvidia" ]]; then
+#      sed -i "s/^MODULE_VARIANT=.*/MODULE_VARIANT=kernel/" /etc/nvidia/kernel.conf
+#    else
+#      echo "ERROR: Unknown nvidia tag set."
+#      exit 1
+#    fi
     
     systemctl enable ublue-nvctk-cdi.service
     semodule --verbose --install /usr/share/selinux/packages/nvidia-container.pp
@@ -445,14 +442,14 @@ function install_nvidia_packages () {
     # as we need forced load, also mustpre-load intel/amd iGPU else chromium web browsers fail to use hardware acceleration
     sed -i 's@ nvidia @ i915 amdgpu nvidia @g' /usr/lib/dracut/dracut.conf.d/99-nvidia.conf
     
-    if [[ "${IMAGE_NAME}" == "sericea" ]]; then
-        mv /etc/sway/environment{,.orig}
-        install -Dm644 /usr/share/ublue-os/etc/sway/environment /etc/sway/environment
+    if [[ "${IMAGE_NAME}" =~ sericea|sway-atomic ]]; then
+      mv /etc/sway/environment{,.orig}
+      install -Dm644 /usr/share/ublue-os/etc/sway/environment /etc/sway/environment
     fi
     
     # re-enable negativo17-mutlimedia since we disabled it
     if [[ "${NEGATIVO17_MULT_PREV_ENABLED}" = "Y" ]]; then
-        sed -i '0,/enabled=0/{s/enabled=0/enabled=1/}' /etc/yum.repos.d/negativo17-fedora-multimedia.repo
+      dnf5 config-manager setopt fedora-multimedia.enabled=1
     fi
   fi
 }
