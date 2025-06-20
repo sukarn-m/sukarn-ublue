@@ -51,7 +51,7 @@ modules:
         - org.fedoraproject.MediaWriter # Fedora Media Writer
         - com.github.tchx84.Flatseal # Flatseal (Permission Manager)
         - page.tesk.Refine # Gnome settings editor
-        - io.github.dvlv.boxbuddyrs # BoxBuddy
+        - com.ranfdev.DistroShelf # DistroShelf
 ## Media
         - com.rafaelmardojai.Blanket # Blanket (soundscapes)
         - com.github.PintaProject.Pinta # Pinta (image editor)
@@ -90,5 +90,5 @@ modules:
 #        - org.gtk.Gtk3theme.Yaru-light
 #        - org.gtk.Gtk3theme.Yaru-dark
 ## UNINSTALL
-#      remove:
-#        - 
+      remove:
+        - io.github.dvlv.boxbuddyrs # BoxBuddy
