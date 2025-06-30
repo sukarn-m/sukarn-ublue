@@ -293,7 +293,9 @@ function rpm_erase () {
   # Remove all existing kernel packages without dependency checks
   # This allows for clean kernel replacement with akmods-compatible versions
   for pkg in kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra kernel-uki-virt; do
+    if rpm -q $pkg &>/dev/null; then
       rpm --erase $pkg --nodeps
+    fi
   done
 }
 
