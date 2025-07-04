@@ -4,7 +4,7 @@ After=multi-user.target
 
 [Container]
 ContainerName=trilium-notes
-Image=ghcr.io/triliumnext/notes:stable
+Image=ghcr.io/triliumnext/trilium:stable
 PublishPort=10000:8080/tcp
 Environment=TRILIUM_DATA_DIR=/home/node/trilium-data
 Environment=LOG_LEVEL=critical
