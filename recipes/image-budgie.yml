@@ -6,11 +6,13 @@ image-version: gts
 
 modules:
   - type: default-flatpaks
-    notify: false
-    user:
-      repo-url: https://dl.flathub.org/repo/flathub.flatpakrepo
-      repo-name: flathub
-      repo-title: "Flathub (user)"
+    configurations:
+    - notify: false
+      scope: user
+      repo:
+        url: https://dl.flathub.org/repo/flathub.flatpakrepo
+        name: flathub
+        title: "Flathub (user)"
 ## INSTALL
       install:
         - org.mozilla.firefox # Mozilla Firefox
