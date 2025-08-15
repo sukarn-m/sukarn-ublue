@@ -25,7 +25,10 @@ function initial_config () {
   AKMODS_NVIDIA_TAGS="/tmp/akmods-nvidia-tags.txt" # Stores the tags list so that they aren't repeatedly checked on the repository
   VARIANTS_TRIED=()
 
+  echo "FEDORA_VERSION=${FEDORA_VERSION}"
+
   # Logic for NVIDIA_WANTED
+  NVIDIA_WANTED="0"
   if [[ -f "/tmp/nvidia" ]]; then
     NVIDIA_WANTED="1"
     remove /tmp/nvidia
@@ -37,18 +40,21 @@ function initial_config () {
         NVIDIA_WANTED="1"
       fi
     done
-  else
-    NVIDIA_WANTED="0"
   fi
   
   # Logic for BAZZITE_ONLY
+  BAZZITE_ONLY="0"
   if [[ -f "/tmp/bazzite-only" ]]; then
     BAZZITE_ONLY="1"
     remove /tmp/bazzite-only
   elif [[ ${#BAZZITE_ONLY_HOSTNAMES[@]} -gt 0 ]]; then
-    BAZZITE_ONLY="1"
-  else
-    BAZZITE_ONLY="0"
+    local current_hostname=""
+    local actual_hostname="$(hostnamectl hostname)"
+    for current_hostname in ${BAZZITE_ONLY_HOSTNAMES[@]}; do
+      if [[ "$actual_hostname" == "$current_hostname" ]]; then
+        BAZZITE_ONLY="1"
+      fi
+    done
   fi
 
   local option=""
@@ -97,22 +103,37 @@ function confirm_tag () {
 
 function try_bazzite_gated () {
   # Get the latest CoreOS kernel version from the repository
-  GATED_KERNEL_VERSION="$(cat ${AKMODS_TAGS} | grep ${GATED_TAG}-${FEDORA_VERSION} | sort -r | head -n 1 | cut -d '-' -f 4)"
+#  GATED_KERNEL_VERSION="$(cat ${AKMODS_TAGS} | grep ${GATED_TAG}-${FEDORA_VERSION} | sort -r | head -n 1 | cut -d '-' -f 4)"
+  echo "Attempting to set RETRIEVAL_TAG in try_bazzite_gated"
+  GATED_KERNEL_VERSION="$(cat ${AKMODS_TAGS} | grep ${GATED_TAG}-${FEDORA_VERSION} | sort -r | head -n 2 | sort | head -n 1 | cut -d '-' -f 4)"
+  echo "GATED_KERNEL_VERSION=${GATED_KERNEL_VERSION}"
   # Find matching Bazzite tag with the same kernel version
   if $(cat ${AKMODS_TAGS} | grep ${AKMODS-FLAVOUR}-${FEDORA_VERSION} | grep -q ${GATED_KERNEL_VERSION}); then
-    RETRIEVAL_TAG="$(cat ${AKMODS_TAGS} | grep ${AKMODS_FLAVOUR}-${FEDORA_VERSION} | grep ${GATED_KERNEL_VERSION} | sort -r | head -n 1 | cut -d '"' -f 2)"
+ #   RETRIEVAL_TAG="$(cat ${AKMODS_TAGS} | grep ${AKMODS_FLAVOUR}-${FEDORA_VERSION} | grep ${GATED_KERNEL_VERSION} | sort -r | head -n 1 | cut -d '"' -f 2)"
+    RETRIEVAL_TAG="$(cat ${AKMODS_TAGS} | grep ${AKMODS_FLAVOUR}-${FEDORA_VERSION} | grep ${GATED_KERNEL_VERSION} | sort -r | head -n 2 | sort | head -n 1 | cut -d '"' -f 2)"
     confirm_tag
+    echo "RETRIEVAL_TAG=${RETRIEVAL_TAG}"
   else
-    echo "ERROR: Failed to match bazzite and gated tags."
+    echo "ERROR: Failed to find matching gated bazzite kernel tag."
   fi
 }
 
 function try_standard () {
-  RETRIEVAL_TAG="$(cat ${AKMODS_TAGS} | grep ${AKMODS_FLAVOUR}-${FEDORA_VERSION} | sort -r | head -n 1 | cut -d '"' -f 2)"
-  confirm_tag
+#  RETRIEVAL_TAG="$(cat ${AKMODS_TAGS} | grep ${AKMODS_FLAVOUR}-${FEDORA_VERSION} | sort -r | head -n 1 | cut -d '"' -f 2)"
+  local retrieval_tag="$(cat ${AKMODS_TAGS} | grep ${AKMODS_FLAVOUR}-${FEDORA_VERSION} | sort -r | head -n 3 | sort | head -n 1 | cut -d '"' -f 2)" || true
+  if [ -n "$retrieval_tag" ]; then
+    RETRIEVAL_TAG="${retrieval_tag}"
+    confirm_tag
+    echo "RETRIEVAL_TAG=${RETRIEVAL_TAG}"
+  else
+    echo "Failed the if condition for $retrieval_tag"
+    set_next_variant
+    set_retrieval_tag
+  fi
 }
 
 function set_retrieval_tag () {
+  reset_vars
   if [[ $VARIANT_CURRENT == "bazzite-gated" ]]; then
     try_bazzite_gated
   else
@@ -167,12 +188,15 @@ function set_next_variant () {
 
 function download_normal_packages () {
   # Download akmods container image and extract RPM packages
+  echo "Attempting to download tag ${RETRIEVAL_TAG}"
   skopeo copy --retry-times 3 docker://ghcr.io/ublue-os/akmods:"${RETRIEVAL_TAG}" dir:/tmp/akmods
   # Extract the layer digest from the manifest
+  echo "Extracting..."
   AKMODS_TARGZ=$(jq -r '.layers[].digest' </tmp/akmods/manifest.json | cut -d : -f 2)
   # Extract the compressed layer containing RPM and kernel packages
   tar -xvzf /tmp/akmods/"$AKMODS_TARGZ" -C /tmp/
   # Move extracted RPMs to akmods directory
+  echo "Moving rpms into /tmp/akmods"
   mv /tmp/rpms/* /tmp/akmods/
 }
 
@@ -182,8 +206,10 @@ function download_nvidia_packages () {
     echo "Replacing the kernel RPMs from akmods with the RPMs from the nvidia build."
     remove /tmp/kernel-rpms
     # Download NVIDIA akmods + kernel build
+    echo "Attempting to download nvidia tag"
     skopeo copy --retry-times 3 docker://ghcr.io/ublue-os/akmods-nvidia:"${RETRIEVAL_TAG}" dir:/tmp/akmods-rpms
     # Extract NVIDIA akmods layer
+    echo "Extracting..."
     AKMODS_TARGZ=$(jq -r '.layers[].digest' </tmp/akmods-rpms/manifest.json | cut -d : -f 2)
     tar -xvzf /tmp/akmods-rpms/"$AKMODS_TARGZ" -C /tmp/
     # Move NVIDIA RPMs to separate directory
