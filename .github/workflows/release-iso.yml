@@ -13,7 +13,7 @@ jobs:
     permissions:
       contents: write
     container:
-      image: fedora:39
+      image: fedora:42
       options: --privileged
     steps:
       - uses: actions/checkout@v4
@@ -23,7 +23,7 @@ jobs:
         with:
           image-name: sukarn-ublue
           installer-repo: releases
-          installer-major-version: 39
+          installer-major-version: 42
           boot-menu-path: boot_menu.yml
       - name: install github CLI
         run: |
