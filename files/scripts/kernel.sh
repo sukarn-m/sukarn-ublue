@@ -108,7 +108,7 @@ function try_bazzite_gated () {
   GATED_KERNEL_VERSION="$(cat ${AKMODS_TAGS} | grep ${GATED_TAG}-${FEDORA_VERSION} | sort -r | head -n 2 | sort | head -n 1 | cut -d '-' -f 4)"
   echo "GATED_KERNEL_VERSION=${GATED_KERNEL_VERSION}"
   # Find matching Bazzite tag with the same kernel version
-  if $(cat ${AKMODS_TAGS} | grep ${AKMODS-FLAVOUR}-${FEDORA_VERSION} | grep -q ${GATED_KERNEL_VERSION}); then
+  if $(cat ${AKMODS_TAGS} | grep ${AKMODS_FLAVOUR}-${FEDORA_VERSION} | grep -q ${GATED_KERNEL_VERSION}); then
  #   RETRIEVAL_TAG="$(cat ${AKMODS_TAGS} | grep ${AKMODS_FLAVOUR}-${FEDORA_VERSION} | grep ${GATED_KERNEL_VERSION} | sort -r | head -n 1 | cut -d '"' -f 2)"
     RETRIEVAL_TAG="$(cat ${AKMODS_TAGS} | grep ${AKMODS_FLAVOUR}-${FEDORA_VERSION} | grep ${GATED_KERNEL_VERSION} | sort -r | head -n 2 | sort | head -n 1 | cut -d '"' -f 2)"
     confirm_tag
