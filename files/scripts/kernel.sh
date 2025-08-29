@@ -260,7 +260,7 @@ function nvidia_sanity_check () {
     for pkg in "${NVIDIA_PKGS[@]}"; do
       if ! dnf5 info "$pkg" &>/dev/null; then
         echo "ERROR: Package not found: ${pkg}"
-        package="${pkg%-${VERSION}*}"
+        package=${pkg%-${VERSION}*} #Do not quote. Quoting disables pattern matching and prevents the suffix removal from working as intended.
         echo "Packages found for ${package}:"
         echo "$(dnf5 list --showduplicates ${package})"
         NVIDIA_PKGS_FOUND_ALL="0"
