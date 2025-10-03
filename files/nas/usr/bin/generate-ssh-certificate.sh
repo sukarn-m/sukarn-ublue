@@ -9,7 +9,7 @@ HOMEDIR=${user_array[5]} #Set home directory
 
 EXPIRY_DATE=$(/usr/bin/ssh-keygen -Lf $HOMEDIR/.ssh/id_ed25519-cert.pub | /usr/bin/grep Valid | /usr/bin/sed -e 's/T[0-9\:]\+//g' -e 's/^\ \+Valid\:\ from\ [0-9]\+\-[0-9]\+\-[0-9]\+\ to\ //')
 DAYS_UNTIL_EXPIRY=$(( ($(date --date=$EXPIRY_DATE +%s) - $(date +%s))/(60*60*24) ))
-DAYS_UNTIL_RENEWAL=$(( $DAYS_UNTIL_EXPIRY - 120 ))
+DAYS_UNTIL_RENEWAL=$(( $DAYS_UNTIL_EXPIRY - 365 ))
 
 echo "$DAYS_UNTIL_RENEWAL days left until certificate renewal."
 
