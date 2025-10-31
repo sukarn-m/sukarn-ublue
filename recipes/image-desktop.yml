@@ -2,7 +2,7 @@ name: sukarn-ublue-desktop
 description: Customized for desktops with nvidia graphics card.
 #base-image: ghcr.io/ublue-os/silverblue-nvidia # Probably cannot use kernel.sh (from base-last-steps)
 base-image: ghcr.io/ublue-os/silverblue-main
-image-version: 42 # Options: Numbered fedora release (`41`, `42`); `latest`; `gts`. Some images also support `stable`. Check the available tags of the image being used.
+image-version: gts # Options: Numbered fedora release (`42`, `43`); `latest`; `gts`. Some images also support `stable`. Check the available tags of the image being used.
 
 modules:
 #  - from-file: base-bluefin-changes.yml
