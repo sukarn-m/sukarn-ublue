@@ -6,6 +6,13 @@ image-version: gts # Options: Numbered fedora release (`42`, `43`); `latest`; `g
 modules:
   - from-file: variant-gnome.yml
 
+  - type: default-flatpaks
+    configurations:
+    - notify: false   # Send notification after install/uninstall is finished (true/false)
+      scope: user
+      install:
+        - io.github.v81d.Wattage # Wattage for laptop battery information
+
   - type: files
     files:
       - source: laptop
