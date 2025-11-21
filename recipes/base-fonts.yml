@@ -1,3 +1,5 @@
+# DEPRECATED
+# This file is no longer referenced anywhere. Fonts are no longer added to any images. Fonts are now handled through brew on eachsystem.
 modules:
   - type: fonts
     fonts:
