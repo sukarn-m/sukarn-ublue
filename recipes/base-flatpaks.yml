@@ -67,7 +67,8 @@ modules:
         - com.github.wwmm.easyeffects # Easy Effects
         - org.filezillaproject.Filezilla # FileZilla
         - it.mijorus.gearlever # Gear Lever
-        - io.missioncenter.MissionCenter # Mission Center
+        - net.nokyan.Resources # System Monitor - Resources
+#        - io.missioncenter.MissionCenter # System Monitor - Mission Center
         - com.vscodium.codium # VS Codium
         - io.github.flattool.Warehouse # Warehouse
         - dev.deedles.Trayscale # Trayscale for tailscale
