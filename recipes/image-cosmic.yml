@@ -26,6 +26,9 @@ modules:
       packages:
         - cosmic-desktop
         - cosmic-desktop-apps
+    install:
+      packages:
+        - qemu-guest-agent
     remove:
       packages:
         - firefox
