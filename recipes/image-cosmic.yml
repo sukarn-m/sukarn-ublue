@@ -33,6 +33,7 @@ modules:
       packages:
         - firefox
         - firefox-langpacks
+        - thunderbird
 
   - type: files
     files:
