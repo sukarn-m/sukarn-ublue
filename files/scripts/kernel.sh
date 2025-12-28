@@ -24,6 +24,7 @@ function initial_config () {
   AKMODS_TAGS="/tmp/akmods-tags.txt" # Stores the tags list so that they aren't repeatedly checked on the repository
   AKMODS_NVIDIA_TAGS="/tmp/akmods-nvidia-tags.txt" # Stores the tags list so that they aren't repeatedly checked on the repository
   VARIANTS_TRIED=()
+  AKMODS_REPO="ghcr.io/ublue-os/akmods"
 
   echo "FEDORA_VERSION=${FEDORA_VERSION}"
 
@@ -87,10 +88,9 @@ function reset_vars () {
 # ----------------- Retrieval -----------------
 
 function get_tags () {
-  local akmods_repo="ghcr.io/ublue-os/akmods"
-  skopeo list-tags --retry-times 3 docker://${akmods_repo} > ${AKMODS_TAGS}
+  skopeo list-tags --retry-times 3 docker://${AKMODS_REPO} > ${AKMODS_TAGS}
   if [[ $NVIDIA_WANTED == "1" ]]; then
-    skopeo list-tags --retry-times 3 docker://${akmods_repo}-${NVIDIA_TAG} > ${AKMODS_NVIDIA_TAGS}
+    skopeo list-tags --retry-times 3 docker://${AKMODS_REPO}-${NVIDIA_TAG} > ${AKMODS_NVIDIA_TAGS}
   fi
 }
 
@@ -189,7 +189,7 @@ function set_next_variant () {
 function download_normal_packages () {
   # Download akmods container image and extract RPM packages
   echo "Attempting to download tag ${RETRIEVAL_TAG}"
-  skopeo copy --retry-times 3 docker://${akmods_repo}:"${RETRIEVAL_TAG}" dir:/tmp/akmods
+  skopeo copy --retry-times 3 docker://${AKMODS_REPO}:"${RETRIEVAL_TAG}" dir:/tmp/akmods
   # Extract the layer digest from the manifest
   echo "Extracting..."
   AKMODS_TARGZ=$(jq -r '.layers[].digest' </tmp/akmods/manifest.json | cut -d : -f 2)
@@ -207,7 +207,7 @@ function download_nvidia_packages () {
     remove /tmp/kernel-rpms
     # Download NVIDIA akmods + kernel build
     echo "Attempting to download nvidia tag"
-    skopeo copy --retry-times 3 docker://${akmods_repo}-${NVIDIA_TAG}:"${RETRIEVAL_TAG}" dir:/tmp/akmods-rpms
+    skopeo copy --retry-times 3 docker://${AKMODS_REPO}-${NVIDIA_TAG}:"${RETRIEVAL_TAG}" dir:/tmp/akmods-rpms
     # Extract NVIDIA akmods layer
     echo "Extracting..."
     AKMODS_TARGZ=$(jq -r '.layers[].digest' </tmp/akmods-rpms/manifest.json | cut -d : -f 2)
