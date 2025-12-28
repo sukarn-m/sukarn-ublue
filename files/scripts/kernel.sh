@@ -1,6 +1,8 @@
 #!/usr/bin/bash
 
-## Initial reference: https://github.com/ublue-os/bluefin/blob/main/build_files/base/03-install-kernel-akmods.sh
+## Initial reference:
+## - https://github.com/ublue-os/bluefin/blob/main/build_files/base/03-install-kernel-akmods.sh
+## - https://github.com/ublue-os/main/blob/main/build_files/nvidia-install.sh
 ## Heavily modified from that starting point.
 
 # Enable strict error handling: exit on any error, undefined variables, or pipe failures
@@ -380,7 +382,12 @@ function install_packages () {
 function nvidia_initial_setup () {
   if [[ $NVIDIA_WANTED == "1" ]]; then
     # disable any remaining rpmfusion repos
-#    dnf5 config-manager setopt "rpmfusion*".enabled=0 fedora-cisco-openh264.enabled=0
+    if dnf5 repolist --all | grep -q rpmfusion; then
+      dnf5 config-manager setopt "rpmfusion*".enabled=0
+    fi
+    
+    dnf5 config-manager setopt fedora-cisco-openh264.enabled=0
+    
     # Exclude golang NVIDIA container toolkit to prevent conflicts
     dnf5 config-manager setopt excludepkgs=golang-github-nvidia-container-toolkit
 
@@ -391,13 +398,13 @@ function nvidia_initial_setup () {
     
     # Install MULTILIB packages from negativo17-multimedia prior to disabling repo
     MULTILIB=(
-#        mesa-dri-drivers.i686
+        mesa-dri-drivers.i686
         mesa-filesystem.i686
         mesa-libEGL.i686
         mesa-libGL.i686
         mesa-libgbm.i686
         mesa-va-drivers.i686
-#        mesa-vulkan-drivers.i686
+        mesa-vulkan-drivers.i686
     )
     
     if [[ "$(rpm -E %fedora)" -lt 41 ]]; then
@@ -453,15 +460,7 @@ function install_nvidia_packages () {
     
     # ensure kernel.conf matches NVIDIA_FLAVOR (which must be nvidia or nvidia-open)
     # kmod-nvidia-common defaults to 'nvidia-open' but this will match our akmod image
-    sed -i "s/^MODULE_VARIANT=.*/MODULE_VARIANT=$NVIDIA_TAG/" /etc/nvidia/kernel.conf
-#    if [[ ${NVIDIA_TAG} == "nvidia-open" ]]; then
-#      sed -i "s/^MODULE_VARIANT=.*/MODULE_VARIANT=kernel-open/" /etc/nvidia/kernel.conf
-#    elif [[ ${NVIDIA_TAG} == "nvidia" ]]; then
-#      sed -i "s/^MODULE_VARIANT=.*/MODULE_VARIANT=kernel/" /etc/nvidia/kernel.conf
-#    else
-#      echo "ERROR: Unknown nvidia tag set."
-#      exit 1
-#    fi
+#    sed -i "s/^MODULE_VARIANT=.*/MODULE_VARIANT=$NVIDIA_TAG/" /etc/nvidia/kernel.conf
     
     systemctl enable ublue-nvctk-cdi.service
     semodule --verbose --install /usr/share/selinux/packages/nvidia-container.pp
