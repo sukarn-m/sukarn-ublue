@@ -189,7 +189,7 @@ function set_next_variant () {
 function download_normal_packages () {
   # Download akmods container image and extract RPM packages
   echo "Attempting to download tag ${RETRIEVAL_TAG}"
-  skopeo copy --retry-times 3 docker://ghcr.io/ublue-os/akmods:"${RETRIEVAL_TAG}" dir:/tmp/akmods
+  skopeo copy --retry-times 3 docker://${akmods_repo}:"${RETRIEVAL_TAG}" dir:/tmp/akmods
   # Extract the layer digest from the manifest
   echo "Extracting..."
   AKMODS_TARGZ=$(jq -r '.layers[].digest' </tmp/akmods/manifest.json | cut -d : -f 2)
@@ -207,7 +207,7 @@ function download_nvidia_packages () {
     remove /tmp/kernel-rpms
     # Download NVIDIA akmods + kernel build
     echo "Attempting to download nvidia tag"
-    skopeo copy --retry-times 3 docker://ghcr.io/ublue-os/akmods-nvidia:"${RETRIEVAL_TAG}" dir:/tmp/akmods-rpms
+    skopeo copy --retry-times 3 docker://${akmods_repo}-${NVIDIA_TAG}:"${RETRIEVAL_TAG}" dir:/tmp/akmods-rpms
     # Extract NVIDIA akmods layer
     echo "Extracting..."
     AKMODS_TARGZ=$(jq -r '.layers[].digest' </tmp/akmods-rpms/manifest.json | cut -d : -f 2)
