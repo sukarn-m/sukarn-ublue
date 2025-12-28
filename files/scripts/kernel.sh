@@ -380,7 +380,7 @@ function install_packages () {
 function nvidia_initial_setup () {
   if [[ $NVIDIA_WANTED == "1" ]]; then
     # disable any remaining rpmfusion repos
-    dnf5 config-manager setopt "rpmfusion*".enabled=0 fedora-cisco-openh264.enabled=0
+#    dnf5 config-manager setopt "rpmfusion*".enabled=0 fedora-cisco-openh264.enabled=0
     # Exclude golang NVIDIA container toolkit to prevent conflicts
     dnf5 config-manager setopt excludepkgs=golang-github-nvidia-container-toolkit
 
