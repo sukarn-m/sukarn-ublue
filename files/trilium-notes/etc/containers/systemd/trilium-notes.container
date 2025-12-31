@@ -1,6 +1,7 @@
 [Unit]
 Description=trilium-notes
 After=multi-user.target
+After=tailscaled.service
 
 [Container]
 ContainerName=trilium-notes
@@ -11,6 +12,7 @@ Environment=LOG_LEVEL=critical
 Volume=trilium-notes.volume:/home/node/trilium-data:Z
 Volume=/etc/localtime:/etc/localtime:ro
 AutoUpdate=registry
+DNS=192.168.50.4,192.68.50.2
 
 [Service]
 Restart=always
