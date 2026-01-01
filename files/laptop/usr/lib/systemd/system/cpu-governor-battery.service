@@ -4,6 +4,7 @@ After=battery.target
 
 [Service]
 Type=oneshot
-ExecStartPre=/usr/bin/sleep 3
-ExecStart=/usr/bin/cpupower frequency-set -g conservative
+#ExecStartPre=/usr/bin/sleep 3
+#ExecStart=/usr/bin/cpupower frequency-set -g conservative
+ExecStart=/usr/bin/sh -c 'echo 0 > /sys/devices/system/cpu/cpufreq/boost'
 

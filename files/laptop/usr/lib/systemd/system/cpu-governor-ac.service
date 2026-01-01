@@ -4,5 +4,6 @@ After=ac.target
 
 [Service]
 Type=oneshot
-ExecStartPre=/usr/bin/sleep 3
-ExecStart=/usr/bin/cpupower frequency-set -g schedutil
+#ExecStartPre=/usr/bin/sleep 3
+#ExecStart=/usr/bin/cpupower frequency-set -g schedutil
+ExecStart=/usr/bin/sh -c 'echo 1 > /sys/devices/system/cpu/cpufreq/boost'
