@@ -4,5 +4,6 @@ After=battery.target
 
 [Service]
 Type=oneshot
+ExecStartPre=/usr/bin/sleep 3
 ExecStart=/usr/bin/cpupower frequency-set -g conservative
 
