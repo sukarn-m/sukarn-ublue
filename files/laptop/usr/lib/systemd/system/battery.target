@@ -2,3 +2,4 @@
 Description=On battery power
 DefaultDependencies=no
 Conflicts=ac.target
+Wants=cpu-governor-battery.service

@@ -1,0 +1,7 @@
+[Unit]
+Description=Set CPU governor to schedutil
+After=ac.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/cpupower frequency-set -g schedutil
