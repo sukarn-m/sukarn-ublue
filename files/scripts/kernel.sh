@@ -241,19 +241,25 @@ function nvidia_sanity_check () {
 
     source /tmp/akmods-rpms/kmods/nvidia-vars
     
+    # Extract version from rpm.
+    # VERSION format example: 590.48.01-1.fc42
     VERSION="$(rpm -q /tmp/akmods-rpms/kmods/kmod-nvidia-*.rpm | sed 's/^kmod-nvidia-//' | sed 's/\.[^.]*$//')"
+    # DRIVER_VERSION format example: 590.48.01
+    DRIVER_VERSION=$(echo "$VERSION" | cut -d- -f1)
 
     LOCAL_NVIDIA_PKG="/tmp/akmods-rpms/kmods/kmod-nvidia-${KERNEL_VERSION}-${NVIDIA_AKMOD_VERSION}.fc*.rpm"
 
+    # Use DRIVER_VERSION for packages to allow minor release mismatches (e.g., -1 vs -3)
+    # This helps when the repo updates before the akmods image
     NVIDIA_PKGS=(
-      "libnvidia-fbc-${VERSION}.x86_64"
-      "libnvidia-ml-${VERSION}.i686"
+      "libnvidia-fbc-${DRIVER_VERSION}.x86_64"
+      "libnvidia-ml-${DRIVER_VERSION}.i686"
       "libva-nvidia-driver"
-      "nvidia-driver-${VERSION}.x86_64"
-      "nvidia-driver-cuda-${VERSION}.x86_64"
-      "nvidia-driver-cuda-libs-${VERSION}.i686"
-      "nvidia-driver-libs-${VERSION}.i686"
-      "nvidia-settings-${VERSION}.x86_64"
+      "nvidia-driver-${DRIVER_VERSION}.x86_64"
+      "nvidia-driver-cuda-${DRIVER_VERSION}.x86_64"
+      "nvidia-driver-cuda-libs-${DRIVER_VERSION}.i686"
+      "nvidia-driver-libs-${DRIVER_VERSION}.i686"
+      "nvidia-settings-${DRIVER_VERSION}.x86_64"
       "nvidia-container-toolkit"
     )
 
@@ -262,7 +268,7 @@ function nvidia_sanity_check () {
     for pkg in "${NVIDIA_PKGS[@]}"; do
       if ! dnf5 info "$pkg" &>/dev/null; then
         echo "ERROR: Package not found: ${pkg}"
-        package=${pkg%-${VERSION}*} #Do not quote. Quoting disables pattern matching and prevents the suffix removal from working as intended.
+        package=${pkg%-${DRIVER_VERSION}*} #Do not quote. Quoting disables pattern matching and prevents the suffix removal from working as intended.
         echo "Packages found for ${package}:"
         echo "$(dnf5 list --showduplicates ${package})"
         NVIDIA_PKGS_FOUND_ALL="0"
@@ -429,7 +435,7 @@ function nvidia_initial_setup () {
       sed -i 's@enabled=0@enabled=1@g' /etc/yum.repos.d/_copr_ublue-os-staging.repo
     else
       # Otherwise, retrieve the repo file for staging
-      curl -Lo /etc/yum.repos.d/_copr_ublue-os-staging.repo https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-"${FEDORA_VERSION}"/ublue-os-staging-fedora-"${FEDORA_VERSION}".repo
+      dnf5 config-manager addrepo --from-repofile="https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-${FEDORA_VERSION}/ublue-os-staging-fedora-${FEDORA_VERSION}.repo" --overwrite --save-filename="_copr_ublue-os-staging.repo"
     fi
   fi
 }
@@ -540,5 +546,5 @@ function main () {
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-  main
+  main "$@"
 fi
