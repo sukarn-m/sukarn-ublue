@@ -241,7 +241,8 @@ function nvidia_sanity_check () {
 
     source /tmp/akmods-rpms/kmods/nvidia-vars
     
-    VERSION="$(rpm -q /tmp/akmods-rpms/kmods/kmod-nvidia-*.rpm | sed 's/^kmod-nvidia-//' | sed 's/\.[^.]*$//')"
+    # We strip the release version to allow for minor rebuilds of the user-space driver
+    VERSION="$(rpm -qp --queryformat '%{VERSION}' /tmp/akmods-rpms/kmods/kmod-nvidia-*.rpm | head -n 1)"
 
     LOCAL_NVIDIA_PKG="/tmp/akmods-rpms/kmods/kmod-nvidia-${KERNEL_VERSION}-${NVIDIA_AKMOD_VERSION}.fc*.rpm"
 
