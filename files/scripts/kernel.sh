@@ -227,7 +227,7 @@ function initial_sanity_check () {
     exit 1
   fi
 
-  if [[ ${#PREFERENCE_ORDER[@]} -eq 0 ]]; then
+  if [[ ! -v PREFERENCE_ORDER || ${#PREFERENCE_ORDER[@]} -eq 0 ]]; then
     echo "ERROR: PREFERENCE_ORDER not set."
     exit 1
   fi
