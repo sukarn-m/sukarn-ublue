@@ -348,22 +348,30 @@ function install_packages () {
   local akmod_dir="/tmp/akmods/kmods"
 
   # Install akmods
+  local install_rpmfusion="false"
+
   for akmod in ${AKMODS_WANTED[@]}; do
-    if [[ ! ${akmod} =~ "v4l2loopback" ]]; then
-      akmods+="${akmod_dir}/*${akmod}*.rpm"
-      dnf5 -y install /tmp/akmods/kmods/*${akmod}*.rpm
-    else
-      dnf5 -y install \
-          https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-"${FEDORA_VERSION}".noarch.rpm \
-          https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-"${FEDORA_VERSION}".noarch.rpm
-      dnf5 -y install \
-          v4l2loopback /tmp/akmods/kmods/*v4l2loopback*.rpm
-      dnf5 -y remove rpmfusion-free-release rpmfusion-nonfree-release
+    local found_files=("${akmod_dir}"/*"${akmod}"*.rpm)
+    akmods+=("${found_files[@]}")
+
+    if [[ ${akmod} =~ "v4l2loopback" ]]; then
+      install_rpmfusion="true"
+      akmods+=("v4l2loopback")
     fi
   done
 
-  if [[ ! ${#akmods[@]} -eq 0 ]]; then
-    dnf5 -y install ${akmods[@]}
+  if [[ "$install_rpmfusion" == "true" ]]; then
+      dnf5 -y install \
+          https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-"${FEDORA_VERSION}".noarch.rpm \
+          https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-"${FEDORA_VERSION}".noarch.rpm
+  fi
+
+  if [[ ${#akmods[@]} -gt 0 ]]; then
+    dnf5 -y install "${akmods[@]}"
+  fi
+
+  if [[ "$install_rpmfusion" == "true" ]]; then
+      dnf5 -y remove rpmfusion-free-release rpmfusion-nonfree-release
   fi
 
   # Check if kernel version changed during installation
