@@ -2,7 +2,7 @@
 
 nas_mount=/var/mnt/nas
 
-user_string=$(cat /etc/passwd | grep 1000:1000) #Look for user with UID and GID of 1000
+user_string=$(grep 1000:1000 /etc/passwd) #Look for user with UID and GID of 1000
 IFS=':' user_array=($user_string) #Split by :
 USERNAME=${user_array[0]} #Set username
 HOMEDIR=${user_array[5]} #Set home directory
