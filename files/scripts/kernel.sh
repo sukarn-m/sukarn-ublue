@@ -539,4 +539,6 @@ function main () {
   lock_version
 }
 
-main
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  main
+fi
