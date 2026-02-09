@@ -97,7 +97,7 @@ function get_tags () {
 }
 
 function confirm_tag () {
-  if [[ $NVIDIA_WANTED == "0" ]] || $(cat ${AKMODS_NVIDIA_TAGS} | grep -q ${RETRIEVAL_TAG}); then
+  if [[ $NVIDIA_WANTED == "0" ]] || grep -q "${RETRIEVAL_TAG}" "${AKMODS_NVIDIA_TAGS}"; then
     KERNEL_FINDING_SUCCESS="1"
     VARIANT_USED="${VARIANT_CURRENT}"
   fi
@@ -107,12 +107,12 @@ function try_bazzite_gated () {
   # Get the latest CoreOS kernel version from the repository
 #  GATED_KERNEL_VERSION="$(cat ${AKMODS_TAGS} | grep ${GATED_TAG}-${FEDORA_VERSION} | sort -r | head -n 1 | cut -d '-' -f 4)"
   echo "Attempting to set RETRIEVAL_TAG in try_bazzite_gated"
-  GATED_KERNEL_VERSION="$(cat ${AKMODS_TAGS} | grep ${GATED_TAG}-${FEDORA_VERSION} | sort -r | head -n 2 | sort | head -n 1 | cut -d '-' -f 4)"
+  GATED_KERNEL_VERSION="$(grep "${GATED_TAG}-${FEDORA_VERSION}" "${AKMODS_TAGS}" | sort -r | head -n 2 | sort | head -n 1 | cut -d '-' -f 4)"
   echo "GATED_KERNEL_VERSION=${GATED_KERNEL_VERSION}"
   # Find matching Bazzite tag with the same kernel version
-  if $(cat ${AKMODS_TAGS} | grep ${AKMODS_FLAVOUR}-${FEDORA_VERSION} | grep -q ${GATED_KERNEL_VERSION}); then
+  if grep "${AKMODS_FLAVOUR}-${FEDORA_VERSION}" "${AKMODS_TAGS}" | grep -q "${GATED_KERNEL_VERSION}"; then
  #   RETRIEVAL_TAG="$(cat ${AKMODS_TAGS} | grep ${AKMODS_FLAVOUR}-${FEDORA_VERSION} | grep ${GATED_KERNEL_VERSION} | sort -r | head -n 1 | cut -d '"' -f 2)"
-    RETRIEVAL_TAG="$(cat ${AKMODS_TAGS} | grep ${AKMODS_FLAVOUR}-${FEDORA_VERSION} | grep ${GATED_KERNEL_VERSION} | sort -r | head -n 2 | sort | head -n 1 | cut -d '"' -f 2)"
+    RETRIEVAL_TAG="$(grep "${AKMODS_FLAVOUR}-${FEDORA_VERSION}" "${AKMODS_TAGS}" | grep "${GATED_KERNEL_VERSION}" | sort -r | head -n 2 | sort | head -n 1 | cut -d '"' -f 2)"
     confirm_tag
     echo "RETRIEVAL_TAG=${RETRIEVAL_TAG}"
   else
@@ -122,7 +122,7 @@ function try_bazzite_gated () {
 
 function try_standard () {
 #  RETRIEVAL_TAG="$(cat ${AKMODS_TAGS} | grep ${AKMODS_FLAVOUR}-${FEDORA_VERSION} | sort -r | head -n 1 | cut -d '"' -f 2)"
-  local retrieval_tag="$(cat ${AKMODS_TAGS} | grep ${AKMODS_FLAVOUR}-${FEDORA_VERSION} | sort -r | head -n 3 | sort | head -n 1 | cut -d '"' -f 2)" || true
+  local retrieval_tag="$(grep "${AKMODS_FLAVOUR}-${FEDORA_VERSION}" "${AKMODS_TAGS}" | sort -r | head -n 3 | sort | head -n 1 | cut -d '"' -f 2)" || true
   if [ -n "$retrieval_tag" ]; then
     RETRIEVAL_TAG="${retrieval_tag}"
     confirm_tag
