@@ -252,14 +252,14 @@ function nvidia_sanity_check () {
     # Use DRIVER_VERSION for packages to allow minor release mismatches (e.g., -1 vs -3)
     # This helps when the repo updates before the akmods image
     NVIDIA_PKGS=(
-      "libnvidia-fbc-${DRIVER_VERSION}.x86_64"
-      "libnvidia-ml-${DRIVER_VERSION}.i686"
+      "libnvidia-fbc-${DRIVER_VERSION}*.x86_64"
+      "libnvidia-ml-${DRIVER_VERSION}*.i686"
       "libva-nvidia-driver"
-      "nvidia-driver-${DRIVER_VERSION}.x86_64"
-      "nvidia-driver-cuda-${DRIVER_VERSION}.x86_64"
-      "nvidia-driver-cuda-libs-${DRIVER_VERSION}.i686"
-      "nvidia-driver-libs-${DRIVER_VERSION}.i686"
-      "nvidia-settings-${DRIVER_VERSION}.x86_64"
+      "nvidia-driver-${DRIVER_VERSION}*.x86_64"
+      "nvidia-driver-cuda-${DRIVER_VERSION}*.x86_64"
+      "nvidia-driver-cuda-libs-${DRIVER_VERSION}*.i686"
+      "nvidia-driver-libs-${DRIVER_VERSION}*.i686"
+      "nvidia-settings-${DRIVER_VERSION}*.x86_64"
       "nvidia-container-toolkit"
     )
 
