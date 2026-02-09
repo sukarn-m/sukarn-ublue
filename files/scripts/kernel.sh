@@ -155,9 +155,9 @@ function set_next_variant () {
   VARIANTS_TRIED+=("${VARIANT_CURRENT}")
   echo "Tried so far: ${VARIANTS_TRIED[@]}"
 
-  for option in ${PREFERENCE_ORDER[@]}; do
+  for option in "${PREFERENCE_ORDER[@]}"; do
     local already_tried="false"
-    for variant in ${VARIANTS_TRIED[@]}; do
+    for variant in "${VARIANTS_TRIED[@]}"; do
       if [[ "${option}" == "${variant}" ]]; then
         already_tried="true"
         break
@@ -539,4 +539,6 @@ function main () {
   lock_version
 }
 
-main
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  main
+fi
