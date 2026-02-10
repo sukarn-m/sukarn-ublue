@@ -14,7 +14,6 @@ on:
       - ".github/workflows/*.yml"
       - "boot_menu.yml"
       - "files/theme-v/**"
-      - "files/scripts/image_name-v.sh"
       - "files/scripts/ublue-rpms.sh"
 
   workflow_dispatch: # allow manually triggering builds

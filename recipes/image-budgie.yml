@@ -51,6 +51,11 @@ modules:
   - type: script
     scripts:
       - laptop-overrides.sh
-      - image_name-v.sh
+
+  - type: script
+    env:
+      IMAGE_DISTRO_NAME: "Fedora Linux"
+    scripts:
+      - image_name.sh
 
   - from-file: base-last-steps.yml
