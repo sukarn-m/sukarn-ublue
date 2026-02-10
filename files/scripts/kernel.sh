@@ -346,9 +346,6 @@ function list_packages () {
 }
 
 function install_packages () {
-  # Install kernel packages
-  dnf5 -y install /tmp/kernel-rpms/*.rpm
-  
   local akmod=""
   local akmods=()
   local akmod_dir="/tmp/akmods/kmods"
@@ -365,6 +362,11 @@ function install_packages () {
       akmods+=("v4l2loopback")
     fi
   done
+
+  # Add kernel packages to the installation list
+  # This ensures kernel and akmods are installed in a single transaction
+  local kernel_files=(/tmp/kernel-rpms/*.rpm)
+  akmods+=("${kernel_files[@]}")
 
   if [[ "$install_rpmfusion" == "true" ]]; then
       dnf5 -y install \

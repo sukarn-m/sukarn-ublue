@@ -61,15 +61,15 @@ echo "Total dnf5 calls: $DNF5_CALLS"
 
 # Assertions
 if [[ "${#AKMODS_WANTED[@]}" -eq 2 ]]; then
-  # xone + v4l2loopback: 4 calls
-  if [[ "$DNF5_CALLS" -ne 4 ]]; then
-    echo "FAIL: Expected 4 calls, got $DNF5_CALLS"
+  # xone + v4l2loopback: 3 calls (rpmfusion install, kernel+akmods install, rpmfusion remove)
+  if [[ "$DNF5_CALLS" -ne 3 ]]; then
+    echo "FAIL: Expected 3 calls, got $DNF5_CALLS"
     exit 1
   fi
 elif [[ "${#AKMODS_WANTED[@]}" -eq 1 ]]; then
-  # xone: 2 calls
-  if [[ "$DNF5_CALLS" -ne 2 ]]; then
-    echo "FAIL: Expected 2 calls, got $DNF5_CALLS"
+  # xone: 1 call (kernel+akmods install)
+  if [[ "$DNF5_CALLS" -ne 1 ]]; then
+    echo "FAIL: Expected 1 call, got $DNF5_CALLS"
     exit 1
   fi
 fi
