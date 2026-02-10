@@ -67,10 +67,12 @@ test_use_dnf_not_wget() {
         fi
 
         # Check if dnf5 was called with correct args
-        # Expected: dnf5 config-manager addrepo --from-repofile=... --overwrite
+        # Expected: dnf5 config-manager addrepo --from-repofile=... --overwrite --save-filename=...
         EXPECTED_REPO="https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-38/ublue-os-staging-fedora-38.repo"
-        if [[ "$output" != *"CALLED_DNF5 config-manager addrepo --from-repofile=$EXPECTED_REPO --overwrite"* ]]; then
+        EXPECTED_FILENAME="ublue-os-staging-fedora-38.repo"
+        if [[ "$output" != *"CALLED_DNF5 config-manager addrepo --from-repofile=$EXPECTED_REPO --overwrite --save-filename=$EXPECTED_FILENAME"* ]]; then
              echo -e "${RED}FAIL: dnf5 was not called correctly${NC}"
+             echo "Expected to contain: CALLED_DNF5 config-manager addrepo --from-repofile=$EXPECTED_REPO --overwrite --save-filename=$EXPECTED_FILENAME"
              echo "Output: $output"
              exit 1
         fi

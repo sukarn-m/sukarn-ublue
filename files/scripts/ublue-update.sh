@@ -30,7 +30,7 @@ main() {
 
     # Fetch ublue COPR
     REPO="https://copr.fedorainfracloud.org/coprs/ublue-os/staging/repo/fedora-${OS_VERSION}/ublue-os-staging-fedora-${OS_VERSION}.repo"
-    dnf5 config-manager addrepo --from-repofile="${REPO//[$'\t\r\n ']}" --overwrite
+    dnf5 config-manager addrepo --from-repofile="${REPO//[$'\t\r\n ']}" --overwrite --save-filename="ublue-os-staging-fedora-${OS_VERSION}.repo"
 
     # topgrade is REQUIRED by ublue-update to install
     #rpm-ostree install topgrade
