@@ -329,11 +329,16 @@ function akmod_sanity_check () {
 function rpm_erase () {
   # Remove all existing kernel packages without dependency checks
   # This allows for clean kernel replacement with akmods-compatible versions
+  local pkgs_to_remove=()
   for pkg in kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra kernel-uki-virt; do
-    if rpm -q $pkg &>/dev/null; then
-      rpm --erase $pkg --nodeps
+    if rpm -q "$pkg" &>/dev/null; then
+      pkgs_to_remove+=("$pkg")
     fi
   done
+
+  if [[ ${#pkgs_to_remove[@]} -gt 0 ]]; then
+    rpm --erase "${pkgs_to_remove[@]}" --nodeps
+  fi
 }
 
 function list_packages () {
