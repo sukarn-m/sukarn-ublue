@@ -2,7 +2,15 @@ modules:
   - type: script
     scripts:
       - nextcloud-vfs.sh
-      - image_name-s.sh
+
+  - type: script
+    env:
+      IMAGE_DISTRO_NAME: "Sukarn Linux"
+    scripts:
+      - image_name.sh
+
+  - type: script
+    scripts:
       - nas.sh
 #      - ublue-udev.sh
 #      - canon-lbp2900.sh

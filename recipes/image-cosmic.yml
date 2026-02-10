@@ -56,6 +56,11 @@ modules:
   - type: script
     scripts:
       - laptop-overrides.sh
-      - image_name-s.sh
+
+  - type: script
+    env:
+      IMAGE_DISTRO_NAME: "Sukarn Linux"
+    scripts:
+      - image_name.sh
 
   - from-file: base-last-steps.yml
