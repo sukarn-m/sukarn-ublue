@@ -13,6 +13,11 @@ set_config_value() {
 }
 
 main() {
+    if ! command -v dnf5 &> /dev/null; then
+        echo "dnf5 is required for secure repository verification"
+        exit 1
+    fi
+
     # Check if ublue-os-update-services rpm is installed, these services conflict with ublue-update
     if rpm -q ublue-os-update-services > /dev/null; then
         rpm-ostree override remove ublue-os-update-services
