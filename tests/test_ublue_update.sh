@@ -90,6 +90,54 @@ test_use_dnf_not_wget() {
 
 test_use_dnf_not_wget
 
+test_dnf5_missing() {
+    echo "Running test_dnf5_missing..."
+    (
+        # Mock commands
+        rpm() {
+            return 1
+        }
+        # Mock command to simulate dnf5 missing
+        command() {
+             if [[ "$1" == "-v" && "$2" == "dnf5" ]]; then
+                 return 1
+             fi
+             # Fallback for other commands if needed, or just succeed
+             return 0
+        }
+
+        # Define OS_VERSION
+        export OS_VERSION="38"
+
+        # Source the script
+        source "$UBLUE_UPDATE_SH"
+
+        # Run main
+        ret=0
+        output=$(main 2>&1) || ret=$?
+
+        if [[ $ret -eq 1 && "$output" == *"dnf5 is required for secure repository verification"* ]]; then
+             exit 0
+        else
+             echo -e "${RED}FAIL: Expected exit 1 and error message.${NC}"
+             echo "Got exit $ret"
+             echo "Output: $output"
+             exit 1
+        fi
+    )
+
+    local status=$?
+    if [[ $status -eq 0 ]]; then
+        echo -e "${GREEN}PASS: test_dnf5_missing${NC}"
+        ((passed++))
+    else
+        echo -e "${RED}FAIL: test_dnf5_missing (status $status)${NC}"
+        ((failed++))
+    fi
+}
+
+test_dnf5_missing
+
 echo "----------------------------"
 echo "Tests passed: $passed"
 echo "Tests failed: $failed"
