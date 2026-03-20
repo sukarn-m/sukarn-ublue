@@ -20,8 +20,7 @@ This is a constantly updating repository for creating [a native container image]
     1. [Enable Auto-Unlock Using TPM2](#enable-auto-unlock-using-tpm2)
     2. [Disable Auto-Unlock Using TPM2](#disable-auto-unlock-using-tpm2)
 4. [Custom Commands](#custom-commands)
-5. [ISO](#iso)
-6. [Verification](#verification)
+5. [Verification](#verification)
 
 ---
 
@@ -180,18 +179,6 @@ These images contain custom commands from the universal-blue project, and custom
 | `sukarn-fix-grub-double-entry`     | Fix the grub double entries issue in Fedora Atomic |
 | `sukarn-enroll-fedora-certificate` | Enroll the upstream fedora certificate             |
 | `sukarn-grub-toggle-savedefault`   | Enable or disable GRUB_SAVEDEFAULT                 |
-
----
-
-## ISO
-
-If build on Fedora Atomic, you can generate an offline ISO with the instructions available [here](https://blue-build.org/learn/universal-blue/#fresh-install-from-an-iso).
-
-The `make-laptop-iso.sh` and `make-desktop-iso.sh` scripts can make ISOs using `podman`. The ISO is saved in `iso-output` directory. Run only one of these scripts at a time. They may overwrite each-other's output. See [JasonN3/build-container-installer](https://github.com/JasonN3/build-container-installer) for variables (must be specified in all caps).
-
-The Action currently uses [ublue-os/isogenerator-old](https://github.com/ublue-os/isogenerator-old). The ISO is a netinstaller and should always pull the latest version of your image. Note that this release-iso action is not a replacement for a full-blown release automation like [release-please](https://github.com/googleapis/release-please).
-
-[Go back to Table of Contents](#table-of-contents)
 
 ---
 
