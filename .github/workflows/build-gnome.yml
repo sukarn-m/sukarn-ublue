@@ -49,7 +49,7 @@ jobs:
           # Optional flags
           use_unstable_cli: false
 #          squash: true
-          rechunk: true
+          rechunk: ${{ github.event_name != 'pull_request' }}
       # start device-specific builds
 #      - name: Build Device Specific Images
 #        run: |
