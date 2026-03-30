@@ -42,13 +42,19 @@ export -f tree
 
 # Setup files
 # Clean up first
-rm -rf /tmp/akmods /tmp/kernel-rpms
+# Since we now use SECURE_TMP_DIR, we must make sure it's set for sourcing if we don't call initial_config
+# Actually, the script sources, and if we call install_packages, we need SECURE_TMP_DIR.
+# The script usually calls main which calls initial_config.
+# Here we source and then call install_packages directly.
 
-mkdir -p /tmp/akmods/kmods
-mkdir -p /tmp/kernel-rpms
-touch /tmp/akmods/kmods/kmod-xone-1.0.rpm
-touch /tmp/akmods/kmods/kmod-v4l2loopback-1.0.rpm
-touch /tmp/kernel-rpms/kernel-core.rpm
+# Create a secure temp dir for testing
+export SECURE_TMP_DIR=$(mktemp -d)
+
+mkdir -p "${SECURE_TMP_DIR}/akmods/kmods"
+mkdir -p "${SECURE_TMP_DIR}/kernel-rpms"
+touch "${SECURE_TMP_DIR}/akmods/kmods/kmod-xone-1.0.rpm"
+touch "${SECURE_TMP_DIR}/akmods/kmods/kmod-v4l2loopback-1.0.rpm"
+touch "${SECURE_TMP_DIR}/kernel-rpms/kernel-core.rpm"
 
 # Source the script
 source files/scripts/kernel.sh
@@ -64,14 +70,17 @@ if [[ "${#AKMODS_WANTED[@]}" -eq 2 ]]; then
   # xone + v4l2loopback: 3 calls (rpmfusion install, kernel+akmods install, rpmfusion remove)
   if [[ "$DNF5_CALLS" -ne 3 ]]; then
     echo "FAIL: Expected 3 calls, got $DNF5_CALLS"
+    rm -rf "${SECURE_TMP_DIR}"
     exit 1
   fi
 elif [[ "${#AKMODS_WANTED[@]}" -eq 1 ]]; then
   # xone: 1 call (kernel+akmods install)
   if [[ "$DNF5_CALLS" -ne 1 ]]; then
     echo "FAIL: Expected 1 call, got $DNF5_CALLS"
+    rm -rf "${SECURE_TMP_DIR}"
     exit 1
   fi
 fi
 
+rm -rf "${SECURE_TMP_DIR}"
 echo "PASS"
