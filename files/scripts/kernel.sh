@@ -331,11 +331,11 @@ function rpm_erase () {
   # Remove all existing kernel packages without dependency checks
   # This allows for clean kernel replacement with akmods-compatible versions
   local pkgs_to_remove=()
-  for pkg in kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra kernel-uki-virt; do
-    if rpm -q "$pkg" &>/dev/null; then
-      pkgs_to_remove+=("$pkg")
-    fi
-  done
+  local target_pkgs=("kernel" "kernel-core" "kernel-modules" "kernel-modules-core" "kernel-modules-extra" "kernel-uki-virt")
+
+  # Query all target packages at once and extract their names
+  # Use sort -u to handle multiple versions of the same package
+  mapfile -t pkgs_to_remove < <(rpm -q --queryformat '%{NAME}\n' "${target_pkgs[@]}" 2>/dev/null | sort -u) || true
 
   if [[ ${#pkgs_to_remove[@]} -gt 0 ]]; then
     rpm --erase "${pkgs_to_remove[@]}" --nodeps
