@@ -24,8 +24,10 @@ function user_config () {
 function initial_config () {
   KERNEL_PRE="$(rpm -q kernel | sed 's/^kernel-//')" # Extract current kernel version (remove "kernel-" prefix)
   FEDORA_VERSION="$(rpm -E %fedora)" # Get current Fedora version number
-  AKMODS_TAGS="/tmp/akmods-tags.txt" # Stores the tags list so that they aren't repeatedly checked on the repository
-  AKMODS_NVIDIA_TAGS="/tmp/akmods-nvidia-tags.txt" # Stores the tags list so that they aren't repeatedly checked on the repository
+  SECURE_TMP_DIR=$(mktemp -d)
+  trap 'rm -rf "${SECURE_TMP_DIR}"' EXIT
+  AKMODS_TAGS="${SECURE_TMP_DIR}/akmods-tags.txt" # Stores the tags list so that they aren't repeatedly checked on the repository
+  AKMODS_NVIDIA_TAGS="${SECURE_TMP_DIR}/akmods-nvidia-tags.txt" # Stores the tags list so that they aren't repeatedly checked on the repository
   VARIANTS_TRIED=()
   AKMODS_REPO="ghcr.io/ublue-os/akmods"
 
@@ -192,31 +194,31 @@ function set_next_variant () {
 function download_normal_packages () {
   # Download akmods container image and extract RPM packages
   echo "Attempting to download tag ${RETRIEVAL_TAG}"
-  skopeo copy --retry-times 3 docker://${AKMODS_REPO}:"${RETRIEVAL_TAG}" dir:/tmp/akmods
+  skopeo copy --retry-times 3 docker://${AKMODS_REPO}:"${RETRIEVAL_TAG}" dir:"${SECURE_TMP_DIR}/akmods"
   # Extract the layer digest from the manifest
   echo "Extracting..."
-  AKMODS_TARGZ=$(jq -r '.layers[].digest' </tmp/akmods/manifest.json | cut -d : -f 2)
+  AKMODS_TARGZ=$(jq -r '.layers[].digest' <"${SECURE_TMP_DIR}/akmods/manifest.json" | cut -d : -f 2)
   # Extract the compressed layer containing RPM and kernel packages
-  tar -xvzf /tmp/akmods/"$AKMODS_TARGZ" -C /tmp/
+  tar -xvzf "${SECURE_TMP_DIR}/akmods/${AKMODS_TARGZ}" -C "${SECURE_TMP_DIR}"
   # Move extracted RPMs to akmods directory
-  echo "Moving rpms into /tmp/akmods"
-  mv /tmp/rpms/* /tmp/akmods/
+  echo "Moving rpms into ${SECURE_TMP_DIR}/akmods"
+  mv "${SECURE_TMP_DIR}/rpms/"* "${SECURE_TMP_DIR}/akmods/"
 }
 
 function download_nvidia_packages () {
   if [[ $NVIDIA_WANTED == "1" ]]; then
     # Clean up existing kernel RPMs from the akmods download above
     echo "Replacing the kernel RPMs from akmods with the RPMs from the nvidia build."
-    remove /tmp/kernel-rpms
+    remove "${SECURE_TMP_DIR}/kernel-rpms"
     # Download NVIDIA akmods + kernel build
     echo "Attempting to download nvidia tag"
-    skopeo copy --retry-times 3 docker://${AKMODS_REPO}-${NVIDIA_TAG}:"${RETRIEVAL_TAG}" dir:/tmp/akmods-rpms
+    skopeo copy --retry-times 3 docker://${AKMODS_REPO}-${NVIDIA_TAG}:"${RETRIEVAL_TAG}" dir:"${SECURE_TMP_DIR}/akmods-rpms"
     # Extract NVIDIA akmods layer
     echo "Extracting..."
-    AKMODS_TARGZ=$(jq -r '.layers[].digest' </tmp/akmods-rpms/manifest.json | cut -d : -f 2)
-    tar -xvzf /tmp/akmods-rpms/"$AKMODS_TARGZ" -C /tmp/
+    AKMODS_TARGZ=$(jq -r '.layers[].digest' <"${SECURE_TMP_DIR}/akmods-rpms/manifest.json" | cut -d : -f 2)
+    tar -xvzf "${SECURE_TMP_DIR}/akmods-rpms/${AKMODS_TARGZ}" -C "${SECURE_TMP_DIR}"
     # Move NVIDIA RPMs to separate directory
-    mv /tmp/rpms/* /tmp/akmods-rpms/
+    mv "${SECURE_TMP_DIR}/rpms/"* "${SECURE_TMP_DIR}/akmods-rpms/"
   fi
 }
 
@@ -240,15 +242,15 @@ function nvidia_sanity_check () {
       nvidia_initial_setup
     fi
 
-    source /tmp/akmods-rpms/kmods/nvidia-vars
+    source "${SECURE_TMP_DIR}/akmods-rpms/kmods/nvidia-vars"
     
     # Extract version from rpm.
     # VERSION format example: 590.48.01-1.fc42
-    VERSION="$(rpm -q /tmp/akmods-rpms/kmods/kmod-nvidia-*.rpm | sed 's/^kmod-nvidia-//' | sed 's/\.[^.]*$//')"
+    VERSION="$(rpm -q "${SECURE_TMP_DIR}/akmods-rpms/kmods/kmod-nvidia-"*.rpm | sed 's/^kmod-nvidia-//' | sed 's/\.[^.]*$//')"
     # DRIVER_VERSION format example: 590.48.01
     DRIVER_VERSION=$(echo "$VERSION" | cut -d- -f1)
 
-    LOCAL_NVIDIA_PKG="/tmp/akmods-rpms/kmods/kmod-nvidia-${KERNEL_VERSION}-${NVIDIA_AKMOD_VERSION}.fc*.rpm"
+    LOCAL_NVIDIA_PKG="${SECURE_TMP_DIR}/akmods-rpms/kmods/kmod-nvidia-${KERNEL_VERSION}-${NVIDIA_AKMOD_VERSION}.fc*.rpm"
 
     # Use DRIVER_VERSION for packages to allow minor release mismatches (e.g., -1 vs -3)
     # This helps when the repo updates before the akmods image
@@ -299,7 +301,7 @@ function nvidia_sanity_check () {
 
 function akmod_sanity_check () {
   local akmod=""
-  local akmod_dir="/tmp/akmods/kmods"
+  local akmod_dir="${SECURE_TMP_DIR}/akmods/kmods"
 
   if [[ ! -d "$akmod_dir" ]]; then
     echo "ERROR: akmods directory not found."
@@ -343,18 +345,18 @@ function rpm_erase () {
 }
 
 function list_packages () {
-  tree /tmp/akmods/kmods
-  tree /tmp/akmods/ublue-os
-  tree /tmp/kernel-rpms
+  tree "${SECURE_TMP_DIR}/akmods/kmods"
+  tree "${SECURE_TMP_DIR}/akmods/ublue-os"
+  tree "${SECURE_TMP_DIR}/kernel-rpms"
   if [[ $NVIDIA_WANTED == "1" ]]; then
-    tree /tmp/akmods-rpms/kmods
+    tree "${SECURE_TMP_DIR}/akmods-rpms/kmods"
   fi
 }
 
 function install_packages () {
   local akmod=""
   local akmods=()
-  local akmod_dir="/tmp/akmods/kmods"
+  local akmod_dir="${SECURE_TMP_DIR}/akmods/kmods"
 
   # Install akmods
   local install_rpmfusion="false"
@@ -371,7 +373,7 @@ function install_packages () {
 
   # Add kernel packages to the installation list
   # This ensures kernel and akmods are installed in a single transaction
-  local kernel_files=(/tmp/kernel-rpms/*.rpm)
+  local kernel_files=("${SECURE_TMP_DIR}/kernel-rpms/"*.rpm)
   akmods+=("${kernel_files[@]}")
 
   if [[ "$install_rpmfusion" == "true" ]]; then
@@ -413,7 +415,7 @@ function nvidia_initial_setup () {
     # Exclude golang NVIDIA container toolkit to prevent conflicts
     dnf5 config-manager setopt excludepkgs=golang-github-nvidia-container-toolkit
 
-    dnf5 install -y /tmp/akmods-rpms/ublue-os/ublue-os-nvidia-addons-*.rpm
+    dnf5 install -y "${SECURE_TMP_DIR}/akmods-rpms/ublue-os/ublue-os-nvidia-addons-"*.rpm
     
     # enable repos provided by ublue-os-nvidia-addons
     dnf5 config-manager setopt fedora-nvidia.enabled=1 nvidia-container-toolkit.enabled=1
@@ -512,9 +514,9 @@ function remove () {
 }
 
 function initial_cleanup () {
-  remove /tmp/akmods
-  remove /tmp/akmods-rpms
-  remove /tmp/kernel-rpms
+  remove "${SECURE_TMP_DIR}/akmods"
+  remove "${SECURE_TMP_DIR}/akmods-rpms"
+  remove "${SECURE_TMP_DIR}/kernel-rpms"
 }
 
 function final_cleanup () {

@@ -32,8 +32,6 @@ test_dnf5_missing() {
             fi
             builtin command "$@"
         }
-        # We need to export the function if we were calling a script,
-        # but here we are sourcing the script and calling the function in the same subshell.
         source "$KERNEL_SH"
         set +e
         PREFERENCE_ORDER=("test")
@@ -164,6 +162,18 @@ test_initial_config_defaults() {
         assert_eq "$NVIDIA_WANTED" "0" || exit 1
         assert_eq "$BAZZITE_ONLY" "0" || exit 1
         assert_eq "$VARIANT_CURRENT" "gated" || exit 1
+
+        # Check if SECURE_TMP_DIR was created and is randomized
+        if [[ "$SECURE_TMP_DIR" =~ ^/tmp/tmp\..*$ ]]; then
+            echo "SECURE_TMP_DIR is randomized."
+        else
+            echo "SECURE_TMP_DIR is NOT randomized: $SECURE_TMP_DIR"
+            exit 1
+        fi
+
+        # Verify tag paths
+        assert_eq "$AKMODS_TAGS" "${SECURE_TMP_DIR}/akmods-tags.txt" || exit 1
+        assert_eq "$AKMODS_NVIDIA_TAGS" "${SECURE_TMP_DIR}/akmods-nvidia-tags.txt" || exit 1
     )
     local status=$?
     if [[ $status -eq 0 ]]; then
@@ -247,9 +257,6 @@ test_reset_vars() {
     (
         source "$KERNEL_SH"
 
-        # Mock initial_config variables that reset_vars might depend on if strict mode is on?
-        # reset_vars uses VARIANT_CURRENT, GATED_TAG.
-
         # Case 1: bazzite
         VARIANT_CURRENT="bazzite"
         GATED_TAG="coreos-stable"
@@ -321,23 +328,20 @@ test_akmod_sanity_check() {
     (
         source "$KERNEL_SH"
 
-        # Setup temp dir (mocking /tmp/akmods/kmods)
-        # Since script uses hardcoded path, we have to use it.
-        # But we must clean up.
-
-        rm -rf /tmp/akmods
-        mkdir -p /tmp/akmods/kmods
+        # Setup temp dir
+        SECURE_TMP_DIR=$(mktemp -d)
+        mkdir -p "${SECURE_TMP_DIR}/akmods/kmods"
 
         AKMODS_WANTED=("foo" "bar")
 
         # Create matching files
-        touch /tmp/akmods/kmods/kmod-foo-1.rpm
-        touch /tmp/akmods/kmods/kmod-bar-1.rpm
+        touch "${SECURE_TMP_DIR}/akmods/kmods/kmod-foo-1.rpm"
+        touch "${SECURE_TMP_DIR}/akmods/kmods/kmod-bar-1.rpm"
 
         akmod_sanity_check
 
         # Cleanup
-        rm -rf /tmp/akmods
+        rm -rf "${SECURE_TMP_DIR}"
     )
     local status=$?
     if [[ $status -eq 0 ]]; then
