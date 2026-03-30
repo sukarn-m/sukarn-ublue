@@ -85,9 +85,16 @@ test_rpm_erase_batch() {
 test_rpm_erase_none() {
     echo "Running test_rpm_erase_none..."
     (
-        # Mock rpm - nothing installed
+        # Mock rpm - nothing installed, but outputs error to stdout to test grep
         rpm() {
             if [[ "$1" == "-q" ]]; then
+                shift # remove -q
+                if [[ "$1" == "--queryformat" ]]; then
+                    shift 2
+                fi
+                for pkg in "$@"; do
+                    echo "package $pkg is not installed"
+                done
                 return 1
             elif [[ "$1" == "--erase" ]]; then
                 echo "rpm_erase_called: ${@:2}"
