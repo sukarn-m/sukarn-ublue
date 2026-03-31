@@ -28,12 +28,21 @@ test_rpm_erase_batch() {
         # Mock rpm
         rpm() {
             if [[ "$1" == "-q" ]]; then
-                # Simulate that kernel, kernel-core, and kernel-modules are installed
-                if [[ "$2" == "kernel" || "$2" == "kernel-core" || "$2" == "kernel-modules" ]]; then
-                    return 0
-                else
-                    return 1
+                # Optimized call: rpm -q --queryformat '%{NAME}\n' "${target_pkgs[@]}"
+                # target_pkgs: kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra kernel-uki-virt
+                shift # remove -q
+                if [[ "$1" == "--queryformat" ]]; then
+                    shift 2 # remove --queryformat and '%{NAME}\n'
                 fi
+                local found=0
+                for pkg in "$@"; do
+                    # Simulate that kernel, kernel-core, and kernel-modules are installed
+                    if [[ "$pkg" == "kernel" || "$pkg" == "kernel-core" || "$pkg" == "kernel-modules" ]]; then
+                        echo "$pkg"
+                        found=1
+                    fi
+                done
+                [[ $found -eq 1 ]] && return 0 || return 1
             elif [[ "$1" == "--erase" ]]; then
                 echo "rpm_erase_called: ${@:2}"
                 return 0
@@ -47,9 +56,12 @@ test_rpm_erase_batch() {
         output=$(rpm_erase)
 
         # Expected output: "rpm_erase_called: kernel kernel-core kernel-modules --nodeps"
-        # The order depends on the loop order in kernel.sh
-        # In kernel.sh: kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra kernel-uki-virt
-        # So we expect kernel, kernel-core, kernel-modules.
+        # Output of sort -u will be: kernel kernel-core kernel-modules (alphabetical)
+        # kernel, kernel-core, kernel-modules
+        # Wait, sort -u will result in:
+        # kernel
+        # kernel-core
+        # kernel-modules
 
         expected="rpm_erase_called: kernel kernel-core kernel-modules --nodeps"
 
@@ -73,9 +85,16 @@ test_rpm_erase_batch() {
 test_rpm_erase_none() {
     echo "Running test_rpm_erase_none..."
     (
-        # Mock rpm - nothing installed
+        # Mock rpm - nothing installed, but outputs error to stdout to test grep
         rpm() {
             if [[ "$1" == "-q" ]]; then
+                shift # remove -q
+                if [[ "$1" == "--queryformat" ]]; then
+                    shift 2
+                fi
+                for pkg in "$@"; do
+                    echo "package $pkg is not installed"
+                done
                 return 1
             elif [[ "$1" == "--erase" ]]; then
                 echo "rpm_erase_called: ${@:2}"
