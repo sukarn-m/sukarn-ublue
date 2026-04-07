@@ -1,5 +1,5 @@
 [org.gnome.shell]
-enabled-extensions=['dash-to-panel@jderose9.github.com', 'gsconnect@andyholmes.github.io', 'launch-new-instance@gnome-shell-extensions.gcampax.github.com', 'drive-menu@gnome-shell-extensions.gcampax.github.com', 'gamemode@christian.kellner.me', 'system-monitor-next@paradoxxx.zero.gmail.com', 'Bluetooth-Battery-Meter@maniacx.github.com', 'clipboard-history@alexsaveau.dev', 'forge@jmmaranan.com', 'weatherornot@somepaulo.github.io', 'pano@elhan.io', 'blur-my-shell@aunetx', 'quick-settings-tweaks@qwreey', 'order-extensions@wa4557.github.com', 'gnome-ui-tune@itstime.tech', 'appindicatorsupport@rgcjonas.gmail.com', 'workspaces-by-open-apps@favo02.github.com']
+enabled-extensions=['dash-to-panel@jderose9.github.com', 'gsconnect@andyholmes.github.io', 'launch-new-instance@gnome-shell-extensions.gcampax.github.com', 'drive-menu@gnome-shell-extensions.gcampax.github.com', 'gamemode@christian.kellner.me', 'system-monitor-next@paradoxxx.zero.gmail.com', 'Bluetooth-Battery-Meter@maniacx.github.com', 'forge@jmmaranan.com', 'weatherornot@somepaulo.github.io', 'blur-my-shell@aunetx', 'gnome-ui-tune@itstime.tech', 'appindicatorsupport@rgcjonas.gmail.com', 'workspaces-by-open-apps@favo02.github.com']
 
 [org.gnome.shell.extensions.system-monitor]
 thermal-sensor-label='k10temp - Tctl'

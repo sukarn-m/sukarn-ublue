@@ -509,9 +509,11 @@ function install_nvidia_packages () {
 }
 
 function remove () {
-  if [[ -d "$1" ]] || [[ -f "$1" ]] ; then
-    rm -rf "$1"
-  fi
+  for target in "$@"; do
+    if [[ -d "$target" ]] || [[ -f "$target" ]] ; then
+      rm -rf "$target"
+    fi
+  done
 }
 
 function initial_cleanup () {

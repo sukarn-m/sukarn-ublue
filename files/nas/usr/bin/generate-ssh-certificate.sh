@@ -3,6 +3,10 @@
 nas_mount=/var/mnt/nas
 
 user_string=$(grep 1000:1000 /etc/passwd) #Look for user with UID and GID of 1000
+if [[ -z "$user_string" ]]; then
+  echo "ERROR: No user with UID:GID 1000:1000 found in /etc/passwd"
+  exit 1
+fi
 IFS=':' read -r -a user_array <<< "$user_string" #Split by :
 USERNAME=${user_array[0]} #Set username
 HOMEDIR=${user_array[5]} #Set home directory
