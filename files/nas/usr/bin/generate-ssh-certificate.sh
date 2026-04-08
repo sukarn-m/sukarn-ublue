@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 nas_mount=/var/mnt/nas
 
@@ -24,9 +25,16 @@ then
 	/usr/bin/mkdir -p "$nas_mount/$HOSTNAME/ssh"
 	/usr/bin/cp "$HOMEDIR/.ssh/id_ed25519.pub" "$nas_mount/$HOSTNAME/ssh/$HOSTNAME.pub"
 	echo "Files are in place. Let the waiting games begin."
+	MAX_WAIT=60
+	WAIT_COUNT=0
 	while [ ! -f "$nas_mount/$HOSTNAME/ssh/${HOSTNAME}-cert.pub" ]
 	do
-	    /usr/bin/echo "File not found. Waiting..."
+	    WAIT_COUNT=$((WAIT_COUNT + 1))
+	    if [ "$WAIT_COUNT" -ge "$MAX_WAIT" ]; then
+	        echo "ERROR: Timed out waiting for certificate after $((MAX_WAIT * 60)) seconds."
+	        exit 1
+	    fi
+	    /usr/bin/echo "File not found. Waiting... ($WAIT_COUNT/$MAX_WAIT)"
 	    /usr/bin/sleep 60
 	done
 	/usr/bin/echo "Found the file! Waiting another 5 seconds for good luck..."

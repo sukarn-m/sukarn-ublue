@@ -54,7 +54,7 @@ modules:
 
   - type: script
     env:
-      IMAGE_DISTRO_NAME: "Fedora Linux"
+      IMAGE_DISTRO_NAME: "Sukarn Linux"
     scripts:
       - image_name.sh
 

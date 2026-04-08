@@ -4,17 +4,15 @@ on:
     - cron: "30 06 * * 0" # Set in UTC: 6:30 AM on Sunday.
 
   push:
-    paths-ignore: # don't rebuild if only documentation has changed
+    paths-ignore:
       - "**.md"
       - "recipes/image-budgie.yml"
       - "recipes/image-cosmic.yml"
       - "make-*-iso.sh"
-      - ".github/workflows/build-budgie.yml"
       - ".github/workflows/build-others.yml"
-      - ".github/workflows/*.yml"
-      - "boot_menu.yml"
+      - ".github/workflows/clean-workflows.yml"
       - "files/theme-v/**"
-      - "files/scripts/ublue-rpms.sh"
+
 
   workflow_dispatch: # allow manually triggering builds
 

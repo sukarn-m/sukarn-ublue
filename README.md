@@ -12,15 +12,17 @@ This is a constantly updating repository for creating [a native container image]
     1. [Rebasing to `sukarn-ublue-desktop`](#rebasing-to-sukarn-ublue-desktop)
     2. [Rebasing to `sukarn-ublue-laptop`](#rebasing-to-sukarn-ublue-laptop)
     3. [Rebasing to `sukarn-ublue-budgie`](#rebasing-to-sukarn-ublue-budgie)
-    4. [Pinning to a Specific Tag](#pinning-to-a-specific-tag)
+    4. [Rebasing to `sukarn-ublue-cosmic`](#rebasing-to-sukarn-ublue-cosmic)
+    5. [Pinning to a Specific Tag](#pinning-to-a-specific-tag)
 2. [Secure Boot](#secure-boot)
     1. [Fedora's certificate](#fedoras-certificate)
     2. [Universal-Blue's certificate](#universal-blues-certificate)
 3. [Encrypted Drives](#encrypted-drives)
     1. [Enable Auto-Unlock Using TPM2](#enable-auto-unlock-using-tpm2)
     2. [Disable Auto-Unlock Using TPM2](#disable-auto-unlock-using-tpm2)
-4. [Custom Commands](#custom-commands)
-5. [Verification](#verification)
+4. [Laptop Power Management](#laptop-power-management)
+5. [Custom Commands](#custom-commands)
+6. [Verification](#verification)
 
 ---
 
@@ -72,6 +74,22 @@ Then rebase to the signed image. The system will reboot automatically upon compl
 
 ```bash
 rpm-ostree rebase ostree-image-signed:docker://ghcr.io/sukarn-m/sukarn-ublue-budgie:latest --reboot
+```
+
+[Go back to Table of Contents](#table-of-contents)
+
+### Rebasing to `sukarn-ublue-cosmic`
+
+First rebase to the unsigned image, to get the proper signing keys and policies installed. The system will reboot automatically upon completion of this step.
+
+```bash
+rpm-ostree rebase ostree-unverified-registry:ghcr.io/sukarn-m/sukarn-ublue-cosmic:latest --reboot
+```
+
+Then rebase to the signed image. The system will reboot automatically upon completion of this step.
+
+```bash
+rpm-ostree rebase ostree-image-signed:docker://ghcr.io/sukarn-m/sukarn-ublue-cosmic:latest --reboot
 ```
 
 [Go back to Table of Contents](#table-of-contents)
@@ -156,6 +174,19 @@ ujust remove-luks-tpm-unlock
 ```
 
 For manual steps, refer to [https://github.com/ublue-os/config/blob/main/build/ublue-os-luks/luks-disable-tpm2-autounlock](https://github.com/ublue-os/config/blob/main/build/ublue-os-luks/luks-disable-tpm2-autounlock).
+
+[Go back to Table of Contents](#table-of-contents)
+
+---
+
+## Laptop Power Management
+
+Laptop images include a power management system that adjusts system behavior based on power source:
+
+- **AC power:** CPU boost enabled (full performance). System updates, syncthing, and podman operations run normally.
+- **Battery power:** CPU boost disabled (power saving). System updates, syncthing, and podman operations are stopped and will not run.
+
+This is implemented via `ac.target` and `battery.target` systemd targets, triggered automatically by a udev rule that detects AC adapter status changes.
 
 [Go back to Table of Contents](#table-of-contents)
 

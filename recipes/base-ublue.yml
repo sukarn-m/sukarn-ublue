@@ -13,5 +13,4 @@ modules:
 
   - type: script
     scripts:
-      - ublue-rpms.sh
-      - ublue-update.sh # Must be after ublue-rpms.sh
+      - ublue-update.sh

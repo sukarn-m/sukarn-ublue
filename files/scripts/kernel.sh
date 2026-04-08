@@ -93,9 +93,15 @@ function reset_vars () {
 # ----------------- Retrieval -----------------
 
 function get_tags () {
-  skopeo list-tags --retry-times 3 docker://${AKMODS_REPO} > ${AKMODS_TAGS}
+  if ! skopeo list-tags --retry-times 3 docker://${AKMODS_REPO} > "${AKMODS_TAGS}"; then
+    echo "ERROR: Failed to fetch tags from ${AKMODS_REPO}"
+    exit 1
+  fi
   if [[ $NVIDIA_WANTED == "1" ]]; then
-    skopeo list-tags --retry-times 3 docker://${AKMODS_REPO}-${NVIDIA_TAG} > ${AKMODS_NVIDIA_TAGS}
+    if ! skopeo list-tags --retry-times 3 docker://${AKMODS_REPO}-${NVIDIA_TAG} > "${AKMODS_NVIDIA_TAGS}"; then
+      echo "ERROR: Failed to fetch NVIDIA tags from ${AKMODS_REPO}-${NVIDIA_TAG}"
+      exit 1
+    fi
   fi
 }
 
@@ -198,11 +204,16 @@ function download_normal_packages () {
   # Extract the layer digest from the manifest
   echo "Extracting..."
   AKMODS_TARGZ=$(jq -r '.layers[].digest' <"${SECURE_TMP_DIR}/akmods/manifest.json" | cut -d : -f 2)
-  # Extract the compressed layer containing RPM and kernel packages
+  if [[ -z "${AKMODS_TARGZ}" ]]; then
+    echo "ERROR: Failed to extract layer digest from manifest"
+    exit 1
+  fi
   tar -xvzf "${SECURE_TMP_DIR}/akmods/${AKMODS_TARGZ}" -C "${SECURE_TMP_DIR}"
-  # Move extracted RPMs to akmods directory
   echo "Moving rpms into ${SECURE_TMP_DIR}/akmods"
-  mv "${SECURE_TMP_DIR}/rpms/"* "${SECURE_TMP_DIR}/akmods/"
+  if ! mv "${SECURE_TMP_DIR}/rpms/"* "${SECURE_TMP_DIR}/akmods/"; then
+    echo "ERROR: No RPMs found after extraction"
+    exit 1
+  fi
 }
 
 function download_nvidia_packages () {
@@ -216,9 +227,15 @@ function download_nvidia_packages () {
     # Extract NVIDIA akmods layer
     echo "Extracting..."
     AKMODS_TARGZ=$(jq -r '.layers[].digest' <"${SECURE_TMP_DIR}/akmods-rpms/manifest.json" | cut -d : -f 2)
+    if [[ -z "${AKMODS_TARGZ}" ]]; then
+      echo "ERROR: Failed to extract NVIDIA layer digest from manifest"
+      exit 1
+    fi
     tar -xvzf "${SECURE_TMP_DIR}/akmods-rpms/${AKMODS_TARGZ}" -C "${SECURE_TMP_DIR}"
-    # Move NVIDIA RPMs to separate directory
-    mv "${SECURE_TMP_DIR}/rpms/"* "${SECURE_TMP_DIR}/akmods-rpms/"
+    if ! mv "${SECURE_TMP_DIR}/rpms/"* "${SECURE_TMP_DIR}/akmods-rpms/"; then
+      echo "ERROR: No NVIDIA RPMs found after extraction"
+      exit 1
+    fi
   fi
 }
 
@@ -242,6 +259,10 @@ function nvidia_sanity_check () {
       nvidia_initial_setup
     fi
 
+    if [[ ! -f "${SECURE_TMP_DIR}/akmods-rpms/kmods/nvidia-vars" ]]; then
+      echo "ERROR: nvidia-vars not found in extracted akmods. The akmods image may be malformed."
+      exit 1
+    fi
     source "${SECURE_TMP_DIR}/akmods-rpms/kmods/nvidia-vars"
     
     # Extract version from rpm.

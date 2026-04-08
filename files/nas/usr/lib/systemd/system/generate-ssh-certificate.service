@@ -9,8 +9,8 @@ Before=umount.target
 Type=oneshot
 ExecStart=/usr/bin/generate-ssh-certificate.sh
 ExecStopPost=-/usr/bin/sh -c 'export HOSTNAME=$(/usr/bin/hostnamectl hostname) && /usr/bin/rm -r /mnt/nas/$HOSTNAME/ssh'
-RuntimeMaxSec=1h
-TimeoutStopSec=2
+RuntimeMaxSec=1h 15min
+TimeoutStopSec=10
 Restart=on-failure
 RemainAfterExit=no
 [Install]
