@@ -37,6 +37,10 @@ modules:
     scripts:
       - laptop-overrides.sh
 
+  - type: script
+    scripts:
+      - install_nordvpn.sh
+
   - type: kargs
     arch: x86_64
     kargs:

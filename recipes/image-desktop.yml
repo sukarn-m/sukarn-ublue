@@ -12,6 +12,10 @@ modules:
     scripts:
       - nvidia.sh
 
+  - type: script
+    scripts:
+      - install_nordvpn.sh
+
   - type: files
     files:
       - source: desktop
