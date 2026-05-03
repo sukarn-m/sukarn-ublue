@@ -29,7 +29,7 @@ modules:
 #        - org.gnome.Maps # Maps
         - org.gnome.seahorse.Application # Seahorse
         - org.gnome.NautilusPreviewer # Sushi (Nautilus Previewer)
-        - org.gnome.Papers # Document Viewer
+#        - org.gnome.Papers # Document Viewer
         - org.gnome.TextEditor # Text Editor
         - org.gnome.Weather # Weather
 ## System Apps
