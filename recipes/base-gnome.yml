@@ -23,6 +23,7 @@ modules:
     install:
       - 6670 # Bluetooth Battery Meter
 #      - 517 # Caffeine
+      - 8834 # Copyous - modern fork of Pano for Gnome 48+
       - 7074 # GameMode Shell Extension
       - 4158 # Gnome 4x UI Improvements
       - 2236 # Night Theme Switcher
