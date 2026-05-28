@@ -22,6 +22,7 @@ modules:
         - tailscale
 # Theming - Look and Feel
         - variety # Wallpapers
+        - ydotool # Generic command-line automation tool
     remove:
       packages:
       ## Firefox has to be removed in 'main' image, but not in bluefin, bazzite, and aurora.
