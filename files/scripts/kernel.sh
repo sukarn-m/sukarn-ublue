@@ -275,28 +275,40 @@ function nvidia_sanity_check () {
 
     # Use DRIVER_VERSION for packages to allow minor release mismatches (e.g., -1 vs -3)
     # This helps when the repo updates before the akmods image
-    NVIDIA_PKGS=(
+    NVIDIA_PKGS_REQUIRED=(
       "libnvidia-fbc-${DRIVER_VERSION}*.x86_64"
-      "libnvidia-ml-${DRIVER_VERSION}*.i686"
       "libva-nvidia-driver"
       "nvidia-driver-${DRIVER_VERSION}*.x86_64"
       "nvidia-driver-cuda-${DRIVER_VERSION}*.x86_64"
-      "nvidia-driver-cuda-libs-${DRIVER_VERSION}*.i686"
-      "nvidia-driver-libs-${DRIVER_VERSION}*.i686"
       "nvidia-settings-${DRIVER_VERSION}*.x86_64"
       "nvidia-container-toolkit"
     )
+    NVIDIA_PKGS_OPTIONAL=(
+      "libnvidia-ml-${DRIVER_VERSION}*.i686"
+      "nvidia-driver-cuda-libs-${DRIVER_VERSION}*.i686"
+      "nvidia-driver-libs-${DRIVER_VERSION}*.i686"
+    )
 
     NVIDIA_PKGS_FOUND_ALL="1"
+    NVIDIA_PKGS=()
 
-    for pkg in "${NVIDIA_PKGS[@]}"; do
+    for pkg in "${NVIDIA_PKGS_REQUIRED[@]}"; do
       if ! dnf5 info "$pkg" &>/dev/null; then
         echo "ERROR: Package not found: ${pkg}"
-        package=${pkg%-${DRIVER_VERSION}*} #Do not quote. Quoting disables pattern matching and prevents the suffix removal from working as intended.
+        package=${pkg%-${DRIVER_VERSION}*}
         echo "Packages found for ${package}:"
         echo "$(dnf5 list --showduplicates ${package})"
         NVIDIA_PKGS_FOUND_ALL="0"
         break
+      fi
+      NVIDIA_PKGS+=("$pkg")
+    done
+
+    for pkg in "${NVIDIA_PKGS_OPTIONAL[@]}"; do
+      if dnf5 info "$pkg" &>/dev/null; then
+        NVIDIA_PKGS+=("$pkg")
+      else
+        echo "WARNING: Optional i686 multilib package not found, skipping: ${pkg}"
       fi
     done
 
