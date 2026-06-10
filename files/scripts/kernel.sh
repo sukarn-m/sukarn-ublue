@@ -289,6 +289,26 @@ function nvidia_sanity_check () {
       "nvidia-driver-libs-${DRIVER_VERSION}*.i686"
     )
 
+    # CUDA Toolkit packages come from negativo17 multimedia repo, not nvidia repo
+    # These are separate from NVIDIA driver packages and don't depend on DRIVER_VERSION
+    CUDA_PKGS_REQUIRED=(
+      "cuda-nvcc"
+      "cuda-cudart"
+      "cuda-cudart-devel"
+      "cuda-libs"
+      "cuda-devel"
+      "cuda-cudnn"
+      "cuda-cuobjdump"
+      "cuda-gdb"
+    )
+    CUDA_PKGS_OPTIONAL=(
+      "cuda-nvrtc"
+      "cuda-nvrtc-devel"
+      "cuda-cupti"
+      "cuda-cupti-devel"
+      "cuda-cudnn-devel"
+      "cuda-sanitizer"
+    )
     NVIDIA_PKGS_FOUND_ALL="1"
     NVIDIA_PKGS=()
 
@@ -311,6 +331,33 @@ function nvidia_sanity_check () {
         echo "WARNING: Optional i686 multilib package not found, skipping: ${pkg}"
       fi
     done
+
+    # Sanity check CUDA packages from multimedia repo
+    CUDA_PKGS_FOUND_ALL="1"
+    CUDA_PKGS=()
+    
+    # Temporarily enable multimedia repo to check CUDA packages
+    dnf5 config-manager setopt fedora-multimedia.enabled=1
+    
+    for pkg in "${CUDA_PKGS_REQUIRED[@]}"; do
+      if ! dnf5 info "$pkg" &>/dev/null; then
+        echo "ERROR: CUDA package not found in multimedia repo: ${pkg}"
+        CUDA_PKGS_FOUND_ALL="0"
+        break
+      fi
+      CUDA_PKGS+=("$pkg")
+    done
+
+    for pkg in "${CUDA_PKGS_OPTIONAL[@]}"; do
+      if dnf5 info "$pkg" &>/dev/null; then
+        CUDA_PKGS+=("$pkg")
+      else
+        echo "WARNING: Optional CUDA package not found, skipping: ${pkg}"
+      fi
+    done
+
+    # Disable multimedia repo after checks
+    dnf5 config-manager setopt fedora-multimedia.enabled=0
 
 #    if [[ ! -f "${LOCAL_NVIDIA_PKG}" ]]; then
 #      echo "Local RPM version mismatch."
@@ -507,6 +554,9 @@ function install_nvidia_packages () {
         VARIANT_PKGS=""
     fi
     
+    # NVIDIA driver packages come from fedora-nvidia repo (enabled by ublue-os-nvidia-addons)
+    # Multimedia repo should be OFF here to avoid version conflicts
+    # It was disabled at the end of nvidia_sanity_check and in nvidia_initial_setup
     dnf5 install -y ${NVIDIA_PKGS[@]} ${VARIANT_PKGS} ${LOCAL_NVIDIA_PKG}
     
     ## nvidia post-install steps
@@ -533,10 +583,30 @@ function install_nvidia_packages () {
       mv /etc/sway/environment{,.orig}
       install -Dm644 /usr/share/ublue-os/etc/sway/environment /etc/sway/environment
     fi
+  fi
+}
+
+function install_cuda_packages () {
+  if [[ $NVIDIA_WANTED == "1" ]]; then
+    # CUDA toolkit packages come from negativo17 multimedia repo
+    # These are separate from NVIDIA driver packages and installed separately
+    # to avoid repo conflicts during the driver installation
     
-    # re-enable negativo17-mutlimedia since we disabled it
+    # Enable multimedia repo for CUDA packages
+    echo "Installing CUDA toolkit packages from negativo17 multimedia repo..."
+    dnf5 config-manager setopt fedora-multimedia.enabled=1
+    
+    if [[ ${#CUDA_PKGS[@]} -gt 0 ]]; then
+      dnf5 install -y "${CUDA_PKGS[@]}"
+    fi
+    
+    # Disable multimedia repo after CUDA installation
+    # re-enable only if it was previously enabled before this script ran
     if [[ "${NEGATIVO17_MULT_PREV_ENABLED}" = "Y" ]]; then
+      echo "Re-enabling negativo17-fedora-multimedia as it was previously enabled"
       dnf5 config-manager setopt fedora-multimedia.enabled=1
+    else
+      dnf5 config-manager setopt fedora-multimedia.enabled=0
     fi
   fi
 }
@@ -594,6 +664,7 @@ function main () {
   akmod_sanity_check
   install_packages
   install_nvidia_packages
+  install_cuda_packages
   final_cleanup
   lock_version
 }
