@@ -291,23 +291,15 @@ function nvidia_sanity_check () {
 
     # CUDA Toolkit packages come from negativo17 multimedia repo, not nvidia repo
     # These are separate from NVIDIA driver packages and don't depend on DRIVER_VERSION
+    # Minimal set: runtime libs + build-from-source tools (nvcc, headers)
+    # cuda-nvrtc is needed by PyTorch for JIT kernel compilation
     CUDA_PKGS_REQUIRED=(
-      "cuda-nvcc"
-      "cuda-cudart"
-      "cuda-cudart-devel"
       "cuda-libs"
+      "cuda-cudart"
+      "cuda-nvcc"
       "cuda-devel"
-      "cuda-cudnn"
-      "cuda-cuobjdump"
-      "cuda-gdb"
-    )
-    CUDA_PKGS_OPTIONAL=(
+      "cuda-cudart-devel"
       "cuda-nvrtc"
-      "cuda-nvrtc-devel"
-      "cuda-cupti"
-      "cuda-cupti-devel"
-      "cuda-cudnn-devel"
-      "cuda-sanitizer"
     )
     NVIDIA_PKGS_FOUND_ALL="1"
     NVIDIA_PKGS=()
@@ -346,14 +338,6 @@ function nvidia_sanity_check () {
         break
       fi
       CUDA_PKGS+=("$pkg")
-    done
-
-    for pkg in "${CUDA_PKGS_OPTIONAL[@]}"; do
-      if dnf5 info "$pkg" &>/dev/null; then
-        CUDA_PKGS+=("$pkg")
-      else
-        echo "WARNING: Optional CUDA package not found, skipping: ${pkg}"
-      fi
     done
 
     # Disable multimedia repo after checks
