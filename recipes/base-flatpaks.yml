@@ -29,7 +29,7 @@ modules:
 #        - org.gnome.Maps # Maps
         - org.gnome.seahorse.Application # Seahorse
         - org.gnome.NautilusPreviewer # Sushi (Nautilus Previewer)
-#        - org.gnome.Papers # Document Viewer
+        - org.gnome.Papers # Document Viewer
         - org.gnome.TextEditor # Text Editor
         - org.gnome.Weather # Weather
 ## System Apps
@@ -42,6 +42,7 @@ modules:
         - com.rafaelmardojai.Blanket # Blanket (soundscapes)
         - com.github.PintaProject.Pinta # Pinta (image editor)
         - org.videolan.VLC # VLC (media player)
+        - rocks.koreader.KOReader # KOReader (e-book reader)
 ## Internet
         - com.bitwarden.desktop # Bitwarden
         - org.mozilla.firefox # Mozilla Firefox
@@ -63,13 +64,15 @@ modules:
 #        - io.github.alainm23.planify # Planify (Tasks / ToDo)
         - org.kde.okular # Okular PDF
         - com.super_productivity.SuperProductivity # Super Productivity
+        - org.gnome.gitlab.somas.Apostrophe # Apostrophe (Markdown editor)
+        - org.onlyoffice.desktopeditors # OnlyOffice
 ## Tools
         - com.github.wwmm.easyeffects # Easy Effects
         - org.filezillaproject.Filezilla # FileZilla
         - it.mijorus.gearlever # Gear Lever
 #        - net.nokyan.Resources # System Monitor - Resources
         - io.missioncenter.MissionCenter # System Monitor - Mission Center
-        - com.vscodium.codium # VS Codium
+#        - com.vscodium.codium # VS Codium
         - io.github.flattool.Warehouse # Warehouse
         - dev.deedles.Trayscale # Trayscale for tailscale
         - io.github.flattool.Ignition # Ignition for managing startup apps and scripts
