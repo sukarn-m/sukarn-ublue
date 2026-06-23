@@ -16,6 +16,7 @@ modules:
         - rpm-ostreed-automatic.timer
         - flatpak-system-update.timer
         - cachefilesd.service # This is enabled through ujust enable-nfs-cache
+        - fstrim.timer # btrfs mounts already use discard=async
     user:
 #      enabled:
 #        - 
