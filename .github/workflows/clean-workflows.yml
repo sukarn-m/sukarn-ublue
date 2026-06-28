@@ -17,3 +17,4 @@ jobs:
         with:
           runs_older_than: 30
           runs_to_keep: 10
+          token: ${{ github.token }}
