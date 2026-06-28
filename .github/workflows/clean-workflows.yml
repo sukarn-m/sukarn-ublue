@@ -13,8 +13,18 @@ jobs:
   clean:
     runs-on: ubuntu-latest
     steps:
-      - uses: igorjs/gh-actions-clean-workflow@v7
-        with:
-          runs_older_than: 30
-          runs_to_keep: 10
-          token: ${{ github.token }}
+      - name: Delete old workflow runs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Delete runs older than 30 days
+          cutoff=$(date -u -d "30 days ago" +%Y-%m-%d)
+          echo "Deleting workflow runs older than $cutoff"
+          gh run list --repo "${{ github.repository }}" \
+            --limit 1000 \
+            --json databaseId,createdAt \
+            --jq ".[] | select(.createdAt < \"$cutoff\") | .databaseId" \
+            | while read -r run_id; do
+              echo "Deleting run #$run_id"
+              gh run delete "$run_id" --repo "${{ github.repository }}" || true
+            done
