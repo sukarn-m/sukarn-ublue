@@ -22,6 +22,7 @@ modules:
         - tailscale
 # Theming - Look and Feel
         - variety # Wallpapers
+        - ImageMagick # Needed for variety's clock
         - ydotool # Generic command-line automation tool
     remove:
       packages:
