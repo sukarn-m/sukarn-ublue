@@ -284,7 +284,6 @@ function nvidia_sanity_check () {
       "nvidia-container-toolkit"
     )
     NVIDIA_PKGS_OPTIONAL=(
-      "libnvidia-ml-${DRIVER_VERSION}*.i686"
       "nvidia-driver-cuda-libs-${DRIVER_VERSION}*.i686"
       "nvidia-driver-libs-${DRIVER_VERSION}*.i686"
     )
@@ -492,7 +491,6 @@ function nvidia_initial_setup () {
         mesa-libEGL.i686
         mesa-libGL.i686
         mesa-libgbm.i686
-        mesa-va-drivers.i686
         mesa-vulkan-drivers.i686
     )
     
@@ -554,7 +552,7 @@ function install_nvidia_packages () {
     # kmod-nvidia-common defaults to 'nvidia-open' but this will match our akmod image
 #    sed -i "s/^MODULE_VARIANT=.*/MODULE_VARIANT=$NVIDIA_TAG/" /etc/nvidia/kernel.conf
     
-    systemctl enable ublue-nvctk-cdi.service
+    systemctl enable nvidia-cdi-refresh.service nvidia-cdi-refresh.path nvidia-persistenced.service
     semodule --verbose --install /usr/share/selinux/packages/nvidia-container.pp
     
     # Universal Blue specific Initramfs fixes
