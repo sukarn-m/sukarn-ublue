@@ -16,6 +16,11 @@ on:
 
   workflow_dispatch: # allow manually triggering builds
 
+  pull_request:
+    paths:
+      - recipes/**
+      - files/**
+
 #  repository_dispatch: # allow trigerring through another repository
 jobs:
   bluebuild:

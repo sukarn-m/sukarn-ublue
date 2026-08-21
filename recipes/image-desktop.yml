@@ -7,6 +7,7 @@ image-version: gts # Options: Numbered fedora release (`42`, `43`); `latest`; `g
 modules:
 #  - from-file: base-bluefin-changes.yml
   - from-file: variant-gnome.yml
+  # PR builds skip rechunk, so their verify leg checks the raw build output.
 
   - type: script
     scripts:
