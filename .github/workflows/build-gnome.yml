@@ -32,6 +32,20 @@ jobs:
           - image-desktop.yml
           - image-laptop.yml
     steps:
+      # GitHub's ubuntu-24.04 runner image 20260810+ ships fuse-overlayfs 1.16
+      # and pins it as mount_program in /etc/containers/storage.conf. Rechunk's
+      # rootful containers then commit the image tree through the FUSE overlay,
+      # corrupting every files-module override of a lower-layer file (old content
+      # zero-padded to the new size). See containers/fuse-overlayfs#475 and
+      # actions/runner-images#14597. Removing the binary and its config pin
+      # forces kernel-native overlayfs and produces clean images (verified).
+      - name: Force native overlayfs (remove fuse-overlayfs)
+        run: |
+          sudo rm -f /usr/local/bin/fuse-overlayfs /usr/bin/fuse-overlayfs
+          sudo sed -i -E 's/^[[:space:]]*(mount_program|mountopt)[[:space:]]*=.*/# \1 disabled: fuse-overlayfs 1.16 corrupts rechunked images/' /etc/containers/storage.conf 2>/dev/null || true
+          mkdir -p "$HOME/.config/containers"
+          printf '[storage]\ndriver = "overlay"\n' > "$HOME/.config/containers/storage.conf"
+
        # the build is fully handled by the reusable github action
       - name: Build Custom Image
         uses: blue-build/github-action@v1.12
@@ -59,10 +73,13 @@ jobs:
   # The 2026-08-17 build silently corrupted every files-module override of an
   # RPM-owned path (old content zero-padded to the new size). Verify the pushed
   # image's files-module content against the repo tree so a bad build fails loudly.
+  # Only main/schedule/dispatch builds push :latest; branch and PR builds push
+  # br-*/pr-* tags instead, so the gate runs only where :latest is the target.
   verify:
     name: Verify files in ${{ matrix.image }}
     runs-on: ubuntu-latest
     needs: bluebuild
+    if: github.event_name != 'pull_request' && (github.event_name != 'push' || github.ref == 'refs/heads/main')
     permissions:
       packages: read
     strategy:
@@ -85,7 +102,7 @@ jobs:
         env:
           IMAGE: ${{ matrix.image }}
           SOURCES: ${{ matrix.sources }}
-          TAG: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.number) || 'latest' }}
+          TAG: latest
         run: |
           set -euo pipefail
           expected="$(mktemp)"
