@@ -55,3 +55,44 @@ jobs:
 #          -H 'Accept: application/vnd.github.everest-preview+json' \
 #          -u ${{ secrets.PERSONAL_ACCESS_TOKEN }} \
 #          --data '{"event_type": "Initiated from sukarn-os-base", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
+
+  # The 2026-08-17 build silently corrupted every files-module override of an
+  # RPM-owned path (old content zero-padded to the new size). Verify the pushed
+  # image's files-module content against the repo tree so a bad build fails loudly.
+  verify:
+    name: Verify files in ${{ matrix.image }}
+    runs-on: ubuntu-latest
+    needs: bluebuild
+    permissions:
+      packages: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - recipe: image-desktop.yml
+            image: ghcr.io/sukarn-m/sukarn-ublue-desktop
+            sources: system nas canon-lbp2900 tailscale theme-s trilium-notes desktop
+          - recipe: image-laptop.yml
+            image: ghcr.io/sukarn-m/sukarn-ublue-laptop
+            sources: system nas canon-lbp2900 tailscale theme-s trilium-notes laptop device-e14g2
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | podman login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+      - name: Verify files-module content
+        env:
+          IMAGE: ${{ matrix.image }}
+          SOURCES: ${{ matrix.sources }}
+          TAG: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.number) || 'latest' }}
+        run: |
+          set -euo pipefail
+          expected="$(mktemp)"
+          for src in $SOURCES; do
+            (cd "files/$src" && find . -type f -print0 | sort -z | xargs -0 sha256sum | sed 's~  \./~  /~') >> "$expected"
+          done
+          echo "Verifying $(wc -l < "$expected") files from sources: $SOURCES"
+          podman pull "$IMAGE:$TAG"
+          podman run --rm -i --entrypoint /usr/bin/bash "$IMAGE:$TAG" -c 'sha256sum -c --quiet' < "$expected"
+          echo "All files-module content verified OK"
