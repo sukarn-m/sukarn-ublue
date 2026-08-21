@@ -33,12 +33,12 @@ jobs:
           - image-laptop.yml
     steps:
       # GitHub's ubuntu-24.04 runner image 20260810+ ships fuse-overlayfs 1.16
-      # and pins it as mount_program in /etc/containers/storage.conf. Rechunk's
-      # rootful containers then commit the image tree through the FUSE overlay,
-      # corrupting every files-module override of a lower-layer file (old content
-      # zero-padded to the new size). See containers/fuse-overlayfs#475 and
-      # actions/runner-images#14597. Removing the binary and its config pin
-      # forces kernel-native overlayfs and produces clean images (verified).
+      # and pins it as mount_program in /etc/containers/storage.conf. Post-build
+      # stages committing image trees through that FUSE overlay silently corrupt
+      # every files-module override of a lower-layer file (old content
+      # zero-padded to the new size) - seen with rechunk in 2026-08. Chunkah runs
+      # rootless, but keep this so all podman storage stays on native overlayfs.
+      # See containers/fuse-overlayfs#475 and actions/runner-images#14597.
       - name: Force native overlayfs (remove fuse-overlayfs)
         run: |
           sudo rm -f /usr/local/bin/fuse-overlayfs /usr/bin/fuse-overlayfs
@@ -61,7 +61,9 @@ jobs:
           # Optional flags
           use_unstable_cli: false
 #          squash: true
-          rechunk: ${{ github.event_name != 'pull_request' }}
+          # chunkah (coreos/chunkah) replaces the deprecated hhd-dev/rechunk;
+          # skipped on PRs like rechunk was
+          chunkah: ${{ github.event_name != 'pull_request' }}
       # start device-specific builds
 #      - name: Build Device Specific Images
 #        run: |

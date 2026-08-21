@@ -33,7 +33,8 @@ jobs:
           - image-cosmic.yml
     steps:
       # See build-gnome.yml: runner image 20260810+ pins fuse-overlayfs 1.16,
-      # which corrupts rechunked files-module overwrites. Force native overlayfs.
+      # which corrupted rechunked files-module overwrites. Keep all podman
+      # storage on native overlayfs.
       - name: Force native overlayfs (remove fuse-overlayfs)
         run: |
           sudo rm -f /usr/local/bin/fuse-overlayfs /usr/bin/fuse-overlayfs
@@ -55,7 +56,9 @@ jobs:
           
           # Optional flags
           use_unstable_cli: false
-          rechunk: ${{ github.event_name != 'pull_request' }}
+          # chunkah (coreos/chunkah) replaces the deprecated hhd-dev/rechunk;
+          # skipped on PRs like rechunk was
+          chunkah: ${{ github.event_name != 'pull_request' }}
 #          squash: true
 
   # Fail the build loudly if files-module content in the pushed image does not
