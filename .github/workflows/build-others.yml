@@ -75,12 +75,16 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          # laptop-overrides.sh legitimately rewrites these two drop-ins after
+          # the files module, so they cannot be compared against the repo tree
           - recipe: image-budgie.yml
             image: ghcr.io/sukarn-m/sukarn-ublue-budgie
             sources: system laptop theme-v
+            exclude: /etc/systemd/system/rpm-ostreed-automatic.service.d/override.conf /etc/systemd/system/rpm-ostreed-automatic.timer.d/override.conf
           - recipe: image-cosmic.yml
             image: ghcr.io/sukarn-m/sukarn-ublue-cosmic
             sources: system laptop theme-s
+            exclude: /etc/systemd/system/rpm-ostreed-automatic.service.d/override.conf /etc/systemd/system/rpm-ostreed-automatic.timer.d/override.conf
     steps:
       - uses: actions/checkout@v4
 
@@ -91,12 +95,17 @@ jobs:
         env:
           IMAGE: ${{ matrix.image }}
           SOURCES: ${{ matrix.sources }}
+          EXCLUDE: ${{ matrix.exclude }}
           TAG: latest
         run: |
           set -euo pipefail
           expected="$(mktemp)"
           for src in $SOURCES; do
             (cd "files/$src" && find . -type f -print0 | sort -z | xargs -0 sha256sum | sed 's~  \./~  /~') >> "$expected"
+          done
+          for ex in ${EXCLUDE:-}; do
+            grep -v "  ${ex}$" "$expected" > "$expected.f" || true
+            mv "$expected.f" "$expected"
           done
           echo "Verifying $(wc -l < "$expected") files from sources: $SOURCES"
           podman pull "$IMAGE:$TAG"
