@@ -7,19 +7,23 @@ modules:
       packages:
 # Terminal
         - byobu
-#        - ptyxis # Included by default now
         - wl-clipboard
 # Nextcloud. Also requires the script nextcloud-vfs.sh
         - nextcloud-client-devel # Required on Fedora for virtual files.
         - nextcloud-client-nautilus # The main nextcloud client.
-# Miscellaneous
+# Development
         - android-tools # ADB and Fastboot
-        - cachefilesd # For NFS caching.
-#        - gnome-boxes # Virtualization
+        - gcc
+        - golang
+# Printing and Scanning
         - libcupsfilters # For Canon LBP2900 printer
         - simple-scan # Scanner
+# Networking
+        - cachefilesd # For NFS caching.
         - syncthing # File sync
         - tailscale
+# Miscellaneous
+#        - gnome-boxes # Virtualization
 # Theming - Look and Feel
         - variety # Wallpapers
         - ImageMagick # Needed for variety's clock
