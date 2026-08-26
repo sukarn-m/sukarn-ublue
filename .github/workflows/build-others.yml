@@ -86,7 +86,7 @@ jobs:
             sources: system laptop theme-s
             exclude: /etc/systemd/system/rpm-ostreed-automatic.service.d/override.conf /etc/systemd/system/rpm-ostreed-automatic.timer.d/override.conf
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Log in to GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | podman login ghcr.io -u "${{ github.actor }}" --password-stdin
