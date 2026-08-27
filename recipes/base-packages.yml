@@ -8,6 +8,27 @@ modules:
 # Terminal
         - byobu
         - wl-clipboard
+# Terminal utilities (replaces Homebrew installs in my personal setup)
+        - aria2 # download utility
+        - bat # cat clone with syntax highlighting
+        - btop # system resource monitor
+        - ddrescue # data recovery tool
+        - duf # disk usage/free viewer
+        - du-dust # disk usage analyzer (bin: dust)
+        - eza # ls replacement
+        - fastfetch # system info fetcher
+        - neovim # text editor (bin: nvim)
+        - nethogs # per-process network monitor
+        - nodejs22 # JavaScript runtime (provides node; Fedora has no plain 'nodejs' on F44)
+        - pdfgrep # search inside PDFs
+        - rclone # cloud storage sync
+        - ripgrep # fast text search (bin: rg)
+        - rmlint # duplicate file finder
+        - ShellCheck # shell script linter (bin: shellcheck)
+        - tldr # simplified man pages
+        - yt-dlp # video downloader
+        - zoxide # smarter cd command
+# Not in Fedora repos, still installed via brew: broot, yazi
 # Nextcloud. Also requires the script nextcloud-vfs.sh
         - nextcloud-client-devel # Required on Fedora for virtual files.
         - nextcloud-client-nautilus # The main nextcloud client.
@@ -28,6 +49,14 @@ modules:
         - variety # Wallpapers
         - ImageMagick # Needed for variety's clock
         - ydotool # Generic command-line automation tool
+# Fonts (replaces Homebrew casks in my personal setup)
+        - sil-charis-fonts # = font-charis
+        - typetogether-literata-fonts # = font-literata
+        - google-rubik-fonts # = font-rubik
+        - adobe-source-code-pro-fonts # = font-source-code-pro
+# Still via brew (no Fedora equivalent): font-bebas-neue, font-bitter (texlive-bitter
+# lacks most weights), font-fanwood-text, font-tinos-nerd-font (repos have only
+# unpatched google-tinos-fonts), font-symbols-only-nerd-font
     remove:
       packages:
       ## Firefox has to be removed in 'main' image, but not in bluefin, bazzite, and aurora.
