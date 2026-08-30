@@ -35,6 +35,7 @@ modules:
 # Development
         - android-tools # ADB and Fastboot
         - gcc
+        - gcc-c++ # C++ support for GCC (g++); needed to compile node-pty for Hermes desktop
         - golang
 # Printing and Scanning
         - libcupsfilters # For Canon LBP2900 printer
