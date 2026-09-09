@@ -5,12 +5,12 @@ modules:
     fonts:
       nerd-fonts:
         - NerdFontsSymbolsOnly
-        - SourceCodePro
+        # - SourceCodePro # installed via base-packages.yml (adobe-source-code-pro-fonts)
         - Tinos
       google-fonts:
         - Bebas Neue
         - Bitter
-        - Charis SIL
+        # - Charis SIL # installed via base-packages.yml (sil-charis-fonts)
         - Fanwood Text
-        - Literata
-        - Rubik
+        # - Literata # installed via base-packages.yml (typetogether-literata-fonts)
+        # - Rubik # installed via base-packages.yml (google-rubik-fonts)
