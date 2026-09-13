@@ -1,9 +1,5 @@
 modules:
   - type: script
-    scripts:
-      - nextcloud-vfs.sh
-
-  - type: script
     env:
       IMAGE_DISTRO_NAME: "Sukarn Linux"
     scripts:
