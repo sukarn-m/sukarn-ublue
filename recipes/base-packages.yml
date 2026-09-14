@@ -29,8 +29,7 @@ modules:
         - yt-dlp # video downloader
         - zoxide # smarter cd command
 # Not in Fedora repos, still installed via brew: broot, yazi
-# Nextcloud. Since nextcloud-client 34.x the VFS plugins are shipped natively in /usr/lib64/qt6/plugins/, so no symlink script is needed.
-        - nextcloud-client-devel # Header/dev files for the client.
+# Nextcloud. The VFS plugins for virtual files have been shipped natively in /usr/lib64/qt6/plugins/ since 34.x (they were in the devel package before that).
         - nextcloud-client-nautilus # The main nextcloud client.
 # Development
         - android-tools # ADB and Fastboot
