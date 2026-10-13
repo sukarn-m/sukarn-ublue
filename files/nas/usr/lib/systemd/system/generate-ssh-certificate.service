@@ -2,16 +2,18 @@
 Description=Generate ssh host certificate for authentication
 After=network-online.target remote-fs.target local-fs.target
 After=nas-monitor.service
-RequiresMountsFor=/var/mnt/nas
+# No RequiresMountsFor: that would mount the NAS on every boot. The script
+# goes through var-mnt-nas.automount only when a renewal is due.
+After=var-mnt-nas.automount
 #AssertPathIsMountPoint=/var/mnt/nas 
 Before=umount.target
 [Service]
 Type=oneshot
 ExecStart=/usr/bin/generate-ssh-certificate.sh
-ExecStopPost=-/usr/bin/sh -c 'export HOSTNAME=$(/usr/bin/hostnamectl hostname) && /usr/bin/rm -r /mnt/nas/$HOSTNAME/ssh'
-RuntimeMaxSec=1h 15min
+TimeoutStartSec=1h 15min
 TimeoutStopSec=10
 Restart=on-failure
+RestartSec=10min
 RemainAfterExit=no
 [Install]
 WantedBy=default.target

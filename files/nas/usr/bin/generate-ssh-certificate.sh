@@ -12,6 +12,11 @@ IFS=':' read -r -a user_array <<< "$user_string" #Split by :
 USERNAME=${user_array[0]} #Set username
 HOMEDIR=${user_array[5]} #Set home directory
 
+if [[ ! -f "$HOMEDIR/.ssh/id_ed25519-cert.pub" ]]; then
+  echo "No certificate at $HOMEDIR/.ssh/id_ed25519-cert.pub; nothing to renew."
+  exit 0
+fi
+
 EXPIRY_DATE=$(/usr/bin/ssh-keygen -Lf "$HOMEDIR/.ssh/id_ed25519-cert.pub" | /usr/bin/grep Valid | /usr/bin/sed -e 's/T[0-9\:]\+//g' -e 's/^\ \+Valid\:\ from\ [0-9]\+\-[0-9]\+\-[0-9]\+\ to\ //')
 DAYS_UNTIL_EXPIRY=$(( ($(date --date="$EXPIRY_DATE" +%s) - $(date +%s))/(60*60*24) ))
 DAYS_UNTIL_RENEWAL=$(( DAYS_UNTIL_EXPIRY - 365 ))
@@ -21,7 +26,14 @@ echo "$DAYS_UNTIL_RENEWAL days left until certificate renewal."
 if [ "$DAYS_UNTIL_RENEWAL" -lt "0" ]
 then
 	echo "Trying to renew the certificate."
+	# Accessing the path triggers the automount; only proceed if the NFS share actually mounted.
+	/usr/bin/ls "$nas_mount" > /dev/null 2>&1 || true
+	if ! /usr/bin/findmnt -n -t nfs,nfs4 "$nas_mount" > /dev/null; then
+	    echo "NAS is not mounted at $nas_mount; will try again next boot."
+	    exit 0
+	fi
 	HOSTNAME=$(/usr/bin/hostnamectl hostname)
+	trap '/usr/bin/rm -rf "$nas_mount/$HOSTNAME/ssh"' EXIT
 	/usr/bin/mkdir -p "$nas_mount/$HOSTNAME/ssh"
 	/usr/bin/cp "$HOMEDIR/.ssh/id_ed25519.pub" "$nas_mount/$HOSTNAME/ssh/$HOSTNAME.pub"
 	echo "Files are in place. Let the waiting games begin."
@@ -40,7 +52,6 @@ then
 	/usr/bin/echo "Found the file! Waiting another 5 seconds for good luck..."
 	/usr/bin/sleep 5
 	/usr/bin/cp "$nas_mount/$HOSTNAME/ssh/${HOSTNAME}-cert.pub" "$HOMEDIR/.ssh/id_ed25519-cert.pub"
-	/usr/bin/rm -r "$nas_mount/$HOSTNAME/ssh"
 	/usr/bin/chcon -t ssh_home_t "$HOMEDIR/.ssh/id_ed25519-cert.pub"
 	/usr/bin/chown "$USERNAME:$USERNAME" "$HOMEDIR/.ssh/id_ed25519-cert.pub"
 	EXPIRY_DATE=$(/usr/bin/ssh-keygen -Lf "$HOMEDIR/.ssh/id_ed25519-cert.pub" | /usr/bin/grep Valid | /usr/bin/sed -e 's/T[0-9\:]\+//g' -e 's/^\ \+Valid\:\ from\ [0-9]\+\-[0-9]\+\-[0-9]\+\ to\ //')

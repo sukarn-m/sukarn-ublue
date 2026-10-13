@@ -12,7 +12,7 @@ function systemctl_stop () {
   fi
 }
 
-if ping -c 1 truenas.home &> /dev/null
+if ping -c 1 nas.home &> /dev/null
 then
   systemctl_start var-mnt-nas.automount
   systemctl_start var-mnt-roms.automount
