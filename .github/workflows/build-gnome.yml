@@ -91,12 +91,9 @@ jobs:
           - recipe: image-desktop.yml
             image: ghcr.io/sukarn-m/sukarn-ublue-desktop
             sources: system nas canon-lbp2900 tailscale theme-s trilium-notes desktop
-          # laptop-overrides.sh legitimately rewrites these two drop-ins after
-          # the files module, so they cannot be compared against the repo tree
           - recipe: image-laptop.yml
             image: ghcr.io/sukarn-m/sukarn-ublue-laptop
             sources: system nas canon-lbp2900 tailscale theme-s trilium-notes laptop device-e14g2
-            exclude: /etc/systemd/system/rpm-ostreed-automatic.service.d/override.conf /etc/systemd/system/rpm-ostreed-automatic.timer.d/override.conf
     steps:
       - uses: actions/checkout@v7
 

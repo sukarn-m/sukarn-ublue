@@ -2,10 +2,20 @@
 
 set -oeu pipefail
 
-# Define the file path
-rpm_ostreed_automatic_service="/etc/systemd/system/rpm-ostreed-automatic.service.d/override.conf"
-rpm_ostreed_automatic_timer="/etc/systemd/system/rpm-ostreed-automatic.timer.d/override.conf"
+# Timers that are PartOf=ac.target (see files/laptop and files/device-e14g2) get
+# stopped when battery.target starts. Make ac.target pull them back in when AC
+# power returns, but only the timers this image actually enables.
+timers=(
+  bootc-fetch-apply-updates.timer
+  rpm-ostreed-automatic.timer
+  podman-auto-update.timer
+)
 
-# Insert the required lines under the [Unit] heading
-sed -i '/\[Unit\]/a Requires=ac.target\nConflicts=battery.target' "${rpm_ostreed_automatic_service}"
-sed -i '1i [Unit]\nPartOf=ac.target\n' "${rpm_ostreed_automatic_timer}"
+wants_dir="/etc/systemd/system/ac.target.wants"
+mkdir -p "${wants_dir}"
+
+for timer in "${timers[@]}"; do
+  if systemctl is-enabled --quiet "${timer}" 2>/dev/null && [[ -f "/usr/lib/systemd/system/${timer}" ]]; then
+    ln -sfv "/usr/lib/systemd/system/${timer}" "${wants_dir}/${timer}"
+  fi
+done
