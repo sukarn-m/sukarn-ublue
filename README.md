@@ -102,7 +102,7 @@ This repository builds date tags as well, so if you want to rebase to a particul
 
 This repository by default also supports signing.
 
-The `latest` tag will automatically point to the latest build. That build will still always use the Fedora version specified in `recipe.yml`, so you won't get accidentally updated to the next major version.
+The `latest` tag will automatically point to the latest build. That build will still always use the Fedora version (`image-version`) specified in the image's recipe under `recipes/`, so you won't get accidentally updated to the next major version.
 
 [Go back to Table of Contents](#table-of-contents)
 
@@ -157,7 +157,7 @@ TPM2 equipped devices can be set to automatically unlock encrypted drives.
 
 ### Enable Auto-Unlock Using TPM2
 
-Images based on Universal-Blue builds can run the following command to enable auto-unlock using  TPM2:
+Images based on Universal-Blue builds can run the following command to enable auto-unlock using TPM2:
 
 ```bash
 ujust setup-luks-tpm-unlock
@@ -167,7 +167,7 @@ For manual steps, refer to [https://github.com/ublue-os/config/blob/main/build/u
 
 ### Disable Auto-Unlock Using TPM2
 
-Images based on Universal-Blue builds can run the following command to enable auto-unlock using  TPM2:
+Images based on Universal-Blue builds can run the following command to disable auto-unlock using TPM2:
 
 ```bash
 ujust remove-luks-tpm-unlock
@@ -181,12 +181,12 @@ For manual steps, refer to [https://github.com/ublue-os/config/blob/main/build/u
 
 ## Laptop Power Management
 
-Laptop images include a power management system that adjusts system behavior based on power source:
+The laptop, budgie and cosmic images include a power management system that adjusts system behavior based on power source:
 
 - **AC power:** CPU boost enabled (full performance). System updates, syncthing, and podman operations run normally.
 - **Battery power:** CPU boost disabled (power saving). System updates, syncthing, and podman operations are stopped and will not run.
 
-This is implemented via `ac.target` and `battery.target` systemd targets, triggered automatically by a udev rule that detects AC adapter status changes.
+This is implemented via `ac.target` and `battery.target` systemd targets, triggered automatically by a udev rule that detects AC adapter status changes. The update timers stop with `ac.target` and come back when it restarts, and the update services carry `ConditionACPower=true`, so they are also skipped when the system boots on battery.
 
 [Go back to Table of Contents](#table-of-contents)
 
@@ -206,7 +206,7 @@ These images contain custom commands from the universal-blue project, and custom
 | ---------------------------------- | -------------------------------------------------- |
 | `sukarn-enable-nfs-cache`          | Enable NFS caching                                 |
 | `sukarn-remove-nfs-cache`          | Remove NFS caching and cached files                |
-| `sukarn-added-canon-lbp-2900`      | Add this printer to the printers list              |
+| `sukarn-add-canon-lbp2900b`        | Add this printer to the printers list              |
 | `sukarn-fix-grub-double-entry`     | Fix the grub double entries issue in Fedora Atomic |
 | `sukarn-enroll-fedora-certificate` | Enroll the upstream fedora certificate             |
 | `sukarn-grub-toggle-savedefault`   | Enable or disable GRUB_SAVEDEFAULT                 |
@@ -215,10 +215,10 @@ These images contain custom commands from the universal-blue project, and custom
 
 ## Verification
 
-These images are signed with [Sigstore](https://www.sigstore.dev/)'s [cosign](https://github.com/sigstore/cosign). You can verify the signature by downloading the `cosign.pub` file from this repo and running the following command:
+These images are signed with [Sigstore](https://www.sigstore.dev/)'s [cosign](https://github.com/sigstore/cosign). You can verify the signature by downloading the `cosign.pub` file from this repo and running the following command (replace `desktop` with `laptop`, `budgie` or `cosmic` as needed):
 
 ```bash
-cosign verify --key cosign.pub ghcr.io/sukarn-m/sukarn-ublue
+cosign verify --key cosign.pub ghcr.io/sukarn-m/sukarn-ublue-desktop
 ```
 
 [Go back to Table of Contents](#table-of-contents)
