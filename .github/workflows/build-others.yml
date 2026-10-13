@@ -68,23 +68,19 @@ jobs:
     name: Verify files in ${{ matrix.image }}
     runs-on: ubuntu-latest
     needs: bluebuild
-    if: github.event_name != 'pull_request' && (github.event_name != 'push' || github.ref == 'refs/heads/main')
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     permissions:
       packages: read
     strategy:
       fail-fast: false
       matrix:
         include:
-          # laptop-overrides.sh legitimately rewrites these two drop-ins after
-          # the files module, so they cannot be compared against the repo tree
           - recipe: image-budgie.yml
             image: ghcr.io/sukarn-m/sukarn-ublue-budgie
             sources: system laptop theme-v
-            exclude: /etc/systemd/system/rpm-ostreed-automatic.service.d/override.conf /etc/systemd/system/rpm-ostreed-automatic.timer.d/override.conf
           - recipe: image-cosmic.yml
             image: ghcr.io/sukarn-m/sukarn-ublue-cosmic
             sources: system laptop theme-s
-            exclude: /etc/systemd/system/rpm-ostreed-automatic.service.d/override.conf /etc/systemd/system/rpm-ostreed-automatic.timer.d/override.conf
     steps:
       - uses: actions/checkout@v7
 

@@ -75,13 +75,13 @@ jobs:
   # The 2026-08-17 build silently corrupted every files-module override of an
   # RPM-owned path (old content zero-padded to the new size). Verify the pushed
   # image's files-module content against the repo tree so a bad build fails loudly.
-  # Only main/schedule/dispatch builds push :latest; branch and PR builds push
+  # Only main builds (push, schedule or dispatch) push :latest; branch and PR builds push
   # br-*/pr-* tags instead, so the gate runs only where :latest is the target.
   verify:
     name: Verify files in ${{ matrix.image }}
     runs-on: ubuntu-latest
     needs: bluebuild
-    if: github.event_name != 'pull_request' && (github.event_name != 'push' || github.ref == 'refs/heads/main')
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     permissions:
       packages: read
     strategy:
@@ -91,12 +91,9 @@ jobs:
           - recipe: image-desktop.yml
             image: ghcr.io/sukarn-m/sukarn-ublue-desktop
             sources: system nas canon-lbp2900 tailscale theme-s trilium-notes desktop
-          # laptop-overrides.sh legitimately rewrites these two drop-ins after
-          # the files module, so they cannot be compared against the repo tree
           - recipe: image-laptop.yml
             image: ghcr.io/sukarn-m/sukarn-ublue-laptop
             sources: system nas canon-lbp2900 tailscale theme-s trilium-notes laptop device-e14g2
-            exclude: /etc/systemd/system/rpm-ostreed-automatic.service.d/override.conf /etc/systemd/system/rpm-ostreed-automatic.timer.d/override.conf
     steps:
       - uses: actions/checkout@v7
 

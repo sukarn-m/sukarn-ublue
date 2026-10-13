@@ -8,5 +8,6 @@ modules:
   - type: script
     scripts:
       - nas.sh
+      - gnome-keybindings.sh
 #      - ublue-udev.sh
 #      - canon-lbp2900.sh

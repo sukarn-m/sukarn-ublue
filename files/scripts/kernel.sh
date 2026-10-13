@@ -116,12 +116,12 @@ function try_bazzite_gated () {
   # Get the latest CoreOS kernel version from the repository
 #  GATED_KERNEL_VERSION="$(cat ${AKMODS_TAGS} | grep ${GATED_TAG}-${FEDORA_VERSION} | sort -r | head -n 1 | cut -d '-' -f 4)"
   echo "Attempting to set RETRIEVAL_TAG in try_bazzite_gated"
-  GATED_KERNEL_VERSION="$(grep "${GATED_TAG}-${FEDORA_VERSION}" "${AKMODS_TAGS}" | sort -r | head -n 2 | sort | head -n 1 | cut -d '-' -f 4)"
+  GATED_KERNEL_VERSION="$(grep "${GATED_TAG}-${FEDORA_VERSION}" "${AKMODS_TAGS}" | sort -V -r | head -n 2 | sort -V | head -n 1 | cut -d '-' -f 4)"
   echo "GATED_KERNEL_VERSION=${GATED_KERNEL_VERSION}"
   # Find matching Bazzite tag with the same kernel version
   if grep "${AKMODS_FLAVOUR}-${FEDORA_VERSION}" "${AKMODS_TAGS}" | grep -q "${GATED_KERNEL_VERSION}"; then
  #   RETRIEVAL_TAG="$(cat ${AKMODS_TAGS} | grep ${AKMODS_FLAVOUR}-${FEDORA_VERSION} | grep ${GATED_KERNEL_VERSION} | sort -r | head -n 1 | cut -d '"' -f 2)"
-    RETRIEVAL_TAG="$(grep "${AKMODS_FLAVOUR}-${FEDORA_VERSION}" "${AKMODS_TAGS}" | grep "${GATED_KERNEL_VERSION}" | sort -r | head -n 2 | sort | head -n 1 | cut -d '"' -f 2)"
+    RETRIEVAL_TAG="$(grep "${AKMODS_FLAVOUR}-${FEDORA_VERSION}" "${AKMODS_TAGS}" | grep "${GATED_KERNEL_VERSION}" | sort -V -r | head -n 2 | sort -V | head -n 1 | cut -d '"' -f 2)"
     confirm_tag
     echo "RETRIEVAL_TAG=${RETRIEVAL_TAG}"
   else
@@ -131,7 +131,7 @@ function try_bazzite_gated () {
 
 function try_standard () {
 #  RETRIEVAL_TAG="$(cat ${AKMODS_TAGS} | grep ${AKMODS_FLAVOUR}-${FEDORA_VERSION} | sort -r | head -n 1 | cut -d '"' -f 2)"
-  local retrieval_tag="$(grep "${AKMODS_FLAVOUR}-${FEDORA_VERSION}" "${AKMODS_TAGS}" | sort -r | head -n 3 | sort | head -n 1 | cut -d '"' -f 2)" || true
+  local retrieval_tag="$(grep "${AKMODS_FLAVOUR}-${FEDORA_VERSION}" "${AKMODS_TAGS}" | sort -V -r | head -n 3 | sort -V | head -n 1 | cut -d '"' -f 2)" || true
   if [ -n "$retrieval_tag" ]; then
     RETRIEVAL_TAG="${retrieval_tag}"
     confirm_tag
@@ -457,10 +457,12 @@ function install_packages () {
   # Check if kernel version changed during installation
   KERNEL_POST="$(rpm -q kernel | sed 's/^kernel-//')"
   if [[ "$KERNEL_PRE" != "$KERNEL_POST" ]]; then
-    # Install the correct kernel-tools version
+    # Install the kernel-tools version matching the new kernel, whichever direction that is
+    NEW_KERNEL_VERSION="$(rpm -q --queryformat '%{VERSION}' kernel)"
     if rpm -q kernel-tools &>/dev/null; then
-      NEW_KERNEL_VERSION="$(rpm -q kernel | cut -d'-' -f2)"
-      dnf5 downgrade --assumeyes "kernel-tools-${NEW_KERNEL_VERSION}"
+      if [[ "$(rpm -q --queryformat '%{VERSION}' kernel-tools)" != "${NEW_KERNEL_VERSION}" ]]; then
+        dnf5 downgrade --assumeyes "kernel-tools-${NEW_KERNEL_VERSION}" || dnf5 upgrade --assumeyes "kernel-tools-${NEW_KERNEL_VERSION}"
+      fi
     else
       dnf5 install --assumeyes "kernel-tools-${NEW_KERNEL_VERSION}"
     fi
