@@ -75,13 +75,13 @@ jobs:
   # The 2026-08-17 build silently corrupted every files-module override of an
   # RPM-owned path (old content zero-padded to the new size). Verify the pushed
   # image's files-module content against the repo tree so a bad build fails loudly.
-  # Only main/schedule/dispatch builds push :latest; branch and PR builds push
+  # Only main builds (push, schedule or dispatch) push :latest; branch and PR builds push
   # br-*/pr-* tags instead, so the gate runs only where :latest is the target.
   verify:
     name: Verify files in ${{ matrix.image }}
     runs-on: ubuntu-latest
     needs: bluebuild
-    if: github.event_name != 'pull_request' && (github.event_name != 'push' || github.ref == 'refs/heads/main')
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     permissions:
       packages: read
     strategy:
