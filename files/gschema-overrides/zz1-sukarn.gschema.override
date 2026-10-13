@@ -15,7 +15,7 @@ show-battery-percentage=true
 tap-to-click=true
 two-finger-scrolling-enabled=true
 
-[org/gnome/desktop/peripherals/keyboard]
+[org.gnome.desktop.peripherals.keyboard]
 numlock-state=true
 
 [org.gnome.desktop.wm.preferences]
@@ -37,48 +37,18 @@ use-tree-view=true
 [org.gnome.settings-daemon.plugins.color]
 night-light-enabled=true
 
-[org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom0]
-binding='F12'
-command='flatpak run app.devsuite.Ptyxis --new-window'
-name='Terminal'
-
-[org.gnome.settings-daemon.plugins.media-keys.custom-keybindings.custom1]
-binding='Favorites'
-command='flatpak run app.devsuite.Ptyxis --new-window'
-name='Terminal'
-
-[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2]
-binding='<Control><Shift>Escape'
-command="flatpak run io.missioncenter.MissionCenter"
-name='mission-center'
-
-[org.gnome.settings-daemon.plugins.media-keys]
-custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/']
-
 [org.gnome.settings-daemon.plugins.power]
 sleep-inactive-battery-timeout=600
 sleep-inactive-ac-timeout=1800
 
 [org.gnome.shell]
-favorite-apps=['org.gnome.Nautilus.desktop', 'one.ablaze.floorp.desktop', 'org.mozilla.firefox.desktop', 'org.gnome.Evolution.desktop', 'com.github.zadam.trilium.desktop', 'io.github.alainm23.planify.desktop']
+favorite-apps=['org.gnome.Nautilus.desktop', 'org.mozilla.firefox.desktop', 'org.gnome.Evolution.desktop']
 
 [org.gnome.shell.app-switcher]
 current-workspace-only=true
 
 [org.gnome.shell.extensions.appindicator]
 legacy-tray-enabled=true
-
-[org.gnome.shell.extensions.pano]
-history-length=20
-item-date-font-family='Bitter'
-item-date-font-size=11
-item-title-font-family='Bitter'
-item-title-font-size=20
-paste-on-select=true
-play-audio-on-copy=false
-search-bar-font-family='Bitter'
-search-bar-font-size=14
-send-notification-on-copy=false
 
 [org.gnome.shell.extensions.dash-to-panel]
 animate-appicon-hover-animation-extent={'RIPPLE': 4, 'PLANK': 4, 'SIMPLE': 1}
@@ -183,9 +153,6 @@ scroll-enable=false
 
 [org.gnome.software]
 allow-updates=false
-
-[org.gnome.terminal.legacy]
-theme-variant='system'
 
 [org.gtk.gtk4.settings.file-chooser]
 date-format='regular'
