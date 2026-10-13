@@ -7,7 +7,6 @@ set -oeu pipefail
 # power returns, but only the timers this image actually enables.
 timers=(
   bootc-fetch-apply-updates.timer
-  rpm-ostreed-automatic.timer
   podman-auto-update.timer
 )
 

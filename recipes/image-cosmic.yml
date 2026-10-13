@@ -47,8 +47,10 @@ modules:
   - type: systemd
     system:
       enabled:
-        - rpm-ostreed-automatic.timer
+        - bootc-fetch-apply-updates.timer
         - flatpak-system-update.timer
+      disabled:
+        - rpm-ostreed-automatic.timer
     user:
       enabled:
         - flatpak-user-update.timer
