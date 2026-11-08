@@ -25,10 +25,6 @@ modules:
       disabled:
         - e14-quirks.service
 
-  - type: gnome-extensions
-    install:
-      - 4798 # Thinkpad Battery Threshold
-
   - type: gschema-overrides
     include:
       - zz2-sukarn-laptop.gschema.override
