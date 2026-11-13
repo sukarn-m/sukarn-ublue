@@ -44,6 +44,7 @@ modules:
         - syncthing # File sync
         - tailscale
 # Miscellaneous
+        - fuse-libs # libfuse.so.2, required by AppImages (F44's 'fuse' no longer depends on it)
 #        - gnome-boxes # Virtualization
 # Theming - Look and Feel
         - variety # Wallpapers
