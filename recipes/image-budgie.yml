@@ -25,6 +25,9 @@ modules:
       with-optional: false
       packages:
         - budgie-desktop
+    install:
+      packages:
+        - fuse-libs # libfuse.so.2, required by AppImages (F44's 'fuse' no longer depends on it)
     remove:
       packages:
         - firefox

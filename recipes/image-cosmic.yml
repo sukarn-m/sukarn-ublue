@@ -29,6 +29,7 @@ modules:
     install:
       packages:
         - qemu-guest-agent
+        - fuse-libs # libfuse.so.2, required by AppImages (F44's 'fuse' no longer depends on it)
     remove:
       packages:
         - firefox
