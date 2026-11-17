@@ -495,14 +495,10 @@ function nvidia_initial_setup () {
         mesa-libgbm.i686
         mesa-vulkan-drivers.i686
     )
-    
-    if [[ "$(rpm -E %fedora)" -lt 41 ]]; then
-        MULTILIB+=(
-            mesa-libglapi.i686
-            libvdpau.i686
-        )
-    fi
-    
+
+    # Bring the 64-bit counterparts up to the repo's version first. When the repo is ahead of the
+    # base image, the i686 packages otherwise conflict with the older x86_64 ones on shared files.
+    dnf5 upgrade -y "${MULTILIB[@]%.i686}"
     dnf5 install -y "${MULTILIB[@]}"
     
     # Disable Multimedia
