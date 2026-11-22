@@ -21,6 +21,11 @@ modules:
       - source: desktop
         destination: /
 
+  # Compile the GDM greeter dconf database so the login screen does not suspend.
+  - type: script
+    scripts:
+      - gdm-dconf.sh
+
   - type: gschema-overrides
     include:
       - zz2-sukarn-desktop.gschema.override
